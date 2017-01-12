@@ -11,6 +11,8 @@ tags:
   - cli
 ---
 
+https://skilldrick.github.io/easy6502/
+
 ### [ Remacs ][remacs-gh] - Emacs in rust
 
 > N.B. When cloning this project, it is not a bad idea to use `--depth 1`, seeing as there are over 120.000 commits in the repo.

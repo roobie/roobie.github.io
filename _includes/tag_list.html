@@ -1,9 +1,10 @@
 <div class="tags">
   {% if page.tags.size > 0 %}
   <p class="page-tags">
+    <strong>Tagged with:</strong>
     <i class="fa fa-tags"></i>
     {% for tag in page.tags | sort %}
-    <a href="{{site.url}}{{site.baseurl}}/tags/#{{ tag }}">{{tag}}</a>
+    {{ tag }}
     {% if forloop.last == false %}, {% endif %}
     {% endfor %}
   </p>
