@@ -1,16 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-01-12T18:07:30+01:00</updated><id>http://localhost:4000//</id><title type="html">defsrc.com</title><subtitle>Discussing topics and going into details related to source code and software.
-</subtitle><entry><title type="html">Interesting software in the rust world</title><link href="http://localhost:4000/software/rust/2017/01/12/intro.html" rel="alternate" type="text/html" title="Interesting software in the rust world" /><published>2017-01-12T14:58:02+01:00</published><updated>2017-01-12T14:58:02+01:00</updated><id>http://localhost:4000/software/rust/2017/01/12/intro</id><content type="html" xml:base="http://localhost:4000/software/rust/2017/01/12/intro.html">&lt;h3 id=&quot;remacs-remacs-gh---emacs-in-rust&quot;&gt;&lt;a href=&quot;https://github.com/Wilfred/remacs&quot;&gt; Remacs &lt;/a&gt; - Emacs in rust&lt;/h3&gt;
-
-&lt;h3 id=&quot;alacritty-alacritty-announcement---opengl-powered-terminal-emulator&quot;&gt;&lt;a href=&quot;http://blog.jwilm.io/announcing-alacritty/&quot;&gt; Alacritty &lt;/a&gt; - OpenGL powered terminal emulator&lt;/h3&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-01-12T20:35:26+01:00</updated><id>http://localhost:4000//</id><title type="html">defsrc.com</title><subtitle>Discussing topics and going into details related to source code and software.
+</subtitle><entry><title type="html">Interesting software in the rust world</title><link href="http://localhost:4000/software/rust/2017/01/12/intro.html" rel="alternate" type="text/html" title="Interesting software in the rust world" /><published>2017-01-12T14:58:02+01:00</published><updated>2017-01-12T14:58:02+01:00</updated><id>http://localhost:4000/software/rust/2017/01/12/intro</id><content type="html" xml:base="http://localhost:4000/software/rust/2017/01/12/intro.html">&lt;h3 id=&quot;alacritty-alacritty-announcement---opengl-powered-terminal-emulator&quot;&gt;&lt;a href=&quot;http://blog.jwilm.io/announcing-alacritty/&quot;&gt; Alacritty &lt;/a&gt; - OpenGL powered terminal emulator&lt;/h3&gt;
 
 &lt;p&gt;Lately I’ve been using &lt;a href=&quot;https://launchpad.net/sakura&quot;&gt; Sakura &lt;/a&gt; as my preferred terminal emulator and tmux as
 the multiplexer. But it was not too long ago I switched from using
-&lt;a href=&quot;https://launchpad.net/terminator&quot;&gt; Terminator &lt;/a&gt; (which has built in multiplexing functions). Terminator is somewhat slow with its output, whereas Sakura is pretty darn fast. The faster output of
-Sakura has really made a difference in my CLI-life, which is why I find Alacritty really
+&lt;a href=&quot;https://launchpad.net/terminator&quot;&gt; Terminator &lt;/a&gt; (which has built in multiplexing functions). Terminator is
+somewhat slow with its output, whereas Sakura is pretty darn fast. The faster output of
+Sakura has really made a difference in my CLI-life, which is why I find Alacritty
 interesting.&lt;/p&gt;
 
-&lt;h3 id=&quot;redox-redox-gh---a-new-os&quot;&gt;&lt;a href=&quot;https://github.com/redox-os/redox&quot;&gt; Redox &lt;/a&gt; - a new OS&lt;/h3&gt;
+&lt;p&gt;Alacritty, which I think is a portmanteau of alacrity and TTY, and is a most fitting name
+given the project’s goals.&lt;/p&gt;
 
-&lt;h3 id=&quot;ripgrep-rg-gh---rip-grep&quot;&gt;&lt;a href=&quot;https://github.com/BurntSushi/ripgrep&quot;&gt; ripgrep &lt;/a&gt; - RIP grep&lt;/h3&gt;
+&lt;p&gt;Here’s an excerpt from the project’s README:&lt;/p&gt;
 
-&lt;h3 id=&quot;awesome-rust-rust-awesome---the-list-of-awesome-rust-code-and-resources&quot;&gt;&lt;a href=&quot;https://github.com/kud1ing/awesome-rust&quot;&gt; Awesome rust &lt;/a&gt; - The list of awesome rust code and resources&lt;/h3&gt;</content><category term="rust" /><category term="emacs" /><category term="terminal-emulator" /><category term="opengl" /><category term="cli" /><summary type="html">Remacs  - Emacs in rust</summary></entry></feed>
+&lt;blockquote&gt;
+  &lt;p&gt;Keep in mind that Alacritty is very much not looking to be a feature-rich terminal emulator with all sorts of bells and widgets. It’s primarily a cross-platform, blazing fast tmux renderer that Just Works.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Which is all I require of a good terminal emulator.&lt;/p&gt;
+
+&lt;p&gt;When building this project, I had to do as the README instructs when the compilation fails
+with &lt;code class=&quot;highlighter-rouge&quot;&gt;nightly&lt;/code&gt; version; &lt;code class=&quot;highlighter-rouge&quot;&gt;rustup override set $(&amp;lt;rustc-version)&lt;/code&gt; because otherwise
+&lt;a href=&quot;https://crates.io/crates/copypasta&quot;&gt;copypasta&lt;/a&gt; wouldn’t compile.&lt;/p&gt;
+
+&lt;p&gt;To try it out, I opened a new tmux session, split the window in two and executed
+&lt;code class=&quot;highlighter-rouge&quot;&gt;dd if=/dev/urandom | base64&lt;/code&gt;, which generates a &lt;em&gt;lot&lt;/em&gt; of output.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/alacritty_1-compressor.png&quot; alt=&quot;Alacritty test&quot; /&gt;
+&lt;em&gt;Alacritty with a tmux session having two zsh instances running &lt;code class=&quot;highlighter-rouge&quot;&gt;dd if=/dev/urandom | base64&lt;/code&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;I did the same with Sakura, and it was noticeably laggy, whereas Alacritty was pretty smooth.&lt;/p&gt;
+
+&lt;p&gt;I think I’ve found me a new terminal emulator.&lt;/p&gt;
+
+&lt;p&gt;Other commands to try in your terminal emulator:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cd /; tree&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;wget -qO- https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;ps&quot;&gt;P.S.&lt;/h4&gt;
+
+&lt;p&gt;It’s somewhat unfortunate that there is a multiplayer game named Rust. It somewhat dilutes
+the signal-to-noise ratio when searching the Web for rust related resources.&lt;/p&gt;</content><category term="rust" /><category term="emacs" /><category term="terminal-emulator" /><category term="opengl" /><category term="cli" /><summary type="html">Alacritty  - OpenGL powered terminal emulator</summary></entry></feed>

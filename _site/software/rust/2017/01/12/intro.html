@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Interesting software in the rust world</title>
-  <meta name="description" content="Remacs - Emacs in rust">
+  <meta name="description" content="Alacritty - OpenGL powered terminal emulator">
 
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="canonical" href="http://localhost:4000/software/rust/2017/01/12/intro.html">
@@ -45,10 +45,6 @@
           
         
           
-          <a class="page-link" href="/tags/">Tags</a>
-          
-        
-          
         
           
         
@@ -64,29 +60,72 @@
 
     <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+        
+
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
     <h1 class="post-title" itemprop="name headline">Interesting software in the rust world</h1>
-    <p class="post-meta"><time datetime="2017-01-12T14:58:02+01:00" itemprop="datePublished">Jan 12, 2017</time></p>
+
+    <p class="post-meta">
+      <time datetime="2017-01-12T14:58:02+01:00" itemprop="datePublished">
+        Jan 12, 2017
+      </time>
+      |
+      <span class="post-meta">
+        305 words
+      </span>
+
+      
+    </p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <h3 id="remacs-remacs-gh---emacs-in-rust"><a href="https://github.com/Wilfred/remacs"> Remacs </a> - Emacs in rust</h3>
-
-<h3 id="alacritty-alacritty-announcement---opengl-powered-terminal-emulator"><a href="http://blog.jwilm.io/announcing-alacritty/"> Alacritty </a> - OpenGL powered terminal emulator</h3>
+    <h3 id="alacritty-alacritty-announcement---opengl-powered-terminal-emulator"><a href="http://blog.jwilm.io/announcing-alacritty/"> Alacritty </a> - OpenGL powered terminal emulator</h3>
 
 <p>Lately I’ve been using <a href="https://launchpad.net/sakura"> Sakura </a> as my preferred terminal emulator and tmux as
 the multiplexer. But it was not too long ago I switched from using
-<a href="https://launchpad.net/terminator"> Terminator </a> (which has built in multiplexing functions). Terminator is somewhat slow with its output, whereas Sakura is pretty darn fast. The faster output of
-Sakura has really made a difference in my CLI-life, which is why I find Alacritty really
+<a href="https://launchpad.net/terminator"> Terminator </a> (which has built in multiplexing functions). Terminator is
+somewhat slow with its output, whereas Sakura is pretty darn fast. The faster output of
+Sakura has really made a difference in my CLI-life, which is why I find Alacritty
 interesting.</p>
 
-<h3 id="redox-redox-gh---a-new-os"><a href="https://github.com/redox-os/redox"> Redox </a> - a new OS</h3>
+<p>Alacritty, which I think is a portmanteau of alacrity and TTY, and is a most fitting name
+given the project’s goals.</p>
 
-<h3 id="ripgrep-rg-gh---rip-grep"><a href="https://github.com/BurntSushi/ripgrep"> ripgrep </a> - RIP grep</h3>
+<p>Here’s an excerpt from the project’s README:</p>
 
-<h3 id="awesome-rust-rust-awesome---the-list-of-awesome-rust-code-and-resources"><a href="https://github.com/kud1ing/awesome-rust"> Awesome rust </a> - The list of awesome rust code and resources</h3>
+<blockquote>
+  <p>Keep in mind that Alacritty is very much not looking to be a feature-rich terminal emulator with all sorts of bells and widgets. It’s primarily a cross-platform, blazing fast tmux renderer that Just Works.</p>
+</blockquote>
+
+<p>Which is all I require of a good terminal emulator.</p>
+
+<p>When building this project, I had to do as the README instructs when the compilation fails
+with <code class="highlighter-rouge">nightly</code> version; <code class="highlighter-rouge">rustup override set $(&lt;rustc-version)</code> because otherwise
+<a href="https://crates.io/crates/copypasta">copypasta</a> wouldn’t compile.</p>
+
+<p>To try it out, I opened a new tmux session, split the window in two and executed
+<code class="highlighter-rouge">dd if=/dev/urandom | base64</code>, which generates a <em>lot</em> of output.</p>
+
+<p><img src="/assets/img/alacritty_1-compressor.png" alt="Alacritty test" />
+<em>Alacritty with a tmux session having two zsh instances running <code class="highlighter-rouge">dd if=/dev/urandom | base64</code></em></p>
+
+<p>I did the same with Sakura, and it was noticeably laggy, whereas Alacritty was pretty smooth.</p>
+
+<p>I think I’ve found me a new terminal emulator.</p>
+
+<p>Other commands to try in your terminal emulator:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">cd /; tree</code></li>
+  <li><code class="highlighter-rouge">wget -qO- https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js</code></li>
+</ul>
+
+<h4 id="ps">P.S.</h4>
+
+<p>It’s somewhat unfortunate that there is a multiplayer game named Rust. It somewhat dilutes
+the signal-to-noise ratio when searching the Web for rust related resources.</p>
 
 
   </div>
