@@ -11,33 +11,43 @@ tags:
   - cli
 ---
 
-Lately I've been using [ Sakura ][sakura-home] as my preferred terminal emulator and tmux as the multiplexer. But it was not too long ago I switched from using [ Terminator ][terminator-lp] (which has built in multiplexing functions). Terminator is somewhat slow with its output, whereas Sakura is pretty fast. The faster output of Sakura has really made a difference in my command-line interfacing.
-
-Enter [Alacritty][alacritty-announcement]. The name, which I think is a portmanteau of alacrity and TTY, is a terminal emulator written in rust. Here's an excerpt from the project's README:
+Today we're going to take a look at [Alacritty][alacritty-announcement]. The name, which I think is a portmanteau of alacrity and [TTY][jargon-tty], is a terminal emulator written in rust. Here's an excerpt from the project's README, which describes it in a nutshell:
 
 >Keep in mind that Alacritty is very much not looking to be a feature-rich terminal emulator with all sorts of bells and widgets. It's primarily a cross-platform, blazing fast tmux renderer that Just Works.
 
-Which is all I require of a good terminal emulator and is why I find Alacritty interesting, but also in part due to it being written in rust.
+Personally, I've used the following terminal emulators to a greater extent:
 
-When building this project, I had to do as the README instructs when the compilation fails
-with `nightly` version; `rustup override set $(<rustc-version)` because otherwise
-[copypasta][cargo-copypasta] wouldn't compile.
+- Sakura
+- Terminator
+- rxvt-unicode
+- xterm
+- eterm
 
-To try it out, I opened a new tmux session, split the window in two and executed
-`dd if=/dev/urandom | base64`, which generates a _lot_ of output.
+Of which, to this date, I've found Sakura to be the most pleasant one to use, because of its simplicity and speed. Since Alacritty's goals are to be simple and fast, it might be a contender for my number one.
 
-![Alacritty test](/assets/img/alacritty_1-compressor.png)
+### Building
+
+The project's README includes instructions on which dependencies are requried and how to build. I had to `rustup override set $(<rustc-version)` (as stated in the README) because [copypasta][cargo-copypasta] wouldn't compile with the `nightly` release. Other than that, it was, more or less, a straight-forward `cargo build --release`, and a bit of waiting.
+
+### Running
+
+To try it out, I opened a new tmux session, split the window in two and executed `dd if=/dev/urandom | base64`, in order to generate some output.
+
+![Alacritty test](/assets/img/post1/alacritty_1-compressor.png)
 *Alacritty with a tmux session having two zsh instances running `dd if=/dev/urandom | base64`*
 
-I did the same with Sakura, and it was noticeably laggy, whereas Alacritty was pretty smooth.
+I did the same with Sakura, and it was actually noticeably laggy, whereas Alacritty was pretty smooth. Now, this test, in and of itself, is not sufficient to draw a final conclusion regarding which is faster. I presume that factors, such as [ANSI][jargon-ansi] colours and unicode glyphs, play a role as well. There is [an issue][alacritty-benchmark-issue] regarding this on the project's issue tracker, where one can find some examples of ways to benchmark a terminal emulator.
 
-I think I've found me a new terminal emulator, or at least one to start using and help improve.
+### Caveats
 
-Other commands to try in your terminal emulator:
+Running this on an older machine may not be possible just yet, due to Alacritty needing support for `GLSL 3.30`, as discussed in [this issue][alacritty-glsl-issue]. Trying to run Alacritty with an Intel M 530 integrated graphics controller did not work, whereas it did work on a newer ATI Radeon M. Hopefully, this issue is solved so that one can use Alacritty even on somewhat dated hardware.
 
-- `cd /; tree`
-- `wget -qO- https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js`
+Alacritty is still new, and as such has its share of bugs and incomplete functionality, but it is an [active project][alacritty-pulse], and as such might be "production ready" sometime in the future.
 
+### Links
+
+- [Joe Wilm's intro to Alacritty][alacritty-announcement]
+- [Alacritty@GitHub][alacritty-gh]
 
 #### P.S.
 
@@ -45,7 +55,13 @@ Other commands to try in your terminal emulator:
 the signal-to-noise ratio when searching the Web for rust related resources.*
 
 [alacritty-announcement]: http://blog.jwilm.io/announcing-alacritty/
+[alacritty-gh]: https://github.com/jwilm/alacritty
+[alacritty-pulse]: https://github.com/jwilm/alacritty/pulse
+[alacritty-benchmark-issue]: https://github.com/jwilm/alacritty/issues/289
+[alacritty-glsl-issue]: https://github.com/jwilm/alacritty/issues/128
 [cargo-copypasta]: https://crates.io/crates/copypasta
 
+[jargon-tty]: http://catb.org/jargon/html/T/tty.html
+[jargon-ansi]: http://catb.org/jargon/html/A/ANSI-standard.html
 [sakura-home]: https://launchpad.net/sakura
 [terminator-lp]: https://launchpad.net/terminator

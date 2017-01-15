@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Alacritty - an OpenGL powered terminal emulator</title>
-  <meta name="description" content="Lately I’ve been using Sakura as my preferred terminal emulator and tmux as the multiplexer. But it was not too long ago I switched from using Terminator (wh...">
+  <meta name="description" content="Today we’re going to take a look at Alacritty. The name, which I think is a portmanteau of alacrity and TTY, is a terminal emulator written in rust. Here’s a...">
 
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="canonical" href="http://localhost:4000/software/rust/2017/01/12/alacritty-opengl-powered-terminal-emulator.html">
@@ -73,7 +73,7 @@
       </time>
       |
       <span class="post-meta">
-        317 words
+        465 words
       </span>
 
       
@@ -81,35 +81,48 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>Lately I’ve been using <a href="https://launchpad.net/sakura"> Sakura </a> as my preferred terminal emulator and tmux as the multiplexer. But it was not too long ago I switched from using <a href="https://launchpad.net/terminator"> Terminator </a> (which has built in multiplexing functions). Terminator is somewhat slow with its output, whereas Sakura is pretty fast. The faster output of Sakura has really made a difference in my command-line interfacing.</p>
-
-<p>Enter <a href="http://blog.jwilm.io/announcing-alacritty/">Alacritty</a>. The name, which I think is a portmanteau of alacrity and TTY, is a terminal emulator written in rust. Here’s an excerpt from the project’s README:</p>
+    <p>Today we’re going to take a look at <a href="http://blog.jwilm.io/announcing-alacritty/">Alacritty</a>. The name, which I think is a portmanteau of alacrity and <a href="http://catb.org/jargon/html/T/tty.html">TTY</a>, is a terminal emulator written in rust. Here’s an excerpt from the project’s README, which describes it in a nutshell:</p>
 
 <blockquote>
   <p>Keep in mind that Alacritty is very much not looking to be a feature-rich terminal emulator with all sorts of bells and widgets. It’s primarily a cross-platform, blazing fast tmux renderer that Just Works.</p>
 </blockquote>
 
-<p>Which is all I require of a good terminal emulator and is why I find Alacritty interesting, but also in part due to it being written in rust.</p>
-
-<p>When building this project, I had to do as the README instructs when the compilation fails
-with <code class="highlighter-rouge">nightly</code> version; <code class="highlighter-rouge">rustup override set $(&lt;rustc-version)</code> because otherwise
-<a href="https://crates.io/crates/copypasta">copypasta</a> wouldn’t compile.</p>
-
-<p>To try it out, I opened a new tmux session, split the window in two and executed
-<code class="highlighter-rouge">dd if=/dev/urandom | base64</code>, which generates a <em>lot</em> of output.</p>
-
-<p><img src="/assets/img/alacritty_1-compressor.png" alt="Alacritty test" />
-<em>Alacritty with a tmux session having two zsh instances running <code class="highlighter-rouge">dd if=/dev/urandom | base64</code></em></p>
-
-<p>I did the same with Sakura, and it was noticeably laggy, whereas Alacritty was pretty smooth.</p>
-
-<p>I think I’ve found me a new terminal emulator, or at least one to start using and help improve.</p>
-
-<p>Other commands to try in your terminal emulator:</p>
+<p>Personally, I’ve used the following terminal emulators to a greater extent:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">cd /; tree</code></li>
-  <li><code class="highlighter-rouge">wget -qO- https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js</code></li>
+  <li>Sakura</li>
+  <li>Terminator</li>
+  <li>rxvt-unicode</li>
+  <li>xterm</li>
+  <li>eterm</li>
+</ul>
+
+<p>Of which, to this date, I’ve found Sakura to be the most pleasant one to use, because of its simplicity and speed. Since Alacritty’s goals are to be simple and fast, it might be a contender for my number one.</p>
+
+<h3 id="building">Building</h3>
+
+<p>The project’s README includes instructions on which dependencies are requried and how to build. I had to <code class="highlighter-rouge">rustup override set $(&lt;rustc-version)</code> (as stated in the README) because <a href="https://crates.io/crates/copypasta">copypasta</a> wouldn’t compile with the <code class="highlighter-rouge">nightly</code> release. Other than that, it was, more or less, a straight-forward <code class="highlighter-rouge">cargo build --release</code>, and a bit of waiting.</p>
+
+<h3 id="running">Running</h3>
+
+<p>To try it out, I opened a new tmux session, split the window in two and executed <code class="highlighter-rouge">dd if=/dev/urandom | base64</code>, in order to generate some output.</p>
+
+<p><img src="/assets/img/post1/alacritty_1-compressor.png" alt="Alacritty test" />
+<em>Alacritty with a tmux session having two zsh instances running <code class="highlighter-rouge">dd if=/dev/urandom | base64</code></em></p>
+
+<p>I did the same with Sakura, and it was actually noticeably laggy, whereas Alacritty was pretty smooth. Now, this test, in and of itself, is not sufficient to draw a final conclusion regarding which is faster. I presume that factors, such as <a href="http://catb.org/jargon/html/A/ANSI-standard.html">ANSI</a> colours and unicode glyphs, play a role as well. There is <a href="https://github.com/jwilm/alacritty/issues/289">an issue</a> regarding this on the project’s issue tracker, where one can find some examples of ways to benchmark a terminal emulator.</p>
+
+<h3 id="caveats">Caveats</h3>
+
+<p>Running this on an older machine may not be possible just yet, due to Alacritty needing support for <code class="highlighter-rouge">GLSL 3.30</code>, as discussed in <a href="https://github.com/jwilm/alacritty/issues/128">this issue</a>. Trying to run Alacritty with an Intel M 530 integrated graphics controller did not work, whereas it did work on a newer ATI Radeon M. Hopefully, this issue is solved so that one can use Alacritty even on somewhat dated hardware.</p>
+
+<p>Alacritty is still new, and as such has its share of bugs and incomplete functionality, but it is an <a href="https://github.com/jwilm/alacritty/pulse">active project</a>, and as such might be “production ready” sometime in the future.</p>
+
+<h3 id="links">Links</h3>
+
+<ul>
+  <li><a href="http://blog.jwilm.io/announcing-alacritty/">Joe Wilm’s intro to Alacritty</a></li>
+  <li><a href="https://github.com/jwilm/alacritty">Alacritty@GitHub</a></li>
 </ul>
 
 <h4 id="ps">P.S.</h4>
@@ -232,6 +245,10 @@ the signal-to-noise ratio when searching the Web for rust related resources.</em
 
 </footer>
 
+
+    <script>
+     document.title = 'defsrc::' + document.title;
+    </script>
 
     <script>
  (function () {
