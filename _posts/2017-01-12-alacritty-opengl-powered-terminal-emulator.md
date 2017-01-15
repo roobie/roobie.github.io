@@ -49,11 +49,6 @@ Alacritty is still new, and as such has its share of bugs and incomplete functio
 - [Joe Wilm's intro to Alacritty][alacritty-announcement]
 - [Alacritty@GitHub][alacritty-gh]
 
-#### P.S.
-
-*It's somewhat unfortunate that there is a multiplayer game named Rust. It somewhat dilutes
-the signal-to-noise ratio when searching the Web for rust related resources.*
-
 [alacritty-announcement]: http://blog.jwilm.io/announcing-alacritty/
 [alacritty-gh]: https://github.com/jwilm/alacritty
 [alacritty-pulse]: https://github.com/jwilm/alacritty/pulse
