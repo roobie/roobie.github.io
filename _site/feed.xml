@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-01-15T03:15:15+01:00</updated><id>http://localhost:4000//</id><title type="html">defsrc.com</title><subtitle>Discussing topics and going into details related to source code and software.
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-01-15T21:38:57+01:00</updated><id>http://localhost:4000//</id><title type="html">defsrc.com</title><subtitle>Discussing topics and going into details related to source code and software.
 </subtitle><entry><title type="html">Alacritty - an OpenGL powered terminal emulator</title><link href="http://localhost:4000/software/rust/2017/01/12/alacritty-opengl-powered-terminal-emulator.html" rel="alternate" type="text/html" title="Alacritty - an OpenGL powered terminal emulator" /><published>2017-01-12T14:58:02+01:00</published><updated>2017-01-12T14:58:02+01:00</updated><id>http://localhost:4000/software/rust/2017/01/12/alacritty-opengl-powered-terminal-emulator</id><content type="html" xml:base="http://localhost:4000/software/rust/2017/01/12/alacritty-opengl-powered-terminal-emulator.html">&lt;p&gt;Today we’re going to take a look at &lt;a href=&quot;http://blog.jwilm.io/announcing-alacritty/&quot;&gt;Alacritty&lt;/a&gt;. The name, which I think is a portmanteau of alacrity and &lt;a href=&quot;http://catb.org/jargon/html/T/tty.html&quot;&gt;TTY&lt;/a&gt;, is a terminal emulator written in rust. Here’s an excerpt from the project’s README, which describes it in a nutshell:&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -34,16 +34,13 @@
 
 &lt;p&gt;Running this on an older machine may not be possible just yet, due to Alacritty needing support for &lt;code class=&quot;highlighter-rouge&quot;&gt;GLSL 3.30&lt;/code&gt;, as discussed in &lt;a href=&quot;https://github.com/jwilm/alacritty/issues/128&quot;&gt;this issue&lt;/a&gt;. Trying to run Alacritty with an Intel M 530 integrated graphics controller did not work, whereas it did work on a newer ATI Radeon M. Hopefully, this issue is solved so that one can use Alacritty even on somewhat dated hardware.&lt;/p&gt;
 
-&lt;p&gt;Alacritty is still new, and as such has its share of bugs and incomplete functionality, but it is an &lt;a href=&quot;https://github.com/jwilm/alacritty/pulse&quot;&gt;active project&lt;/a&gt;, and as such might be “production ready” sometime in the future.&lt;/p&gt;
+&lt;h3 id=&quot;activity&quot;&gt;Activity&lt;/h3&gt;
+
+&lt;p&gt;The first commit to the repository was almost one year ago and it is an &lt;a href=&quot;https://github.com/jwilm/alacritty/pulse&quot;&gt;active project&lt;/a&gt;. There seem to be a bit of duplication regarding issues, especially issues regarding performance/benchmarking.&lt;/p&gt;
 
 &lt;h3 id=&quot;links&quot;&gt;Links&lt;/h3&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;http://blog.jwilm.io/announcing-alacritty/&quot;&gt;Joe Wilm’s intro to Alacritty&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://github.com/jwilm/alacritty&quot;&gt;Alacritty@GitHub&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;ps&quot;&gt;P.S.&lt;/h4&gt;
-
-&lt;p&gt;&lt;em&gt;It’s somewhat unfortunate that there is a multiplayer game named Rust. It somewhat dilutes
-the signal-to-noise ratio when searching the Web for rust related resources.&lt;/em&gt;&lt;/p&gt;</content><category term="rust" /><category term="terminal-emulator" /><category term="opengl" /><category term="cli" /><summary type="html">Today we’re going to take a look at Alacritty. The name, which I think is a portmanteau of alacrity and TTY, is a terminal emulator written in rust. Here’s an excerpt from the project’s README, which describes it in a nutshell:</summary></entry></feed>
+&lt;/ul&gt;</content><category term="rust" /><category term="terminal-emulator" /><category term="opengl" /><category term="cli" /><summary type="html">Today we’re going to take a look at Alacritty. The name, which I think is a portmanteau of alacrity and TTY, is a terminal emulator written in rust. Here’s an excerpt from the project’s README, which describes it in a nutshell:</summary></entry></feed>
