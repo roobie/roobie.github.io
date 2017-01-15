@@ -4,8 +4,7 @@
     <strong>Tagged with:</strong>
     <i class="fa fa-tags"></i>
     {% for tag in page.tags | sort %}
-    {{ tag }}
-    {% if forloop.last == false %}, {% endif %}
+    {{ tag }}{% if forloop.last == false %}, {% endif %}
     {% endfor %}
   </p>
   {% endif %}
