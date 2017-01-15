@@ -42,7 +42,9 @@ I did the same with Sakura, and it was actually noticeably laggy, whereas Alacri
 
 Running this on an older machine may not be possible just yet, due to Alacritty needing support for `GLSL 3.30`, as discussed in [this issue][alacritty-glsl-issue]. Trying to run Alacritty with an Intel M 530 integrated graphics controller did not work, whereas it did work on a newer ATI Radeon M. Hopefully, this issue is solved so that one can use Alacritty even on somewhat dated hardware.
 
-Alacritty is still new, and as such has its share of bugs and incomplete functionality, but it is an [active project][alacritty-pulse], and as such might be "production ready" sometime in the future.
+### Activity
+
+The first commit to the repository was almost one year ago and it is an [active project][alacritty-pulse]. There seem to be a bit of duplication regarding issues, especially issues regarding performance/benchmarking.
 
 ### Links
 
