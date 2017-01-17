@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>A uniform accessor for javascript</title>
-  <meta name="description" content="The uniform access principle can be applied when writing software to hide implementation details in an API. Consider the following (contrived) example:">
+  <meta name="description" content="The uniform access principle can be applied when writing software to hide implementation details in a module’s API. Consider the following (contrived) exampl...">
 
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="canonical" href="http://localhost:4000/software/javascript/2017/01/12/uniform-accessor-javascript.html">
@@ -73,7 +73,7 @@
       </time>
       |
       <span class="post-meta">
-        1253 words
+        1280 words
       </span>
 
       
@@ -81,9 +81,7 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>The <a href="https://en.wikipedia.org/wiki/Uniform_access_principle">uniform access principle</a> can be applied when writing software to hide implementation details in an API. Consider the following (contrived) example:</p>
-
-<p>We are interfacing with an API out of our control, which has the following signature:</p>
+    <p>The <a href="https://en.wikipedia.org/wiki/Uniform_access_principle">uniform access principle</a> can be applied when writing software to hide implementation details in a module’s API. Consider the following (contrived) example, where we are interfacing with an HTTP API out of our control, which has the following signature:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>GET /users/1
 {
@@ -93,6 +91,8 @@
 </code></pre>
 </div>
 
+<p>Then, to consume this API, we build an internal API that fetches the data and returns a <code class="highlighter-rouge">Promise</code> of it.</p>
+
 <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">// api module</span>
 <span class="kr">export</span> <span class="k">default</span> <span class="kr">const</span> <span class="nx">api</span> <span class="o">=</span> <span class="p">{</span>
   <span class="na">getUser</span><span class="p">:</span> <span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="err">`</span><span class="o">/</span><span class="nx">users</span><span class="o">/</span><span class="nx">$</span><span class="p">{</span><span class="nx">id</span><span class="p">}</span><span class="err">`</span><span class="p">)</span>
@@ -101,16 +101,13 @@
 <span class="c1">// application module</span>
 <span class="kr">import</span> <span class="nx">api</span> <span class="nx">from</span> <span class="s1">'api'</span><span class="p">;</span>
 
-<span class="c1">// should print 40</span>
 <span class="nx">api</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">fullName</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">fullName</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span> <span class="c1">// "Stephen Smith", 40</span>
 <span class="p">});</span>
 </code></pre>
 </div>
 
-<p>We would be able to access the properties, as usual, on the object.</p>
-
-<p>If the underlying API would change to return the birth date of the person instead of the current age</p>
+<p>All is fine and dandy, for a while. Then, the owner of the HTTP API updates the format of the data that is returned (and it’s not versioned), so we have to update our code.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>GET /users/1
 {
@@ -243,7 +240,7 @@
 <span class="nx">api</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="s1">'Stephen'</span><span class="p">)</span>
   <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">user</span><span class="p">)</span>
   <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">error</span><span class="p">);</span>
-  
+
 <span class="c1">// Or, if we implemented our API using reactive stream</span>
 <span class="nx">userService</span><span class="p">.</span><span class="nx">resultStream</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">user</span><span class="p">);</span>
 <span class="nx">userService</span><span class="p">.</span><span class="nx">errorStream</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">error</span><span class="p">);</span>

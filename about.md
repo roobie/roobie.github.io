@@ -13,8 +13,15 @@ into open source software, for the sake of learning more about programming,
 open source and software development in general. And so I thought that if I learn from it,
 then maybe other people can too. Hence this site.
 
-Happy hacking, to you.
+Happy hacking[^1], to you.
 
 ![Björn Roberg][gravatar]
 
+---
+
+##### Footnotes
+
+[^1]: Hacking to me is not breaking into systems and stealing data, but rather [as defined here (4 & 6)][jargon-hack]
+
 [gravatar]: {{ site.gravatar_href }}
+[jargon-hack]: http://www.catb.org/jargon/html/H/hack.html

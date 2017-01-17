@@ -9,9 +9,7 @@ tags:
   - API-design
 ---
 
-The [uniform access principle][wp-uap] can be applied when writing software to hide implementation details in an API. Consider the following (contrived) example:
-
-We are interfacing with an API out of our control, which has the following signature:
+The [uniform access principle][wp-uap] can be applied when writing software to hide implementation details in a module's API. Consider the following (contrived) example, where we are interfacing with an HTTP API out of our control, which has the following signature:
 
 ```
 GET /users/1
@@ -20,6 +18,8 @@ GET /users/1
   "age": 40
 }
 ```
+
+Then, to consume this API, we build an internal API that fetches the data and returns a `Promise` of it.
 
 ```javascript
 // api module
@@ -30,15 +30,12 @@ export default const api = {
 // application module
 import api from 'api';
 
-// should print 40
 api.getUser(1).then(user => {
-  console.log(user.fullName, user.age);
+  console.log(user.fullName, user.age); // "Stephen Smith", 40
 });
 ```
 
-We would be able to access the properties, as usual, on the object. 
-
-If the underlying API would change to return the birth date of the person instead of the current age
+All is fine and dandy, for a while. Then, the owner of the HTTP API updates the format of the data that is returned (and it's not versioned), so we have to update our code.
 
 ```
 GET /users/1
@@ -172,7 +169,7 @@ const model = {
 api.getUser('Stephen')
   .then(model.user)
   .catch(model.error);
-  
+
 // Or, if we implemented our API using reactive stream
 userService.resultStream.map(model.user);
 userService.errorStream.map(model.error);
