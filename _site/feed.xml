@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-01-17T01:47:41+01:00</updated><id>http://localhost:4000//</id><title type="html">defsrc.com</title><subtitle>Discussing topics and going into details related to source code and software.
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-01-17T01:49:23+01:00</updated><id>http://localhost:4000//</id><title type="html">defsrc.com</title><subtitle>Discussing topics and going into details related to source code and software.
 </subtitle><entry><title type="html">More robust JavaScript - The Maybe monad</title><link href="http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad.html" rel="alternate" type="text/html" title="More robust JavaScript - The Maybe monad" /><published>2017-01-16T19:58:02+01:00</published><updated>2017-01-16T19:58:02+01:00</updated><id>http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad</id><content type="html" xml:base="http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad.html">&lt;p&gt;If you design API’s (i.e. you write programs with more than one module or you
 design libraries to be used by others&lt;sup id=&quot;fnref:ninternalapis&quot;&gt;&lt;a href=&quot;#fn:ninternalapis&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;), then you make decisions on how then
 application code will look like and behave.&lt;/p&gt;
@@ -69,7 +69,7 @@ consumer code to handle the case of failure.&lt;/p&gt;
 
 &lt;p&gt;Let’s take a look at what the first solution could look like:&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Module: &lt;code class=&quot;highlighter-rouge&quot;&gt;app-trycatch.js&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Module: &lt;code class=&quot;highlighter-rouge&quot;&gt;app-nullcheck.js&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// some parts elided&lt;/span&gt;
 

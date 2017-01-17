@@ -76,7 +76,7 @@ consumer code to handle the case of failure.
 
 Let's take a look at what the first solution could look like:
 
-**Module: `app-trycatch.js`**
+**Module: `app-nullcheck.js`**
 
 ```javascript
 // some parts elided
