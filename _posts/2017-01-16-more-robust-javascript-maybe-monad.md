@@ -159,15 +159,20 @@ if (!result) {
 ### I'm sold! Where do I find it?
 
 There are a number of implementations in the wild that one could use. I like the
-idea behind [fantasy-options][fantasy-options-gh][^nalternativenames],
-in that there is a [well defined specification][fantasy-land-spec] for the API
-exposed by that module. As discussed in
-[this issue][fantasy-options-gh-name-issue], it might change the names of the
-exported symbols soon, from `Option{Some, None}` to `Maybe{Just, Nothing}`, so
-if you decide to use this, be ready to rewrite some code... `Maybe`.
+idea that some types of libraries should conform to a spec, and for this sort of
+data type there is a
+[well defined specification (fantasy land)][fantasy-land-spec]. The following
+libraries conforms to this spec:
 
-Another library that conforms to the fantasy-land spec is
-[ramda-fantasy/maybe][ramda-fantasy-maybe-gh]. However, this library is declared
+- [sanctuary/maybe][sanctuary-maybe]. On the plus side on using this library is
+that you get a lot of extra goodies.
+
+- [fantasy-options][fantasy-options-gh][^nalternativenames]. As discussed in
+[this issue][fantasy-options-gh-name-issue], it might change the names of the
+exported symbols soon, from `Option = Some a + None` to `Maybe = Just a + Nothing`,
+so if you decide to use this, be ready to rewrite some code.
+
+- [ramda-fantasy/maybe][ramda-fantasy-maybe-gh]. However, this library is declared
 to be in an alpha state, so should not be used without consideration.
 
 
@@ -186,5 +191,6 @@ I regret not being able to convince you of the merits of using the `Maybe` monad
 [fantasy-options-gh]: https://github.com/fantasyland/fantasy-options
 [fantasy-options-gh-name-issue]: https://github.com/fantasyland/fantasy-options/issues/8
 [ramda-fantasy-maybe-gh]: https://github.com/ramda/ramda-fantasy/blob/master/docs/Maybe.md
+[sanctuary-maybe]: https://sanctuary.js.org/#maybe-type
 
 [why1]: https://github.com/chrissrogers/maybe#why

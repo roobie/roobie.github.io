@@ -73,7 +73,7 @@
       </time>
       |
       <span class="post-meta">
-        1180 words
+        1220 words
       </span>
 
       
@@ -236,16 +236,27 @@ need to worry about inadvertently checking whether <code class="highlighter-roug
 <h3 id="im-sold-where-do-i-find-it">I’m sold! Where do I find it?</h3>
 
 <p>There are a number of implementations in the wild that one could use. I like the
-idea behind <a href="https://github.com/fantasyland/fantasy-options">fantasy-options</a><sup id="fnref:nalternativenames"><a href="#fn:nalternativenames" class="footnote">2</a></sup>,
-in that there is a <a href="https://github.com/fantasyland/fantasy-land">well defined specification</a> for the API
-exposed by that module. As discussed in
-<a href="https://github.com/fantasyland/fantasy-options/issues/8">this issue</a>, it might change the names of the
-exported symbols soon, from <code class="highlighter-rouge">Option{Some, None}</code> to <code class="highlighter-rouge">Maybe{Just, Nothing}</code>, so
-if you decide to use this, be ready to rewrite some code… <code class="highlighter-rouge">Maybe</code>.</p>
+idea that some types of libraries should conform to a spec, and for this sort of
+data type there is a
+<a href="https://github.com/fantasyland/fantasy-land">well defined specification (fantasy land)</a>. The following
+libraries conforms to this spec:</p>
 
-<p>Another library that conforms to the fantasy-land spec is
-<a href="https://github.com/ramda/ramda-fantasy/blob/master/docs/Maybe.md">ramda-fantasy/maybe</a>. However, this library is declared
+<ul>
+  <li>
+    <p><a href="https://sanctuary.js.org/#maybe-type">sanctuary/maybe</a>. On the plus side on using this library is
+that you get a lot of extra goodies.</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/fantasyland/fantasy-options">fantasy-options</a><sup id="fnref:nalternativenames"><a href="#fn:nalternativenames" class="footnote">2</a></sup>. As discussed in
+<a href="https://github.com/fantasyland/fantasy-options/issues/8">this issue</a>, it might change the names of the
+exported symbols soon, from <code class="highlighter-rouge">Option = Some a + None</code> to <code class="highlighter-rouge">Maybe = Just a + Nothing</code>,
+so if you decide to use this, be ready to rewrite some code.</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/ramda/ramda-fantasy/blob/master/docs/Maybe.md">ramda-fantasy/maybe</a>. However, this library is declared
 to be in an alpha state, so should not be used without consideration.</p>
+  </li>
+</ul>
 
 <h3 id="still-not-convinced">Still not convinced?</h3>
 

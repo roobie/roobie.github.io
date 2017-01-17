@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-01-17T01:49:23+01:00</updated><id>http://localhost:4000//</id><title type="html">defsrc.com</title><subtitle>Discussing topics and going into details related to source code and software.
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-01-17T12:43:24+01:00</updated><id>http://localhost:4000//</id><title type="html">defsrc.com</title><subtitle>Discussing topics and going into details related to source code and software.
 </subtitle><entry><title type="html">More robust JavaScript - The Maybe monad</title><link href="http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad.html" rel="alternate" type="text/html" title="More robust JavaScript - The Maybe monad" /><published>2017-01-16T19:58:02+01:00</published><updated>2017-01-16T19:58:02+01:00</updated><id>http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad</id><content type="html" xml:base="http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad.html">&lt;p&gt;If you design API’s (i.e. you write programs with more than one module or you
 design libraries to be used by others&lt;sup id=&quot;fnref:ninternalapis&quot;&gt;&lt;a href=&quot;#fn:ninternalapis&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;), then you make decisions on how then
 application code will look like and behave.&lt;/p&gt;
@@ -154,16 +154,27 @@ need to worry about inadvertently checking whether &lt;code class=&quot;highligh
 &lt;h3 id=&quot;im-sold-where-do-i-find-it&quot;&gt;I’m sold! Where do I find it?&lt;/h3&gt;
 
 &lt;p&gt;There are a number of implementations in the wild that one could use. I like the
-idea behind &lt;a href=&quot;https://github.com/fantasyland/fantasy-options&quot;&gt;fantasy-options&lt;/a&gt;&lt;sup id=&quot;fnref:nalternativenames&quot;&gt;&lt;a href=&quot;#fn:nalternativenames&quot; class=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;,
-in that there is a &lt;a href=&quot;https://github.com/fantasyland/fantasy-land&quot;&gt;well defined specification&lt;/a&gt; for the API
-exposed by that module. As discussed in
-&lt;a href=&quot;https://github.com/fantasyland/fantasy-options/issues/8&quot;&gt;this issue&lt;/a&gt;, it might change the names of the
-exported symbols soon, from &lt;code class=&quot;highlighter-rouge&quot;&gt;Option{Some, None}&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;Maybe{Just, Nothing}&lt;/code&gt;, so
-if you decide to use this, be ready to rewrite some code… &lt;code class=&quot;highlighter-rouge&quot;&gt;Maybe&lt;/code&gt;.&lt;/p&gt;
+idea that some types of libraries should conform to a spec, and for this sort of
+data type there is a
+&lt;a href=&quot;https://github.com/fantasyland/fantasy-land&quot;&gt;well defined specification (fantasy land)&lt;/a&gt;. The following
+libraries conforms to this spec:&lt;/p&gt;
 
-&lt;p&gt;Another library that conforms to the fantasy-land spec is
-&lt;a href=&quot;https://github.com/ramda/ramda-fantasy/blob/master/docs/Maybe.md&quot;&gt;ramda-fantasy/maybe&lt;/a&gt;. However, this library is declared
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://sanctuary.js.org/#maybe-type&quot;&gt;sanctuary/maybe&lt;/a&gt;. On the plus side on using this library is
+that you get a lot of extra goodies.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/fantasyland/fantasy-options&quot;&gt;fantasy-options&lt;/a&gt;&lt;sup id=&quot;fnref:nalternativenames&quot;&gt;&lt;a href=&quot;#fn:nalternativenames&quot; class=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;. As discussed in
+&lt;a href=&quot;https://github.com/fantasyland/fantasy-options/issues/8&quot;&gt;this issue&lt;/a&gt;, it might change the names of the
+exported symbols soon, from &lt;code class=&quot;highlighter-rouge&quot;&gt;Option = Some a + None&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;Maybe = Just a + Nothing&lt;/code&gt;,
+so if you decide to use this, be ready to rewrite some code.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/ramda/ramda-fantasy/blob/master/docs/Maybe.md&quot;&gt;ramda-fantasy/maybe&lt;/a&gt;. However, this library is declared
 to be in an alpha state, so should not be used without consideration.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h3 id=&quot;still-not-convinced&quot;&gt;Still not convinced?&lt;/h3&gt;
 
