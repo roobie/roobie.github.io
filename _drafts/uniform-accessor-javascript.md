@@ -9,182 +9,143 @@ tags:
   - API-design
 ---
 
-The [uniform access principle][wp-uap] can be applied when writing software to hide implementation details in a module's API. Consider the following (contrived) example, where we are interfacing with an HTTP API out of our control, which has the following signature:
+Applying the [uniform access principle][wp-uap] to one's API's in JavaScript can be done in at least two ways:
+
+1. Using the `Object.create`/`Object.defineProperties` API
+2. Wrapping a value in a closure and exposing a function that can read and set said value, e.g. [uniform-accessor][uniform-accessor]
+
+Let's say we have an HTTP API such as this:
 
 ```
 GET /users/1
 {
-  "fullName": "Stephen Smith",
-  "age": 40
+  "firstName": "Fox",
+  "lastName": "Mulder"
 }
 ```
 
-Then, to consume this API, we build an internal API that fetches the data and returns a `Promise` of it.
+**user_service.js**
 
 ```javascript
-// api module
-export default const api = {
-  getUser: (id) => http.get(`/users/${id}`)
-};
+import {User} from './models';
 
-// application module
-import api from 'api';
-
-api.getUser(1).then(user => {
-  console.log(user.fullName, user.age); // "Stephen Smith", 40
-});
-```
-
-All is fine and dandy, for a while. Then, the owner of the HTTP API updates the format of the data that is returned (and it's not versioned), so we have to update our code.
-
-```
-GET /users/1
-{
-  "firstName": "Stephen",
-  "lastName": "Smith",
-  "dateOfBirth": "1977-01-01"
+export getUser(id = 0) {
+  return http.get(`/users/${id}`)
+    .then(User.of);
 }
 ```
 
-Then, we could rewrite the `getUser` function, without breaking application code by using the `Object.create` API, as such:
+**models.js #1**
 
 ```javascript
-// api module, identical parts elided
-    .then(user => {
-      return Object.defineProperties(user, {
-        fullName: {
-          get: function () {
-            return `${user.firstName} ${user.lastName}`;
-          }
+export class User {
+  constructor(srcData) {
+    Object.defineProperties(this, {
+      _firstName: {
+        value: srcData.firstName
+      },
+      _lastName: {
+        value: srcData.lastName
+      },
+      firstName: {
+        get: function () {
+          return this._firstName;
         },
-        dateOfBirth: {
-          get: function () {
-            return new Date(user.dateOfBirth);
-          }
+        set: function (newFirstName) {
+          this._firstName = newFirstName;
         },
-        age: {
-          get: function () {
-            return yearDiff(new Date(), this.dateOfBirth());
-          }
-        }
-      })
-    })
+        enumerable: true
+      },
+      lastName: {
+        get: function () {
+          return this._lastName;
+        },
+        set: function (newLastName) {
+          this._lastName = newLastName;
+        },
+        enumerable: true
+      },
+      name: {
+        get: function () {
+          return `${this.firstName} ${this.lastName}`;
+        },
+        enumerable: true
+      }
+    });
+  }
+
+  static of(data) {
+    return new User(data);
+  }
+}
 ```
 
-A bit mouthful, but does the job. An alternative to this is what one could call a "uniform accessor function". Here's an example of an [implementation in javascript][uniform-accessor]. The basic usage of it is:
-
-```javascript
-import uniformAccessor from 'uniform-accessor';
-const v = uniformAccessor('a string');
-console.assert(v() === 'a string');
-console.assert(v('another string') === 'another string');
-console.assert(v() === 'another string');
-```
-
-Here's a helper function to automatically transform a result from a plain old JS object to one with properties that are of uniform access type, [uniform access transform][ua-transformer-gist]
-
-Using the uniform accessor and the transform, one could design the API from the beginning as:
-
-**Before the underlying API change**
+**models.js #2**
 
 ```javascript
 import ua from 'uniform-accessor';
-import uniformAccessTransform from 'uniform-access-transform';
 
-// api module
-export default const api = {
-  getUser: (id) => http.get(`/users/${id}`)
-    .then(user => uniformAccessTransform(user))
-    // -----------^ using the helper function here
+export class User {
+  constructor(srcData) {
+    this.firstName = ua(srcData.firstName);
+    this.lastName = ua(srcData.lastName);
+    this.fullName = function () {
+      return `${this.firstName()} ${this.lastName()}`;
+    };
+  }
+
+  static of(data) {
+    return new User(data);
+  }
 }
+```
 
-// the application module would instead look like this
-import api from 'api';
+There are a couple of differences, of which at least two are important:
 
-// should print 'Stephen Smith', 40
-api.getUser(1).then(user => {
-  console.log(user.fullName(), user.age());
-  // ----------------------^-----------^
-  // Notice the accessor functions being called
+- There's less boilerplate in **#2**
+- The object's properties are accessed like `a.firstName` in **#1**, whereas they're accessed like `a.firstName()` in **#2** (notice the parentheses)
+
+### More examples
+
+Setting the name of a `User` with a value from an async computation:
+
+```javascript
+const u1 = new User({...}); // from models.js #1
+nameService.getRandom().then(name => u1.name = name);
+// ----------------------------------^^^^^^^^^^^^^^
+// notice how we're actually returning the value of the assignment expression here.
+// (I'm not too fond of this, and e.g. airbnb's eslint config forbids this)
+// In order to circumvent this infraction, we would have to write:
+nameService.getRandom().then(name => {
+  u1.name = name;
 });
 ```
 
-**After the underlying API change**
-
 ```javascript
-import ua from 'uniform-accessor';
-import uniformAccessTransform from 'uniform-access-transform';
-
-// api module, identical parts elided
-    .then(user => {
-      return uniformAccessTransform(user, {
-        fullName: function () {
-          return `${user.firstName} ${user.lastName}`;
-        },
-        dateOfBirth: function () {
-          return new Date(user.dateOfBirth);
-        },
-        age: function () {
-          return yearDiff(new Date(), this.dateOfBirth());
-        }
-      })
-    })
+const u2 = new User({...}); // from models.js #2
+nameService.getRandom().then(u2.name);
+// --------------------------^
+// just pass the accessor function as a callback to the `.then()` method
 ```
 
-# TODO - drawing
+### More possibilities
 
-Now, this, in and of itself, is not mind-blowing. However, there are certain use cases where this sort of API-design could be preferable. E.g. consider Angular, which implements a sort of [event loop with dirty checking][ng-digest] to implement a two-way binding between views and controllers. If one were to implement an Angular-like library, we could require that all properties that are exposed to the view are of uniform access type. We would perhaps implement our own version of the `uniform-accessor` library, that was integrated with our rendering code, so that when application code would set the value of an accessor we would know when to re-render the UI, removing the need for dirty checking. [Mithril MVC framework][mithril-home] does this, as far as i can tell.
+The (uniform-accessor)[uniform-accessor] library (made by yours truly) has some useful
+extensions, such as `equals` `ap`, `map`, `chain`, `update` and `collect`.
 
-Furthermore, uniform access variable bindings can be of use for writing terser code. Since uniform accessors are functions, the can be used as callbacks to e.g. `Promise.prototype.then`:
-
-**Basic implementation**
-
-```javascript
-const model = {
-  user: {},
-  error: null
-};
-
-api.getUser()
-  .then(result => {
-    model.error = null;
-    model.user = result;
-  })
-  .catch(error => {
-    model.error = error;
-    model.user = null;
-  })
-```
-
-**Implementation with a uniform accessor and some helper functions**
+**Examples:**
 
 ```javascript
-// using the event triggers to cause side effects to clear the mutex'd values.
-const model = {
-  user: ua({}, { onset: () => model.error(null) }),
-  error: ua(null, { onset: () => model.user(null) })
-};
-
-// using a Promise-based API
-api.getUser('Stephen')
-  .then(model.user)
-  .catch(model.error);
-
-// Or, if we implemented our API using reactive stream
-userService.resultStream.map(model.user);
-userService.errorStream.map(model.error);
+const dog = ua('Noname')
+const cat = ua('Zeke')
+const upcase = s => s.toUpperCase()
+const upcaseUa = ua(upcase)
 ```
-
-What we're seeing is composability, and a uniform way of accessing data on an object. Furthermore, the way we set it up is in a more declarative way rather than imperative.
-
-#### Notes
-
-- See [flyd][flyd-gh] for a nice reactive stream library.
-- I first saw an implementation and extensive use of one in the [Mithril MVC framework][mithril-home], where it is called [`m.prop`][m-prop].
 
 
 [wp-uap]: https://en.wikipedia.org/wiki/Uniform_access_principle
 [mithril-home]: http://mithril.js.org/
+[mithril-blog-uap]: http://lhorie.github.io/mithril-blog/the-uniform-access-principle.html
 [uniform-accessor]: https://github.com/roobie/uniform-accessor
 [ua-transformer-gist]: https://gist.github.com/roobie/4641d331144c61cdb2fdd0ea3bd957fb
 [m-prop]: http://mithril.js.org/mithril.prop.html

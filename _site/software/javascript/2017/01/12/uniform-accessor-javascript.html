@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>A uniform accessor for javascript</title>
-  <meta name="description" content="The uniform access principle can be applied when writing software to hide implementation details in a module’s API. Consider the following (contrived) exampl...">
+  <meta name="description" content="Applying the uniform access principle to one’s API’s in JavaScript can be done in at least two ways:">
 
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="canonical" href="http://localhost:4000/software/javascript/2017/01/12/uniform-accessor-javascript.html">
@@ -73,7 +73,7 @@
       </time>
       |
       <span class="post-meta">
-        1280 words
+        770 words
       </span>
 
       
@@ -81,180 +81,142 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>The <a href="https://en.wikipedia.org/wiki/Uniform_access_principle">uniform access principle</a> can be applied when writing software to hide implementation details in a module’s API. Consider the following (contrived) example, where we are interfacing with an HTTP API out of our control, which has the following signature:</p>
+    <p>Applying the <a href="https://en.wikipedia.org/wiki/Uniform_access_principle">uniform access principle</a> to one’s API’s in JavaScript can be done in at least two ways:</p>
+
+<ol>
+  <li>Using the <code class="highlighter-rouge">Object.create</code>/<code class="highlighter-rouge">Object.defineProperties</code> API</li>
+  <li>Wrapping a value in a closure and exposing a function that can read and set said value, e.g. <a href="https://github.com/roobie/uniform-accessor">uniform-accessor</a></li>
+</ol>
+
+<p>Let’s say we have an HTTP API such as this:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>GET /users/1
 {
-  "fullName": "Stephen Smith",
-  "age": 40
+  "firstName": "Fox",
+  "lastName": "Mulder"
 }
 </code></pre>
 </div>
 
-<p>Then, to consume this API, we build an internal API that fetches the data and returns a <code class="highlighter-rouge">Promise</code> of it.</p>
+<p><strong>user_service.js</strong></p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">// api module</span>
-<span class="kr">export</span> <span class="k">default</span> <span class="kr">const</span> <span class="nx">api</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">getUser</span><span class="p">:</span> <span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="err">`</span><span class="o">/</span><span class="nx">users</span><span class="o">/</span><span class="nx">$</span><span class="p">{</span><span class="nx">id</span><span class="p">}</span><span class="err">`</span><span class="p">)</span>
-<span class="p">};</span>
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="p">{</span><span class="nx">User</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'./models'</span><span class="p">;</span>
 
-<span class="c1">// application module</span>
-<span class="kr">import</span> <span class="nx">api</span> <span class="nx">from</span> <span class="s1">'api'</span><span class="p">;</span>
-
-<span class="nx">api</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">fullName</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span> <span class="c1">// "Stephen Smith", 40</span>
-<span class="p">});</span>
-</code></pre>
-</div>
-
-<p>All is fine and dandy, for a while. Then, the owner of the HTTP API updates the format of the data that is returned (and it’s not versioned), so we have to update our code.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>GET /users/1
-{
-  "firstName": "Stephen",
-  "lastName": "Smith",
-  "dateOfBirth": "1977-01-01"
-}
-</code></pre>
-</div>
-
-<p>Then, we could rewrite the <code class="highlighter-rouge">getUser</code> function, without breaking application code by using the <code class="highlighter-rouge">Object.create</code> API, as such:</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">// api module, identical parts elided</span>
-    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperties</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="p">{</span>
-        <span class="na">fullName</span><span class="p">:</span> <span class="p">{</span>
-          <span class="na">get</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">firstName</span><span class="p">}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">lastName</span><span class="p">}</span><span class="err">`</span><span class="p">;</span>
-          <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="na">dateOfBirth</span><span class="p">:</span> <span class="p">{</span>
-          <span class="na">get</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">dateOfBirth</span><span class="p">);</span>
-          <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="na">age</span><span class="p">:</span> <span class="p">{</span>
-          <span class="na">get</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">yearDiff</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">(),</span> <span class="k">this</span><span class="p">.</span><span class="nx">dateOfBirth</span><span class="p">());</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">})</span>
-    <span class="p">})</span>
-</code></pre>
-</div>
-
-<p>A bit mouthful, but does the job. An alternative to this is what one could call a “uniform accessor function”. Here’s an example of an <a href="https://github.com/roobie/uniform-accessor">implementation in javascript</a>. The basic usage of it is:</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nx">uniformAccessor</span> <span class="nx">from</span> <span class="s1">'uniform-accessor'</span><span class="p">;</span>
-<span class="kr">const</span> <span class="nx">v</span> <span class="o">=</span> <span class="nx">uniformAccessor</span><span class="p">(</span><span class="s1">'a string'</span><span class="p">);</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">assert</span><span class="p">(</span><span class="nx">v</span><span class="p">()</span> <span class="o">===</span> <span class="s1">'a string'</span><span class="p">);</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">assert</span><span class="p">(</span><span class="nx">v</span><span class="p">(</span><span class="s1">'another string'</span><span class="p">)</span> <span class="o">===</span> <span class="s1">'another string'</span><span class="p">);</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">assert</span><span class="p">(</span><span class="nx">v</span><span class="p">()</span> <span class="o">===</span> <span class="s1">'another string'</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<p>Here’s a helper function to automatically transform a result from a plain old JS object to one with properties that are of uniform access type, <a href="https://gist.github.com/roobie/4641d331144c61cdb2fdd0ea3bd957fb">uniform access transform</a></p>
-
-<p>Using the uniform accessor and the transform, one could design the API from the beginning as:</p>
-
-<p><strong>Before the underlying API change</strong></p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nx">ua</span> <span class="nx">from</span> <span class="s1">'uniform-accessor'</span><span class="p">;</span>
-<span class="kr">import</span> <span class="nx">uniformAccessTransform</span> <span class="nx">from</span> <span class="s1">'uniform-access-transform'</span><span class="p">;</span>
-
-<span class="c1">// api module</span>
-<span class="kr">export</span> <span class="k">default</span> <span class="kr">const</span> <span class="nx">api</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">getUser</span><span class="p">:</span> <span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="err">`</span><span class="o">/</span><span class="nx">users</span><span class="o">/</span><span class="nx">$</span><span class="p">{</span><span class="nx">id</span><span class="p">}</span><span class="err">`</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">uniformAccessTransform</span><span class="p">(</span><span class="nx">user</span><span class="p">))</span>
-    <span class="c1">// -----------^ using the helper function here</span>
+<span class="kr">export</span> <span class="nx">getUser</span><span class="p">(</span><span class="nx">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="err">`</span><span class="o">/</span><span class="nx">users</span><span class="o">/</span><span class="nx">$</span><span class="p">{</span><span class="nx">id</span><span class="p">}</span><span class="err">`</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">User</span><span class="p">.</span><span class="nx">of</span><span class="p">);</span>
 <span class="p">}</span>
-
-<span class="c1">// the application module would instead look like this</span>
-<span class="kr">import</span> <span class="nx">api</span> <span class="nx">from</span> <span class="s1">'api'</span><span class="p">;</span>
-
-<span class="c1">// should print 'Stephen Smith', 40</span>
-<span class="nx">api</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">fullName</span><span class="p">(),</span> <span class="nx">user</span><span class="p">.</span><span class="nx">age</span><span class="p">());</span>
-  <span class="c1">// ----------------------^-----------^</span>
-  <span class="c1">// Notice the accessor functions being called</span>
-<span class="p">});</span>
 </code></pre>
 </div>
 
-<p><strong>After the underlying API change</strong></p>
+<p><strong>models.js #1</strong></p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">export</span> <span class="kr">class</span> <span class="nx">User</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">srcData</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperties</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{</span>
+      <span class="na">_firstName</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">value</span><span class="p">:</span> <span class="nx">srcData</span><span class="p">.</span><span class="nx">firstName</span>
+      <span class="p">},</span>
+      <span class="na">_lastName</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">value</span><span class="p">:</span> <span class="nx">srcData</span><span class="p">.</span><span class="nx">lastName</span>
+      <span class="p">},</span>
+      <span class="na">firstName</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">get</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_firstName</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="na">set</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">newFirstName</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">_firstName</span> <span class="o">=</span> <span class="nx">newFirstName</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="na">enumerable</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="p">},</span>
+      <span class="na">lastName</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">get</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_lastName</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="na">set</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">newLastName</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">_lastName</span> <span class="o">=</span> <span class="nx">newLastName</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="na">enumerable</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="p">},</span>
+      <span class="na">name</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">get</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">firstName</span><span class="p">}</span> <span class="nx">$</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">lastName</span><span class="p">}</span><span class="err">`</span><span class="p">;</span>
+        <span class="p">},</span>
+        <span class="na">enumerable</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+
+  <span class="kr">static</span> <span class="nx">of</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>models.js #2</strong></p>
 
 <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nx">ua</span> <span class="nx">from</span> <span class="s1">'uniform-accessor'</span><span class="p">;</span>
-<span class="kr">import</span> <span class="nx">uniformAccessTransform</span> <span class="nx">from</span> <span class="s1">'uniform-access-transform'</span><span class="p">;</span>
 
-<span class="c1">// api module, identical parts elided</span>
-    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">uniformAccessTransform</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="p">{</span>
-        <span class="na">fullName</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">firstName</span><span class="p">}</span> <span class="nx">$</span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">lastName</span><span class="p">}</span><span class="err">`</span><span class="p">;</span>
-        <span class="p">},</span>
-        <span class="na">dateOfBirth</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">dateOfBirth</span><span class="p">);</span>
-        <span class="p">},</span>
-        <span class="na">age</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="nx">yearDiff</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">(),</span> <span class="k">this</span><span class="p">.</span><span class="nx">dateOfBirth</span><span class="p">());</span>
-        <span class="p">}</span>
-      <span class="p">})</span>
-    <span class="p">})</span>
+<span class="kr">export</span> <span class="kr">class</span> <span class="nx">User</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">srcData</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">firstName</span> <span class="o">=</span> <span class="nx">ua</span><span class="p">(</span><span class="nx">srcData</span><span class="p">.</span><span class="nx">firstName</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">lastName</span> <span class="o">=</span> <span class="nx">ua</span><span class="p">(</span><span class="nx">srcData</span><span class="p">.</span><span class="nx">lastName</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">fullName</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">firstName</span><span class="p">()}</span> <span class="nx">$</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">lastName</span><span class="p">()}</span><span class="err">`</span><span class="p">;</span>
+    <span class="p">};</span>
+  <span class="p">}</span>
+
+  <span class="kr">static</span> <span class="nx">of</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
 </div>
 
-<h1 id="todo---drawing">TODO - drawing</h1>
-
-<p>Now, this, in and of itself, is not mind-blowing. However, there are certain use cases where this sort of API-design could be preferable. E.g. consider Angular, which implements a sort of <a href="https://www.ng-book.com/p/The-Digest-Loop-and-apply/">event loop with dirty checking</a> to implement a two-way binding between views and controllers. If one were to implement an Angular-like library, we could require that all properties that are exposed to the view are of uniform access type. We would perhaps implement our own version of the <code class="highlighter-rouge">uniform-accessor</code> library, that was integrated with our rendering code, so that when application code would set the value of an accessor we would know when to re-render the UI, removing the need for dirty checking. <a href="http://mithril.js.org/">Mithril MVC framework</a> does this, as far as i can tell.</p>
-
-<p>Furthermore, uniform access variable bindings can be of use for writing terser code. Since uniform accessors are functions, the can be used as callbacks to e.g. <code class="highlighter-rouge">Promise.prototype.then</code>:</p>
-
-<p><strong>Basic implementation</strong></p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">model</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">user</span><span class="p">:</span> <span class="p">{},</span>
-  <span class="na">error</span><span class="p">:</span> <span class="kc">null</span>
-<span class="p">};</span>
-
-<span class="nx">api</span><span class="p">.</span><span class="nx">getUser</span><span class="p">()</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">result</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">model</span><span class="p">.</span><span class="nx">error</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="nx">model</span><span class="p">.</span><span class="nx">user</span> <span class="o">=</span> <span class="nx">result</span><span class="p">;</span>
-  <span class="p">})</span>
-  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">model</span><span class="p">.</span><span class="nx">error</span> <span class="o">=</span> <span class="nx">error</span><span class="p">;</span>
-    <span class="nx">model</span><span class="p">.</span><span class="nx">user</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-  <span class="p">})</span>
-</code></pre>
-</div>
-
-<p><strong>Implementation with a uniform accessor and some helper functions</strong></p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">// using the event triggers to cause side effects to clear the mutex'd values.</span>
-<span class="kr">const</span> <span class="nx">model</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">user</span><span class="p">:</span> <span class="nx">ua</span><span class="p">({},</span> <span class="p">{</span> <span class="na">onset</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">model</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span> <span class="p">}),</span>
-  <span class="na">error</span><span class="p">:</span> <span class="nx">ua</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span> <span class="na">onset</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">model</span><span class="p">.</span><span class="nx">user</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span> <span class="p">})</span>
-<span class="p">};</span>
-
-<span class="c1">// using a Promise-based API</span>
-<span class="nx">api</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="s1">'Stephen'</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">user</span><span class="p">)</span>
-  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">error</span><span class="p">);</span>
-
-<span class="c1">// Or, if we implemented our API using reactive stream</span>
-<span class="nx">userService</span><span class="p">.</span><span class="nx">resultStream</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">user</span><span class="p">);</span>
-<span class="nx">userService</span><span class="p">.</span><span class="nx">errorStream</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">error</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<p>What we’re seeing is composability, and a uniform way of accessing data on an object. Furthermore, the way we set it up is in a more declarative way rather than imperative.</p>
-
-<h4 id="notes">Notes</h4>
+<p>There are a couple of differences, of which at least two are important:</p>
 
 <ul>
-  <li>See <a href="https://github.com/paldepind/flyd">flyd</a> for a nice reactive stream library.</li>
-  <li>I first saw an implementation and extensive use of one in the <a href="http://mithril.js.org/">Mithril MVC framework</a>, where it is called <a href="http://mithril.js.org/mithril.prop.html"><code class="highlighter-rouge">m.prop</code></a>.</li>
+  <li>There’s less boilerplate in <strong>#2</strong></li>
+  <li>The object’s properties are accessed like <code class="highlighter-rouge">a.firstName</code> in <strong>#1</strong>, whereas they’re accessed like <code class="highlighter-rouge">a.firstName()</code> in <strong>#2</strong> (notice the parentheses)</li>
 </ul>
+
+<h3 id="more-examples">More examples</h3>
+
+<p>Setting the name of a <code class="highlighter-rouge">User</code> with a value from an async computation:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">u1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">({...});</span> <span class="c1">// from models.js #1</span>
+<span class="nx">nameService</span><span class="p">.</span><span class="nx">getRandom</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">name</span> <span class="o">=&gt;</span> <span class="nx">u1</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">);</span>
+<span class="c1">// ----------------------------------^^^^^^^^^^^^^^</span>
+<span class="c1">// notice how we're actually returning the value of the assignment expression here.</span>
+<span class="c1">// (I'm not too fond of this, and e.g. airbnb's eslint config forbids this)</span>
+<span class="c1">// In order to circumvent this infraction, we would have to write:</span>
+<span class="nx">nameService</span><span class="p">.</span><span class="nx">getRandom</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">name</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">u1</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">u2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">({...});</span> <span class="c1">// from models.js #2</span>
+<span class="nx">nameService</span><span class="p">.</span><span class="nx">getRandom</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="nx">u2</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+<span class="c1">// --------------------------^</span>
+<span class="c1">// just pass the accessor function as a callback to the `.then()` method</span>
+</code></pre>
+</div>
+
+<h3 id="more-possibilities">More possibilities</h3>
+
+<p>The (uniform-accessor)<a href="https://github.com/roobie/uniform-accessor">uniform-accessor</a> library (made by yours truly) has some useful
+extensions, such as <code class="highlighter-rouge">equals</code> <code class="highlighter-rouge">ap</code>, <code class="highlighter-rouge">map</code>, <code class="highlighter-rouge">chain</code>, <code class="highlighter-rouge">update</code> and <code class="highlighter-rouge">collect</code>.</p>
+
+<p><strong>Examples:</strong></p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">const</span> <span class="nx">dog</span> <span class="o">=</span> <span class="nx">ua</span><span class="p">(</span><span class="s1">'Noname'</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">cat</span> <span class="o">=</span> <span class="nx">ua</span><span class="p">(</span><span class="s1">'Zeke'</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">upcase</span> <span class="o">=</span> <span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span>
+<span class="kr">const</span> <span class="nx">upcaseUa</span> <span class="o">=</span> <span class="nx">ua</span><span class="p">(</span><span class="nx">upcase</span><span class="p">)</span>
+</code></pre>
+</div>
 
 
   </div>
