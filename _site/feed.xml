@@ -1,247 +1,241 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-06-02T00:36:13+02:00</updated><id>http://localhost:4000//</id><title type="html">defsrc.com</title><subtitle>Discussing topics and going into details related to source code and software.
-</subtitle><entry><title type="html">More robust JavaScript - The Maybe monad</title><link href="http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad.html" rel="alternate" type="text/html" title="More robust JavaScript - The Maybe monad" /><published>2017-01-16T19:58:02+01:00</published><updated>2017-01-16T19:58:02+01:00</updated><id>http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad</id><content type="html" xml:base="http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad.html">&lt;p&gt;If you design API’s (i.e. you write programs with more than one module or you
-design libraries to be used by others&lt;sup id=&quot;fnref:ninternalapis&quot;&gt;&lt;a href=&quot;#fn:ninternalapis&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;), then you make decisions on how then
-application code will look like and behave.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-06-02T01:07:05+02:00</updated><id>http://localhost:4000//</id><title type="html">defsrc.com</title><subtitle>Discussing topics and going into details related to source code and software.
+</subtitle><entry><title type="html">More robust JavaScript - The Maybe monad</title><link href="http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad.html" rel="alternate" type="text/html" title="More robust JavaScript - The Maybe monad" /><published>2017-01-16T19:58:02+01:00</published><updated>2017-01-16T19:58:02+01:00</updated><id>http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad</id><content type="html" xml:base="http://localhost:4000/software/javascript/2017/01/16/more-robust-javascript-maybe-monad.html">If you design API's (i.e. you write programs with more than one module or you
+design libraries to be used by others[^ninternalapis]), then you make decisions on how then
+application code will look like and behave.
 
-&lt;p&gt;Let’s say that we need a module for interfacing with a word list, like a
-dictionary. The module should expose a function named &lt;code class=&quot;highlighter-rouge&quot;&gt;getFirstMatch&lt;/code&gt; that consumes
-1 argument, a &lt;code class=&quot;highlighter-rouge&quot;&gt;RegExp&lt;/code&gt;, and should return the first word in the word list that matches
-that &lt;code class=&quot;highlighter-rouge&quot;&gt;RegExp&lt;/code&gt;. We have a text file &lt;code class=&quot;highlighter-rouge&quot;&gt;words.txt&lt;/code&gt; that contains the following:&lt;/p&gt;
+Let's say that we need a module for interfacing with a word list, like a
+dictionary. The module should expose a function named `getFirstMatch` that consumes
+1 argument, a `RegExp`, and should return the first word in the word list that matches
+that `RegExp`. We have a text file `words.txt` that contains the following:
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;aardvark
+```
+aardvark
 fox
 lion
 wolf
 zebra
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+```
 
-&lt;p&gt;For the sake of brevity, we have a function, &lt;code class=&quot;highlighter-rouge&quot;&gt;load&lt;/code&gt;, that parses a file as an
-array with an element for each line in the file.&lt;/p&gt;
+For the sake of brevity, we have a function, `load`, that parses a file as an
+array with an element for each line in the file.
 
-&lt;p&gt;An initial implementation could look like:&lt;/p&gt;
+An initial implementation could look like:
 
-&lt;p&gt;&lt;strong&gt;Module: &lt;code class=&quot;highlighter-rouge&quot;&gt;words-basic.js&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+**Module: `words-basic.js`**
 
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'./words.txt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kr&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;getFirstMatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+```javascript
+const words = load('./words.txt');
+export function getFirstMatch(re) {
+  for (let i = 0; i &lt; words.length; ++i)
+    if (words[i].match(re) !== null) return words[i];
+};
+```
 
-&lt;p&gt;Then, some application code comes along and wants to use the above module:&lt;/p&gt;
+Then, some application code comes along and wants to use the above module:
 
-&lt;p&gt;&lt;strong&gt;Module: &lt;code class=&quot;highlighter-rouge&quot;&gt;app-basic.js&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+**Module: `app-basic.js`**
 
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getFirstMatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'words-basic'&lt;/span&gt;
+```javascript
+import {getFirstMatch} from 'words-basic'
 
-&lt;span class=&quot;kr&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;searchPatterns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-  &lt;span class=&quot;sr&quot;&gt;/aa/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;sr&quot;&gt;/frob/&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+const searchPatterns = [
+  /aa/,
+  /frob/
+];
 
-&lt;span class=&quot;c1&quot;&gt;// for some reason, we want to log the length of the first word found matching&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// each of the regices above.&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;searchPatterns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getFirstMatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+// for some reason, we want to log the length of the first word found matching
+// each of the regices above.
+searchPatterns.forEach(pat =&gt; {
+  console.log(getFirstMatch(pat).length);
+});
+```
 
-&lt;p&gt;We incur a &lt;code class=&quot;highlighter-rouge&quot;&gt;TypeError&lt;/code&gt;. Due to &lt;code class=&quot;highlighter-rouge&quot;&gt;getFirstMatch&lt;/code&gt; returning a &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt; as a result of
-the  &lt;code class=&quot;highlighter-rouge&quot;&gt;RegExp&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;/frob/&lt;/code&gt; not matching anything.&lt;/p&gt;
+We incur a `TypeError`. Due to `getFirstMatch` returning a `null` as a result of
+the  `RegExp` `/frob/` not matching anything.
 
-&lt;p&gt;What can we do to mitigate this?&lt;/p&gt;
+What can we do to mitigate this?
 
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;One solution would be to document this in the &lt;code class=&quot;highlighter-rouge&quot;&gt;words&lt;/code&gt; module, telling the
-consumer that “By using this function you agree to check for null, lest you want
-to have TypeErrors thrown about”.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Another solution would be to codify the error handling, or in other terms: force
-consumer code to handle the case of failure.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
+1. One solution would be to document this in the `words` module, telling the
+consumer that &quot;By using this function you agree to check for null, lest you want
+to have TypeErrors thrown about&quot;.
 
-&lt;p&gt;Let’s take a look at what the first solution could look like:&lt;/p&gt;
+2. Another solution would be to codify the error handling, or in other terms: force
+consumer code to handle the case of failure.
 
-&lt;p&gt;&lt;strong&gt;Module: &lt;code class=&quot;highlighter-rouge&quot;&gt;app-nullcheck.js&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+Let's take a look at what the first solution could look like:
 
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// some parts elided&lt;/span&gt;
+**Module: `app-nullcheck.js`**
 
-&lt;span class=&quot;nx&quot;&gt;searchPatterns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kr&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;getFirstMatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+```javascript
+// some parts elided
 
-  &lt;span class=&quot;c1&quot;&gt;// Do the null-check, because the documentation said that the result might&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;// be null. Er, wait, did it say anything about it being undefined? Better&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;// check for that as well.&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;undefined&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// Shucks, there was no word matching `pat`&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+searchPatterns.forEach(pat =&gt; {
+  const result = getFirstMatch(pat);
 
-&lt;p&gt;Looks OK, but keep in mind, nobody really forced you to bother taking care of
-the crashing application (other than your raging client).&lt;/p&gt;
+  // Do the null-check, because the documentation said that the result might
+  // be null. Er, wait, did it say anything about it being undefined? Better
+  // check for that as well.
+  if (result !== null &amp;&amp; result !== undefined) {
+    console.log(result.length);
+  }
+  else {
+    // Shucks, there was no word matching `pat`
+    console.log(0);
+  }
+});
+```
 
-&lt;p&gt;To implement the second solution, we would write our &lt;code class=&quot;highlighter-rouge&quot;&gt;words&lt;/code&gt; module a bit
-different:&lt;/p&gt;
+Looks OK, but keep in mind, nobody really forced you to bother taking care of
+the crashing application (other than your raging client).
 
-&lt;p&gt;&lt;strong&gt;Module: &lt;code class=&quot;highlighter-rouge&quot;&gt;words-monadic.js&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+To implement the second solution, we would write our `words` module a bit
+different:
 
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Maybe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'ramda-fantasy'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kr&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Just&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Nothing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Maybe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+**Module: `words-monadic.js`**
 
-&lt;span class=&quot;kr&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'./words.txt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kr&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;getFirstMatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Just&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// -------------------------------------^&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// We return Maybe.Just if the word was found&lt;/span&gt;
+```javascript
+import {Maybe} from 'ramda-fantasy';
+const {Just, Nothing} = Maybe;
 
-  &lt;span class=&quot;c1&quot;&gt;// otherwise, we return Nothing, which indicate the absence of a value.&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;// A bit similar to `null` but without all the null reference errors.&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Nothing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+const words = load('./words.txt');
+export function getFirstMatch(re) {
+  for (let i = 0; i &lt; words.length; ++i)
+    if (words[i].match(re) !== null) return Just(words[i]);
+    // -------------------------------------^
+    // We return Maybe.Just if the word was found
 
-&lt;p&gt;&lt;strong&gt;Module: &lt;code class=&quot;highlighter-rouge&quot;&gt;app-monadic.js&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+  // otherwise, we return Nothing, which indicate the absence of a value.
+  // A bit similar to `null` but without all the null reference errors.
+  return Nothing;
+};
+```
 
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// some parts elided&lt;/span&gt;
+**Module: `app-monadic.js`**
 
-&lt;span class=&quot;nx&quot;&gt;searchPatterns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kr&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;getFirstMatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// here we are saying:&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// &quot;If the result is Just(x) we want to read x.length&quot;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// here we are saying:&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// &quot;Extract the value of the current Maybe, but if it's a Nothing,&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// then we default to `0`&quot;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getOrElse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+```javascript
+// some parts elided
 
-  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+searchPatterns.forEach(pat =&gt; {
+  const result = getFirstMatch(pat)
+    // here we are saying:
+    // &quot;If the result is Just(x) we want to read x.length&quot;
+    .map(word =&gt; word.length)
+    // here we are saying:
+    // &quot;Extract the value of the current Maybe, but if it's a Nothing,
+    // then we default to `0`&quot;
+    .getOrElse(0);
 
-&lt;p&gt;Personally, I find the second approach to be far superior to the first, because:&lt;/p&gt;
+  console.log(result);
+});
+```
 
-&lt;ul&gt;
-  &lt;li&gt;It forces consumer code to take care of the possible failure state.&lt;/li&gt;
-  &lt;li&gt;It does so in a uniform way, i.e. no need to sometimes check for &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt; and
-other times check for &lt;code class=&quot;highlighter-rouge&quot;&gt;undefined&lt;/code&gt; etc.&lt;/li&gt;
-  &lt;li&gt;It unifies the falsy values of javascript into one atom. I.e. one would not
-need to worry about inadvertently checking whether &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt; is false, as in:&lt;/li&gt;
-&lt;/ul&gt;
+Personally, I find the second approach to be far superior to the first, because:
 
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// zero here is an actual value, not the absence of one.&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ERROR: we got no result'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+- It forces consumer code to take care of the possible failure state.
+- It does so in a uniform way, i.e. no need to sometimes check for `null` and
+other times check for `undefined` etc.
+- It unifies the falsy values of javascript into one atom. I.e. one would not
+need to worry about inadvertently checking whether `0` is false, as in:
 
-&lt;h3 id=&quot;im-sold-where-do-i-find-it&quot;&gt;I’m sold! Where do I find it?&lt;/h3&gt;
+```javascript
+var result = 0; // zero here is an actual value, not the absence of one.
+if (!result) {
+  alert('ERROR: we got no result');
+}
+```
 
-&lt;p&gt;There are a number of implementations in the wild that one could use. I like the
+### I'm sold! Where do I find it?
+
+There are a number of implementations in the wild that one could use. I like the
 idea that some types of libraries should conform to a spec, and for this sort of
 data type there is a
-&lt;a href=&quot;https://github.com/fantasyland/fantasy-land&quot;&gt;well defined specification (fantasy land)&lt;/a&gt;. The following
-libraries conforms to this spec:&lt;/p&gt;
+[well defined specification (fantasy land)][fantasy-land-spec]. The following
+libraries conforms to this spec:
 
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://sanctuary.js.org/#maybe-type&quot;&gt;sanctuary/maybe&lt;/a&gt;. On the plus side on using this library is
-that you get a lot of extra goodies.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://github.com/fantasyland/fantasy-options&quot;&gt;fantasy-options&lt;/a&gt;&lt;sup id=&quot;fnref:nalternativenames&quot;&gt;&lt;a href=&quot;#fn:nalternativenames&quot; class=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;. As discussed in
-&lt;a href=&quot;https://github.com/fantasyland/fantasy-options/issues/8&quot;&gt;this issue&lt;/a&gt;, it might change the names of the
-exported symbols soon, from &lt;code class=&quot;highlighter-rouge&quot;&gt;Option = Some a + None&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;Maybe = Just a + Nothing&lt;/code&gt;,
-so if you decide to use this, be ready to rewrite some code.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://github.com/ramda/ramda-fantasy/blob/master/docs/Maybe.md&quot;&gt;ramda-fantasy/maybe&lt;/a&gt;. However, this library is declared
-to be in an alpha state, so should not be used without consideration.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
+- [sanctuary/maybe][sanctuary-maybe]. On the plus side on using this library is
+that you get a lot of extra goodies.
 
-&lt;h3 id=&quot;still-not-convinced&quot;&gt;Still not convinced?&lt;/h3&gt;
+- [fantasy-options][fantasy-options-gh][^nalternativenames]. As discussed in
+[this issue][fantasy-options-gh-name-issue], it might change the names of the
+exported symbols soon, from `Option = Some a + None` to `Maybe = Just a + Nothing`,
+so if you decide to use this, be ready to rewrite some code.
 
-&lt;p&gt;I regret not being able to convince you of the merits of using the &lt;code class=&quot;highlighter-rouge&quot;&gt;Maybe&lt;/code&gt; monad. Write a comment below and we’ll talk things over.&lt;/p&gt;
+- [ramda-fantasy/maybe][ramda-fantasy-maybe-gh]. However, this library is declared
+to be in an alpha state, so should not be used without consideration.
 
-&lt;hr /&gt;
 
-&lt;h5 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h5&gt;
+### Still not convinced?
 
-&lt;div class=&quot;footnotes&quot;&gt;
-  &lt;ol&gt;
-    &lt;li id=&quot;fn:ninternalapis&quot;&gt;
-      &lt;p&gt;Yes, everyone who has written code that is used by others, be it an internal API or an exposed API, have designed it. The word “design” being applied in a loose manner. &lt;a href=&quot;#fnref:ninternalapis&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-    &lt;/li&gt;
-    &lt;li id=&quot;fn:nalternativenames&quot;&gt;
-      &lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;Maybe&lt;/code&gt; monad is known to also be called &lt;code class=&quot;highlighter-rouge&quot;&gt;Option&lt;/code&gt; and sometimes &lt;code class=&quot;highlighter-rouge&quot;&gt;Optional&lt;/code&gt;. &lt;a href=&quot;#fnref:nalternativenames&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-    &lt;/li&gt;
-  &lt;/ol&gt;
-&lt;/div&gt;</content><category term="javascript" /><category term="API-design" /><category term="monads" /><category term="maybe-monad" /><summary type="html">If you design API’s (i.e. you write programs with more than one module or you
+I regret not being able to convince you of the merits of using the `Maybe` monad. Write a comment below and we'll talk things over.
+
+---
+
+##### Footnotes
+
+[^ninternalapis]: Yes, everyone who has written code that is used by others, be it an internal API or an exposed API, have designed it. The word &quot;design&quot; being applied in a loose manner.
+[^nalternativenames]: The `Maybe` monad is known to also be called `Option` and sometimes `Optional`.
+
+[fantasy-land-spec]: https://github.com/fantasyland/fantasy-land
+[fantasy-options-gh]: https://github.com/fantasyland/fantasy-options
+[fantasy-options-gh-name-issue]: https://github.com/fantasyland/fantasy-options/issues/8
+[ramda-fantasy-maybe-gh]: https://github.com/ramda/ramda-fantasy/blob/master/docs/Maybe.md
+[sanctuary-maybe]: https://sanctuary.js.org/#maybe-type
+
+[why1]: https://github.com/chrissrogers/maybe#why</content><category term="javascript" /><category term="API-design" /><category term="monads" /><category term="maybe-monad" /><summary type="html">If you design API’s (i.e. you write programs with more than one module or you
 design libraries to be used by others1), then you make decisions on how then
 application code will look like and behave.
 
 
   
     
-      Yes, everyone who has written code that is used by others, be it an internal API or an exposed API, have designed it. The word “design” being applied in a loose manner. &amp;#8617;</summary></entry><entry><title type="html">Alacritty - an OpenGL powered terminal emulator</title><link href="http://localhost:4000/software/rust/2017/01/12/alacritty-opengl-powered-terminal-emulator.html" rel="alternate" type="text/html" title="Alacritty - an OpenGL powered terminal emulator" /><published>2017-01-12T14:58:02+01:00</published><updated>2017-01-12T14:58:02+01:00</updated><id>http://localhost:4000/software/rust/2017/01/12/alacritty-opengl-powered-terminal-emulator</id><content type="html" xml:base="http://localhost:4000/software/rust/2017/01/12/alacritty-opengl-powered-terminal-emulator.html">&lt;p&gt;Today we’re going to take a look at &lt;a href=&quot;http://blog.jwilm.io/announcing-alacritty/&quot;&gt;Alacritty&lt;/a&gt;. The name, which I think is a portmanteau of alacrity and &lt;a href=&quot;http://catb.org/jargon/html/T/tty.html&quot;&gt;TTY&lt;/a&gt;, is a terminal emulator written in rust. Here’s an excerpt from the project’s README, which describes it in a nutshell:&lt;/p&gt;
+      Yes, everyone who has written code that is used by others, be it an internal API or an exposed API, have designed it. The word “design” being applied in a loose manner. &amp;#8617;</summary></entry><entry><title type="html">Alacritty - an OpenGL powered terminal emulator</title><link href="http://localhost:4000/software/rust/2017/01/12/alacritty-opengl-powered-terminal-emulator.html" rel="alternate" type="text/html" title="Alacritty - an OpenGL powered terminal emulator" /><published>2017-01-12T14:58:02+01:00</published><updated>2017-01-12T14:58:02+01:00</updated><id>http://localhost:4000/software/rust/2017/01/12/alacritty-opengl-powered-terminal-emulator</id><content type="html" xml:base="http://localhost:4000/software/rust/2017/01/12/alacritty-opengl-powered-terminal-emulator.html">Today we're going to take a look at [Alacritty][alacritty-announcement]. The name, which I think is a portmanteau of alacrity and [TTY][jargon-tty], is a terminal emulator written in rust. Here's an excerpt from the project's README, which describes it in a nutshell:
 
-&lt;blockquote&gt;
-  &lt;p&gt;Keep in mind that Alacritty is very much not looking to be a feature-rich terminal emulator with all sorts of bells and widgets. It’s primarily a cross-platform, blazing fast tmux renderer that Just Works.&lt;/p&gt;
-&lt;/blockquote&gt;
+&gt;Keep in mind that Alacritty is very much not looking to be a feature-rich terminal emulator with all sorts of bells and widgets. It's primarily a cross-platform, blazing fast tmux renderer that Just Works.
 
-&lt;p&gt;Personally, I’ve used the following terminal emulators to a greater extent:&lt;/p&gt;
+Personally, I've used the following terminal emulators to a greater extent:
 
-&lt;ul&gt;
-  &lt;li&gt;Sakura&lt;/li&gt;
-  &lt;li&gt;Terminator&lt;/li&gt;
-  &lt;li&gt;rxvt-unicode&lt;/li&gt;
-  &lt;li&gt;xterm&lt;/li&gt;
-  &lt;li&gt;eterm&lt;/li&gt;
-&lt;/ul&gt;
+- Sakura
+- Terminator
+- rxvt-unicode
+- xterm
+- eterm
 
-&lt;p&gt;Of which, to this date, I’ve found Sakura to be the most pleasant one to use, because of its simplicity and speed. Since Alacritty’s goals are to be simple and fast, it might be a contender for my number one.&lt;/p&gt;
+Of which, to this date, I've found Sakura to be the most pleasant one to use, because of its simplicity and speed. Since Alacritty's goals are to be simple and fast, it might be a contender for my number one.
 
-&lt;h3 id=&quot;building&quot;&gt;Building&lt;/h3&gt;
+### Building
 
-&lt;p&gt;The project’s README includes instructions on which dependencies are requried and how to build. I had to &lt;code class=&quot;highlighter-rouge&quot;&gt;rustup override set $(&amp;lt;rustc-version)&lt;/code&gt; (as stated in the README) because &lt;a href=&quot;https://crates.io/crates/copypasta&quot;&gt;copypasta&lt;/a&gt; wouldn’t compile with the &lt;code class=&quot;highlighter-rouge&quot;&gt;nightly&lt;/code&gt; release. Other than that, it was, more or less, a straight-forward &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo build --release&lt;/code&gt;, and a bit of waiting.&lt;/p&gt;
+The project's README includes instructions on which dependencies are requried and how to build. I had to `rustup override set $(&lt;rustc-version)` (as stated in the README) because [copypasta][cargo-copypasta] wouldn't compile with the `nightly` release. Other than that, it was, more or less, a straight-forward `cargo build --release`, and a bit of waiting.
 
-&lt;h3 id=&quot;running&quot;&gt;Running&lt;/h3&gt;
+### Running
 
-&lt;p&gt;To try it out, I opened a new tmux session, split the window in two and executed &lt;code class=&quot;highlighter-rouge&quot;&gt;dd if=/dev/urandom | base64&lt;/code&gt;, in order to generate some output.&lt;/p&gt;
+To try it out, I opened a new tmux session, split the window in two and executed `dd if=/dev/urandom | base64`, in order to generate some output.
 
-&lt;p&gt;&lt;img src=&quot;/assets/img/post1/alacritty_1-compressor.png&quot; alt=&quot;Alacritty test&quot; /&gt;
-&lt;em&gt;Alacritty with a tmux session having two zsh instances running &lt;code class=&quot;highlighter-rouge&quot;&gt;dd if=/dev/urandom | base64&lt;/code&gt;&lt;/em&gt;&lt;/p&gt;
+![Alacritty test](/assets/img/post1/alacritty_1-compressor.png)
+*Alacritty with a tmux session having two zsh instances running `dd if=/dev/urandom | base64`*
 
-&lt;p&gt;I did the same with Sakura, and it was actually noticeably laggy, whereas Alacritty was pretty smooth. Now, this test, in and of itself, is not sufficient to draw a final conclusion regarding which is faster. I presume that factors, such as &lt;a href=&quot;http://catb.org/jargon/html/A/ANSI-standard.html&quot;&gt;ANSI&lt;/a&gt; colours and unicode glyphs, play a role as well. There is &lt;a href=&quot;https://github.com/jwilm/alacritty/issues/289&quot;&gt;an issue&lt;/a&gt; regarding this on the project’s issue tracker, where one can find some examples of ways to benchmark a terminal emulator.&lt;/p&gt;
+I did the same with Sakura, and it was actually noticeably laggy, whereas Alacritty was pretty smooth. Now, this test, in and of itself, is not sufficient to draw a final conclusion regarding which is faster. I presume that factors, such as [ANSI][jargon-ansi] colours and unicode glyphs, play a role as well. There is [an issue][alacritty-benchmark-issue] regarding this on the project's issue tracker, where one can find some examples of ways to benchmark a terminal emulator.
 
-&lt;h3 id=&quot;caveats&quot;&gt;Caveats&lt;/h3&gt;
+### Caveats
 
-&lt;p&gt;Running this on an older machine may not be possible just yet, due to Alacritty needing support for &lt;code class=&quot;highlighter-rouge&quot;&gt;GLSL 3.30&lt;/code&gt;, as discussed in &lt;a href=&quot;https://github.com/jwilm/alacritty/issues/128&quot;&gt;this issue&lt;/a&gt;. Trying to run Alacritty with an Intel M 530 integrated graphics controller did not work, whereas it did work on a newer ATI Radeon M. Hopefully, this issue is solved so that one can use Alacritty even on somewhat dated hardware.&lt;/p&gt;
+Running this on an older machine may not be possible just yet, due to Alacritty needing support for `GLSL 3.30`, as discussed in [this issue][alacritty-glsl-issue]. Trying to run Alacritty with an Intel M 530 integrated graphics controller did not work, whereas it did work on a newer ATI Radeon M. Hopefully, this issue is solved so that one can use Alacritty even on somewhat dated hardware.
 
-&lt;h3 id=&quot;activity&quot;&gt;Activity&lt;/h3&gt;
+### Activity
 
-&lt;p&gt;The first commit to the repository was almost one year ago and it is an &lt;a href=&quot;https://github.com/jwilm/alacritty/pulse&quot;&gt;active project&lt;/a&gt;. There seem to be a bit of duplication regarding issues, especially issues regarding performance/benchmarking.&lt;/p&gt;
+The first commit to the repository was almost one year ago and it is an [active project][alacritty-pulse]. There seem to be a bit of duplication regarding issues, especially issues regarding performance/benchmarking.
 
-&lt;h3 id=&quot;links&quot;&gt;Links&lt;/h3&gt;
+### Links
 
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://blog.jwilm.io/announcing-alacritty/&quot;&gt;Joe Wilm’s intro to Alacritty&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://github.com/jwilm/alacritty&quot;&gt;Alacritty@GitHub&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><category term="rust" /><category term="terminal-emulator" /><category term="opengl" /><category term="cli" /><summary type="html">Today we’re going to take a look at Alacritty. The name, which I think is a portmanteau of alacrity and TTY, is a terminal emulator written in rust. Here’s an excerpt from the project’s README, which describes it in a nutshell:</summary></entry></feed>
+- [Joe Wilm's intro to Alacritty][alacritty-announcement]
+- [Alacritty@GitHub][alacritty-gh]
+
+[alacritty-announcement]: http://blog.jwilm.io/announcing-alacritty/
+[alacritty-gh]: https://github.com/jwilm/alacritty
+[alacritty-pulse]: https://github.com/jwilm/alacritty/pulse
+[alacritty-benchmark-issue]: https://github.com/jwilm/alacritty/issues/289
+[alacritty-glsl-issue]: https://github.com/jwilm/alacritty/issues/128
+[cargo-copypasta]: https://crates.io/crates/copypasta
+
+[jargon-tty]: http://catb.org/jargon/html/T/tty.html
+[jargon-ansi]: http://catb.org/jargon/html/A/ANSI-standard.html
+[sakura-home]: https://launchpad.net/sakura
+[terminator-lp]: https://launchpad.net/terminator</content><category term="rust" /><category term="terminal-emulator" /><category term="opengl" /><category term="cli" /><summary type="html">Today we’re going to take a look at Alacritty. The name, which I think is a portmanteau of alacrity and TTY, is a terminal emulator written in rust. Here’s an excerpt from the project’s README, which describes it in a nutshell:</summary></entry></feed>
