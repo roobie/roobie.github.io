@@ -8494,10 +8494,28 @@ ALONSO         0.004 90.040   1219`;
 	}
 
 	const styles = csjs_1`
+html, body {
+}
+
+html, html input {
+    font-family: fantasy;
+}
+
+body {
+    background-image: url('https://i.imgur.com/ESvn60I.jpg')
+}
+
+* {
+    box-sizing: border-box;
+}
+
 .container {
     display: flex;
     flex-direction: column;
+    max-width: 720px;
+    margin: 20px auto;
 }
+
 .row {
     display: flex;
 }
@@ -8505,15 +8523,16 @@ ALONSO         0.004 90.040   1219`;
 ${getCols()}
 
 .sheet {
-    border: 1px solid silver;
+    border: 10px ridge rgba(37,37,37,0.7);
+    padding: 6px;
 }
 .sheet input {
     border: none;
     border-bottom: 1px solid silver;
 }
 .sheetSection {
-
 }
+
 .bio extends .col_1, .sheetSection { }
 .metaInfo extends .col_1, .sheetSection { }
 .classesInfo extends .col_1, .sheetSection { }
@@ -8521,10 +8540,25 @@ ${getCols()}
     max-width: 150px;
 }
 
+.spacer {
+    min-height: 20px;
+    height: 20px;
+}
+
 .alignRight {
     text-align: right;
 }
 .numberField extends .alignRight {}
+
+.bg,
+.bg label, .bg table {
+    background: rgba(12,12,12,0.8);
+    color: #eee;
+}
+.bg input {
+    background: rgba(12,12,12,0.8);
+    color: #eee;
+}
 `;
 
 	function translateAlignment (a) {
@@ -8548,7 +8582,7 @@ ${getCols()}
 	    }
 
 	    view (vnode) {
-	        return mithril('div', {className: styles.container}, [
+	        return mithril('div', {className: `${styles.container} ${styles.bg}`}, [
 	            mithril('div', {className: `${styles.sheet} ${styles.row}`}, [
 
 	                mithril('div', {className: styles.bio}, [
@@ -8587,11 +8621,14 @@ ${getCols()}
 	                            mithril('tr', [
 	                                mithril('td', 'klass/yrke'),
 	                                mithril('td', mithril('input', {type: 'text', value: this.char.className})),
-	                                mithril('td', 'level: 1'),
 	                            ]),
 	                        ])
 	                    ])
 	                ]),
+	            ]),
+
+	            mithril('div', {className: `${styles.spacer} ${styles.row}`}, [
+	                mithril('hr')
 	            ]),
 
 	            mithril('div', {className: `${styles.sheet} ${styles.row}`}, [
@@ -8636,6 +8673,7 @@ ${getCols()}
 	                    ])
 	                ]),
 	            ]),
+	            mithril('div', {className: ''}),
 
 	            mithril('pre', JSON.stringify(this.char, null, 2))
 	        ])
