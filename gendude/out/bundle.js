@@ -1264,6 +1264,411 @@
 	}());
 	});
 
+	var composition = {
+	  makeComposition: makeComposition,
+	  isComposition: isComposition,
+	  ignoreComposition: ignoreComposition
+	};
+
+	/**
+	 * Returns an immutable composition object containing the given class names
+	 * @param  {array} classNames - The input array of class names
+	 * @return {Composition}      - An immutable object that holds multiple
+	 *                              representations of the class composition
+	 */
+	function makeComposition(classNames, unscoped, isAnimation) {
+	  var classString = classNames.join(' ');
+	  return Object.create(Composition.prototype, {
+	    classNames: { // the original array of class names
+	      value: Object.freeze(classNames),
+	      configurable: false,
+	      writable: false,
+	      enumerable: true
+	    },
+	    unscoped: { // the original array of class names
+	      value: Object.freeze(unscoped),
+	      configurable: false,
+	      writable: false,
+	      enumerable: true
+	    },
+	    className: { // space-separated class string for use in HTML
+	      value: classString,
+	      configurable: false,
+	      writable: false,
+	      enumerable: true
+	    },
+	    selector: { // comma-separated, period-prefixed string for use in CSS
+	      value: classNames.map(function(name) {
+	        return isAnimation ? name : '.' + name;
+	      }).join(', '),
+	      configurable: false,
+	      writable: false,
+	      enumerable: true
+	    },
+	    toString: { // toString() method, returns class string for use in HTML
+	      value: function() {
+	        return classString;
+	      },
+	      configurable: false,
+	      writeable: false,
+	      enumerable: false
+	    }
+	  });
+	}
+
+	/**
+	 * Returns whether the input value is a Composition
+	 * @param value      - value to check
+	 * @return {boolean} - whether value is a Composition or not
+	 */
+	function isComposition(value) {
+	  return value instanceof Composition;
+	}
+
+	function ignoreComposition(values) {
+	  return values.reduce(function(acc, val) {
+	    if (isComposition(val)) {
+	      val.classNames.forEach(function(name, i) {
+	        acc[name] = val.unscoped[i];
+	      });
+	    }
+	    return acc;
+	  }, {});
+	}
+
+	/**
+	 * Private constructor for use in `instanceof` checks
+	 */
+	function Composition() {}
+
+	var regex = /\.([^\s]+)(\s+)(extends\s+)(\.[^{]+)/g;
+
+	var cssExtractExtends = function extractExtends(css) {
+	  var found, matches = [];
+	  while (found = regex.exec(css)) {
+	    matches.unshift(found);
+	  }
+
+	  function extractCompositions(acc, match) {
+	    var extendee = getClassName(match[1]);
+	    var keyword = match[3];
+	    var extended = match[4];
+
+	    // remove from output css
+	    var index = match.index + match[1].length + match[2].length;
+	    var len = keyword.length + extended.length;
+	    acc.css = acc.css.slice(0, index) + " " + acc.css.slice(index + len + 1);
+
+	    var extendedClasses = splitter(extended);
+
+	    extendedClasses.forEach(function(className) {
+	      if (!acc.compositions[extendee]) {
+	        acc.compositions[extendee] = {};
+	      }
+	      if (!acc.compositions[className]) {
+	        acc.compositions[className] = {};
+	      }
+	      acc.compositions[extendee][className] = acc.compositions[className];
+	    });
+	    return acc;
+	  }
+
+	  return matches.reduce(extractCompositions, {
+	    css: css,
+	    compositions: {}
+	  });
+
+	};
+
+	function splitter(match) {
+	  return match.split(',').map(getClassName);
+	}
+
+	function getClassName(str) {
+	  var trimmed = str.trim();
+	  return trimmed[0] === '.' ? trimmed.substr(1) : trimmed;
+	}
+
+	var makeComposition$2 = composition.makeComposition;
+
+	var buildExports = function createExports(classes, keyframes, compositions) {
+	  var keyframesObj = Object.keys(keyframes).reduce(function(acc, key) {
+	    var val = keyframes[key];
+	    acc[val] = makeComposition$2([key], [val], true);
+	    return acc;
+	  }, {});
+
+	  var exports = Object.keys(classes).reduce(function(acc, key) {
+	    var val = classes[key];
+	    var composition$$1 = compositions[key];
+	    var extended = composition$$1 ? getClassChain(composition$$1) : [];
+	    var allClasses = [key].concat(extended);
+	    var unscoped = allClasses.map(function(name) {
+	      return classes[name] ? classes[name] : name;
+	    });
+	    acc[val] = makeComposition$2(allClasses, unscoped);
+	    return acc;
+	  }, keyframesObj);
+
+	  return exports;
+	};
+
+	function getClassChain(obj) {
+	  var visited = {}, acc = [];
+
+	  function traverse(obj) {
+	    return Object.keys(obj).forEach(function(key) {
+	      if (!visited[key]) {
+	        visited[key] = true;
+	        acc.push(key);
+	        traverse(obj[key]);
+	      }
+	    });
+	  }
+
+	  traverse(obj);
+	  return acc;
+	}
+
+	/**
+	 * base62 encode implementation based on base62 module:
+	 * https://github.com/andrew/base62.js
+	 */
+
+	var CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+	var base62Encode = function encode(integer) {
+	  if (integer === 0) {
+	    return '0';
+	  }
+	  var str = '';
+	  while (integer > 0) {
+	    str = CHARS[integer % 62] + str;
+	    integer = Math.floor(integer / 62);
+	  }
+	  return str;
+	};
+
+	/**
+	 * djb2 string hash implementation based on string-hash module:
+	 * https://github.com/darkskyapp/string-hash
+	 */
+
+	var hashString = function hashStr(str) {
+	  var hash = 5381;
+	  var i = str.length;
+
+	  while (i) {
+	    hash = (hash * 33) ^ str.charCodeAt(--i);
+	  }
+	  return hash >>> 0;
+	};
+
+	var scopedName = function fileScoper(fileSrc) {
+	  var suffix = base62Encode(hashString(fileSrc));
+
+	  return function scopedName(name) {
+	    return name + '_' + suffix;
+	  }
+	};
+
+	var findClasses = /(\.)(?!\d)([^\s\.,{\[>+~#:)]*)(?![^{]*})/.source;
+	var findKeyframes = /(@\S*keyframes\s*)([^{\s]*)/.source;
+	var ignoreComments = /(?!(?:[^*/]|\*[^/]|\/[^*])*\*+\/)/.source;
+
+	var classRegex = new RegExp(findClasses + ignoreComments, 'g');
+	var keyframesRegex = new RegExp(findKeyframes + ignoreComments, 'g');
+
+	var regex$1 = {
+	  classRegex: classRegex,
+	  keyframesRegex: keyframesRegex,
+	  ignoreComments: ignoreComments,
+	};
+
+	var ignoreComments$1 = regex$1.ignoreComments;
+
+	var replaceAnimations_1 = replaceAnimations;
+
+	function replaceAnimations(result) {
+	  var animations = Object.keys(result.keyframes).reduce(function(acc, key) {
+	    acc[result.keyframes[key]] = key;
+	    return acc;
+	  }, {});
+	  var unscoped = Object.keys(animations);
+
+	  if (unscoped.length) {
+	    var regexStr = '((?:animation|animation-name)\\s*:[^};]*)('
+	      + unscoped.join('|') + ')([;\\s])' + ignoreComments$1;
+	    var regex = new RegExp(regexStr, 'g');
+
+	    var replaced = result.css.replace(regex, function(match, preamble, name, ending) {
+	      return preamble + animations[name] + ending;
+	    });
+
+	    return {
+	      css: replaced,
+	      keyframes: result.keyframes,
+	      classes: result.classes
+	    }
+	  }
+
+	  return result;
+	}
+
+	var classRegex$1 = regex$1.classRegex;
+	var keyframesRegex$1 = regex$1.keyframesRegex;
+
+	var scopeify = scopify;
+
+	function scopify(css, ignores) {
+	  var makeScopedName = scopedName(css);
+	  var replacers = {
+	    classes: classRegex$1,
+	    keyframes: keyframesRegex$1
+	  };
+
+	  function scopeCss(result, key) {
+	    var replacer = replacers[key];
+	    function replaceFn(fullMatch, prefix, name) {
+	      var scopedName$$1 = ignores[name] ? name : makeScopedName(name);
+	      result[key][scopedName$$1] = name;
+	      return prefix + scopedName$$1;
+	    }
+	    return {
+	      css: result.css.replace(replacer, replaceFn),
+	      keyframes: result.keyframes,
+	      classes: result.classes
+	    };
+	  }
+
+	  var result = Object.keys(replacers).reduce(scopeCss, {
+	    css: css,
+	    keyframes: {},
+	    classes: {}
+	  });
+
+	  return replaceAnimations_1(result);
+	}
+
+	/**
+	 * CSS identifiers with whitespace are invalid
+	 * Hence this key will not cause a collision
+	 */
+
+	var cssKey = ' css ';
+
+	var classRegex$2 = regex$1.classRegex;
+	var keyframesRegex$2 = regex$1.keyframesRegex;
+
+	var extractExports_1 = extractExports;
+
+	function extractExports(css) {
+	  return {
+	    css: css,
+	    keyframes: getExport(css, keyframesRegex$2),
+	    classes: getExport(css, classRegex$2)
+	  };
+	}
+
+	function getExport(css, regex) {
+	  var prop = {};
+	  var match;
+	  while((match = regex.exec(css)) !== null) {
+	    var name = match[2];
+	    prop[name] = name;
+	  }
+	  return prop;
+	}
+
+	var isComposition$1 = composition.isComposition;
+	var ignoreComposition$1 = composition.ignoreComposition;
+
+
+
+
+
+	var csjs = function csjsTemplate(opts) {
+	  opts = (typeof opts === 'undefined') ? {} : opts;
+	  var noscope = (typeof opts.noscope === 'undefined') ? false : opts.noscope;
+
+	  return function csjsHandler(strings, values) {
+	    // Fast path to prevent arguments deopt
+	    var values = Array(arguments.length - 1);
+	    for (var i = 1; i < arguments.length; i++) {
+	      values[i - 1] = arguments[i];
+	    }
+	    var css = joiner(strings, values.map(selectorize));
+	    var ignores = ignoreComposition$1(values);
+
+	    var scope = noscope ? extractExports_1(css) : scopeify(css, ignores);
+	    var extracted = cssExtractExtends(scope.css);
+	    var localClasses = without(scope.classes, ignores);
+	    var localKeyframes = without(scope.keyframes, ignores);
+	    var compositions = extracted.compositions;
+
+	    var exports = buildExports(localClasses, localKeyframes, compositions);
+
+	    return Object.defineProperty(exports, cssKey, {
+	      enumerable: false,
+	      configurable: false,
+	      writeable: false,
+	      value: extracted.css
+	    });
+	  }
+	};
+
+	/**
+	 * Replaces class compositions with comma seperated class selectors
+	 * @param  value - the potential class composition
+	 * @return       - the original value or the selectorized class composition
+	 */
+	function selectorize(value) {
+	  return isComposition$1(value) ? value.selector : value;
+	}
+
+	/**
+	 * Joins template string literals and values
+	 * @param  {array} strings - array of strings
+	 * @param  {array} values  - array of values
+	 * @return {string}        - strings and values joined
+	 */
+	function joiner(strings, values) {
+	  return strings.map(function(str, i) {
+	    return (i !== values.length) ? str + values[i] : str;
+	  }).join('');
+	}
+
+	/**
+	 * Returns first object without keys of second
+	 * @param  {object} obj      - source object
+	 * @param  {object} unwanted - object with unwanted keys
+	 * @return {object}          - first object without unwanted keys
+	 */
+	function without(obj, unwanted) {
+	  return Object.keys(obj).reduce(function(acc, key) {
+	    if (!unwanted[key]) {
+	      acc[key] = obj[key];
+	    }
+	    return acc;
+	  }, {});
+	}
+
+	var csjs$1 = csjs;
+
+	var getCss = function getCss(csjs) {
+	  return csjs[cssKey];
+	};
+
+	var getCss$1 = getCss;
+
+	var csjs_1 = csjs$1();
+	var csjs_2 = csjs$1;
+	var noScope = csjs$1({ noscope: true });
+	var getCss$2 = getCss$1;
+	csjs_1.csjs = csjs_2;
+	csjs_1.noScope = noScope;
+	csjs_1.getCss = getCss$2;
+
 	const translations = {
 	    // meta
 	    'male': 'man',
@@ -1325,91 +1730,21 @@
 	    return translate(obj.name || obj)
 	}
 
-	var helpers = {
-	    range(n) {
-	        return new Array(n).join(' ').split(' ')
-	    }
-	};
-	var helpers_1 = helpers.range;
+	function range(n) {
+	    return new Array(n).join(' ').split(' ')
+	}
 
-	function die (sides) {
+	function die(sides) {
 	    return 1 + ((Math.random() * sides) | 0)
 	}
 
-	var dice = {
-	    castExpr(expr) {
-	        /**
-	         e.g.
-	        - castExpr('d20+4')
-	        - castExpr('4d6-4')
-	        */
-	        throw new Error('not implemented')
-	    },
+	function d6() {
+	    return die(6)
+	}
 
-	    extendedCast(diceCount, dieSides, options) {
-	        const mod = options.mod || 0;
-	        let outcomes = [];
-	        for (let i = 0; i < diceCount; ++i) {
-	            outcomes.push(die(dieSides));
-	        }
-	        if ('top' in options) {
-	            outcomes.sort().reverse();
-	            outcomes = outcomes.slice(0, options.top);
-	        }
-
-	        let result = outcomes.reduce((a, b) => a + b, mod);
-	        if ('max' in options) {
-	            result = Math.min(options.max, result);
-	        }
-	        if ('min' in options) {
-	            result = Math.max(options.min, result);
-	        }
-
-	        return result
-	    },
-
-	    cast(diceCount, dieSides, mod = 0) {
-	        let result = mod;
-	        for (let i = 0; i < diceCount; ++i) {
-	            result += die(dieSides);
-	        }
-
-	        return result
-	    },
-
-	    die,
-
-	    d4() {
-	        return die(4)
-	    },
-
-	    d6() {
-	        return die(6)
-	    },
-
-	    d8() {
-	        return die(8)
-	    },
-
-	    d10() {
-	        return die(10)
-	    },
-
-	    d12() {
-	        return die(12)
-	    },
-
-	    d20() {
-	        return die(20)
-	    },
-
-	    d100() {
-	        return die(100)
-	    },
-	};
-	var dice_4 = dice.die;
-	var dice_6 = dice.d6;
-	var dice_11 = dice.d100;
+	function d100() {
+	    return die(100)
+	}
 
 	function randomIndex (arr) {
 	  return (Math.random() * arr.length) | 0
@@ -1419,13 +1754,7 @@
 	  return arr[randomIndex(arr)]
 	}
 
-	var utilities = {
-	  randomIndex,
-	  pickOne
-	};
-	var utilities_2 = utilities.pickOne;
-
-	var rawMale =
+	const rawMale =
 	  `Robbie Arms
 Howard Kimrey
 Luke Grissett
@@ -1477,7 +1806,7 @@ Pasquale Klima
 Delmar Partain
 Mack Valtierra`;
 
-	var rawFemale =
+	const rawFemale =
 	  `Shan Westerberg
 Karina Ostroff
 Cindy Primus
@@ -1529,12 +1858,12 @@ Jaquelyn Kingsley
 Leanna Beckles
 Jeanelle Fortner  `;
 
-	var any = {
+	var any = /*#__PURE__*/Object.freeze({
 		rawMale: rawMale,
 		rawFemale: rawFemale
-	};
+	});
 
-	var rawFemale$1 =
+	const rawFemale$1 =
 	  `Lore Thiel
 Isabel Bacharach
 Nadine Molitor
@@ -1556,7 +1885,7 @@ Theresa Fellner
 Emely Müntefering
 Sibylle Mahlau`;
 
-	var rawMale$1 =
+	const rawMale$1 =
 	  `Per Westheimer
 Alwin Bartz
 Dominik Krämer
@@ -1578,12 +1907,12 @@ Gunther Heldt
 Mike Schultze
 Axel Schwan`;
 
-	var ger = {
+	var ger = /*#__PURE__*/Object.freeze({
 		rawFemale: rawFemale$1,
 		rawMale: rawMale$1
-	};
+	});
 
-	var rawMale$2 =
+	const rawMale$2 =
 	  `Zachariah Woodford
 Winford Ruddock
 Trevor Hazel
@@ -1635,7 +1964,7 @@ Trinidad Yzaguirre
 Marlin Roseberry
 Sal Hinze`;
 
-	var rawFemale$2 =
+	const rawFemale$2 =
 	  `Floretta Sabatino
 Kate Cranor
 Hildred Kuhlman
@@ -1687,12 +2016,12 @@ Lashaun Worthey
 Lizzie Crandell
 Ammie Mackson`;
 
-	var brit = {
+	var brit = /*#__PURE__*/Object.freeze({
 		rawMale: rawMale$2,
 		rawFemale: rawFemale$2
-	};
+	});
 
-	var rawMale$3 =
+	const rawMale$3 =
 	  `Terence Akers
 Steven Allan
 Julian Baker
@@ -1744,7 +2073,7 @@ Leslie Winstanley
 Leslie Woodford
 Robert Young`;
 
-	var rawFemale$3 =
+	const rawFemale$3 =
 	  `Sacha Appleton
 Janet Ashworth
 Louise Barker
@@ -1796,12 +2125,12 @@ Marie Wagg
 Margaret Williams
 Emma Wilson`;
 
-	var ame = {
+	var ame = /*#__PURE__*/Object.freeze({
 		rawMale: rawMale$3,
 		rawFemale: rawFemale$3
-	};
+	});
 
-	var rawFemale$4 =
+	const rawFemale$4 =
 	  `Yuguchi Kayoko
 Izumi Toku
 Yamabe Tamiko
@@ -1833,7 +2162,7 @@ Kojima Manzo
 Ishikawa Kamlyn
 Yabuta Hirotada`;
 
-	var rawMale$4 =
+	const rawMale$4 =
 	  `Nagamine Kaneie
 Sawada Shoraku
 Shoda Ryosei
@@ -1865,12 +2194,12 @@ Goya Soshitsu
 Fukunaga Mutsohito
 Kinjo Gengyo`;
 
-	var jap = {
+	var jap = /*#__PURE__*/Object.freeze({
 		rawFemale: rawFemale$4,
 		rawMale: rawMale$4
-	};
+	});
 
-	var rawMale$5 =
+	const rawMale$5 =
 	  `Lagransky Prokhor Filippovich
 Furmanov Ilarion Semyonovich
 Yesaulov Saveliy (Sava) Vladislavovich
@@ -1892,7 +2221,7 @@ Ovechkin Igor (Igorek) Pavlovich
 Budanov Victor (Vitya) Semyonovich
 Katayev Artemiy Valerianovich`;
 
-	var rawFemale$5 =
+	const rawFemale$5 =
 	  `Fyodorova Adeliya Georgievna
 Rzhevskaya Yuliya (Yulia) Valerievna
 Nikulina Adeliya Nikolayevna
@@ -1904,10 +2233,10 @@ Kapralova Orina Gennadievna
 Barndyk Tasha Maximovna
 Lipina Aleksasha Nikolayevna`;
 
-	var rus = {
+	var rus = /*#__PURE__*/Object.freeze({
 		rawMale: rawMale$5,
 		rawFemale: rawFemale$5
-	};
+	});
 
 	const female =
 	  `MARY           2.629  2.629      1
@@ -7407,8 +7736,8 @@ DARELL         0.004 90.033   1217
 BRODERICK      0.004 90.036   1218
 ALONSO         0.004 90.040   1219`;
 
-	var rawMale$6 = format(male);
-	var rawFemale$6 = format(female);
+	const rawMale$6 = format(male);
+	const rawFemale$6 = format(female);
 
 	function format (list) {
 	    const lines = list.split('\n');
@@ -7617,15 +7946,14 @@ ALONSO         0.004 90.040   1219`;
 	const chainMale = generateChain(corpus(all['rawMale']), {length: 3});
 	const chainFemale = generateChain(corpus(all['rawFemale']), {length: 3});
 
-	var getRandomName = function getRandomName (gender) {
+	const getRandomName = function getRandomName (gender) {
 	  const chain = gender === 'M' ? chainMale : chainFemale;
 	  const name = chain.generateWord(3, 10, true);
 	  const surname = chain.generateWord(3, 10, true);
 	  return `${name} ${surname}`
 	};
 
-	var races = createCommonjsModule(function (module) {
-	module.exports.raceData = {
+	const raceData = {
 	    'dwarf': {
 	        name: 'dwarf',
 	        chance: 0.40,
@@ -7794,13 +8122,9 @@ ALONSO         0.004 90.040   1219`;
 	    },
 	};
 
-	module.exports.raceNames = Object.keys(module.exports.raceData);
-	});
-	var races_1 = races.raceData;
-	var races_2 = races.raceNames;
+	const raceNames = Object.keys(raceData);
 
-	var classes = createCommonjsModule(function (module) {
-	module.exports.classData = {
+	const classData = {
 	    barbarian: {
 	        name: 'barbarian',
 	        lvl1hp: 12,
@@ -7932,10 +8256,7 @@ ALONSO         0.004 90.040   1219`;
 	    },
 	};
 
-	module.exports.classNames = Object.keys(module.exports.classData);
-	});
-	var classes_1 = classes.classData;
-	var classes_2 = classes.classNames;
+	const classNames = Object.keys(classData);
 
 	const alignment1 = [
 	    'lawful',
@@ -7955,33 +8276,34 @@ ALONSO         0.004 90.040   1219`;
 
 	function genDude() {
 	    const race = (function iter() {
-	        const result = races_1[utilities_2(races_2)];
+	        const result = raceData[pickOne(raceNames)];
 	        if (Math.random() < result.chance) return result
 	        return iter()
 	    })();
 
 	    const alignment = [
-	        utilities_2(alignment1),
-	        utilities_2(alignment2),
+	        pickOne(alignment1),
+	        pickOne(alignment2),
 	    ];
 
-	    const className = utilities_2(classes_2);
-	    const clazz = classes_1[className];
-	    const age = race.ageFactor * (dice_4(20) + 18) | 0;
+	    const className = pickOne(classNames);
+	    const clazz = classData[className];
+	    const age = race.ageFactor * (die(20) + 18) | 0;
 
-	    const gender = dice_11() === 1 ? 'NB' : dice_6() <= 3 ? 'M' : 'F';
+	    const gender = d100() === 1 ? 'NB' : d6() <= 3 ? 'M' : 'F';
 
 	    const add = (a, b) => a + b;
 	    const rollAttr = (mod) => {
-	        let dres = helpers_1(3)
-	            .map(dice_6)
+	        let dres = range(3)
+	            .map(d6)
 	            .sort()
 	            .reverse();
 	        // let sumOfThreeBest = dres.slice(0, 3).reduce(add, 0)
 	        // let preresult = sumOfThreeBest + mod
 	        let preresult = dres.reduce(add, 0);
-	        let result = Math.max(preresult, 3);
+	        let result = Math.max(preresult, 3) + mod;
 	        return {
+	            preresult,
 	            result,
 	            source: [(mod === 0 ? '±' : mod > 0 ? '+' : '') + mod, dres.join(',')]
 	        }
@@ -8159,6 +8481,167 @@ ALONSO         0.004 90.040   1219`;
 	Gord Belano
 	*/
 
+	function getCols () {
+	    const result = [];
+	    for (let i = 1; i < 10; ++i) {
+	        result.push(`.col_${i} {
+            flex-direction: column;
+            display: flex;
+            flex: ${i};
+        }`);
+	    }
+	    return result.join('\n')
+	}
+
+	const styles = csjs_1`
+.container {
+    display: flex;
+    flex-direction: column;
+}
+.row {
+    display: flex;
+}
+
+${getCols()}
+
+.sheet {
+    border: 1px solid silver;
+}
+.sheet input {
+    border: none;
+    border-bottom: 1px solid silver;
+}
+.sheetSection {
+
+}
+.bio extends .col_1, .sheetSection { }
+.metaInfo extends .col_1, .sheetSection { }
+.classesInfo extends .col_1, .sheetSection { }
+.attrsInfo extends .col_1, .sheetSection {
+    max-width: 150px;
+}
+
+.alignRight {
+    text-align: right;
+}
+.numberField extends .alignRight {}
+`;
+
+	function translateAlignment (a) {
+	    const aa = {
+	        'chaotic': 'kaotisk',
+	        'neutral': 'neutral',
+	        'lawful': 'laglydig',
+	        'good': 'god',
+	        'evil': 'ond',
+	    };
+	    return a.map(x => aa[x]).join(' och ')
+	}
+
+	class ChSheetComp {
+	    static styles () {
+	        return styles
+	    }
+
+	    constructor (vnode) {
+	        this.char = vnode.attrs.character;
+	    }
+
+	    view (vnode) {
+	        return mithril('div', {className: styles.container}, [
+	            mithril('div', {className: `${styles.sheet} ${styles.row}`}, [
+
+	                mithril('div', {className: styles.bio}, [
+	                    mithril('table', [
+	                        mithril('tbody', [
+	                            mithril('tr', [
+	                                mithril('td', 'namn'),
+	                                mithril('td', mithril('input', {type: 'text', value: this.char.name})),
+	                            ]),
+	                            mithril('tr', [
+	                                mithril('td', 'kön'),
+	                                mithril('td', mithril('input', {type: 'text', value: this.char.gender})),
+	                            ]),
+	                        ])
+	                    ])
+	                ]),
+
+	                mithril('div', {className: styles.metaInfo}, [
+	                    mithril('table', [
+	                        mithril('tbody', [
+	                            mithril('tr', [
+	                                mithril('td', 'övertyglese'),
+	                                mithril('td', mithril('input', {type: 'text', value: translateAlignment(this.char.alignment)})),
+	                            ]),
+	                            mithril('tr', [
+	                                mithril('td', 'ras/folkslag'),
+	                                mithril('td', mithril('input', {type: 'text', value: this.char.race})),
+	                            ]),
+	                        ])
+	                    ])
+	                ]),
+
+	                mithril('div', {className: styles.classesInfo}, [
+	                    mithril('table', [
+	                        mithril('tbody', [
+	                            mithril('tr', [
+	                                mithril('td', 'klass/yrke'),
+	                                mithril('td', mithril('input', {type: 'text', value: this.char.className})),
+	                                mithril('td', 'level: 1'),
+	                            ]),
+	                        ])
+	                    ])
+	                ]),
+	            ]),
+
+	            mithril('div', {className: `${styles.sheet} ${styles.row}`}, [
+	                mithril('div', {className: styles.attrsInfo}, [
+	                    mithril('table', [
+	                        mithril('tbody', [
+	                            mithril('tr', [
+	                                mithril('td', 'styrka (str)'),
+	                                mithril('td', {className: styles.numberField}, this.char.attributes.str)
+	                            ]),
+	                            mithril('tr', [
+	                                mithril('td', 'smidighet (dex)'),
+	                                mithril('td', {className: styles.numberField}, this.char.attributes.dex)
+	                            ]),
+	                            mithril('tr', [
+	                                mithril('td', 'uthållighet (con)'),
+	                                mithril('td', {className: styles.numberField}, this.char.attributes.con)
+	                            ]),
+	                            mithril('tr', [
+	                                mithril('td', 'minne (int)'),
+	                                mithril('td', {className: styles.numberField}, this.char.attributes.int)
+	                            ]),
+	                            mithril('tr', [
+	                                mithril('td', 'visdom (wis)'),
+	                                mithril('td', {className: styles.numberField}, this.char.attributes.wis)
+	                            ]),
+	                            mithril('tr', [
+	                                mithril('td', 'utstrålning (cha)'),
+	                                mithril('td', {className: styles.numberField}, this.char.attributes.cha)
+	                            ]),
+	                            mithril('tr', [
+	                                mithril('td', ''),
+	                            ]),
+	                            mithril('tr', [
+	                                mithril('td', 'summa, attribut'),
+	                                mithril('td', {className: styles.numberField},
+	                                    Object.keys(this.char.attributes)
+	                                        .map(x => parseInt(this.char.attributes[x], 10))
+	                                        .reduce((a, b) => a + b, 0))
+	                            ]),
+	                        ])
+	                    ])
+	                ]),
+	            ]),
+
+	            mithril('pre', JSON.stringify(this.char, null, 2))
+	        ])
+	    }
+	}
+
 	if(document.readyState === 'complete') {
 	    init();
 	} else {
@@ -8166,18 +8649,31 @@ ALONSO         0.004 90.040   1219`;
 	}
 
 	class RootComponent {
-	    constructor (vnode) {
-
-	    }
-
 	    view (vnode) {
-	        return mithril('div', [
-	            mithril('pre', JSON.stringify(genDude(), null, 2))
-	        ])
+	        // return m('div', [
+	        //     m('pre', JSON.stringify(genDude(), null, 2))
+	        // ])
+	        return mithril(ChSheetComp, {character: genDude()})
+	    }
+	}
+
+
+	function registerStyles () {
+	    [].forEach.call([
+	        ChSheetComp
+	    ], comp => applyCss(comp.styles));
+	}
+	function applyCss (stylesGetter) {
+	    if (typeof stylesGetter === 'function') {
+	        const css = getCss$2(stylesGetter());
+	        const styleElement = document.createElement('style');
+	        styleElement.innerText = css;
+	        document.head.appendChild(styleElement);
 	    }
 	}
 
 	function init () {
+	    registerStyles();
 	    const element = document.body;
 	    mithril.mount(element, RootComponent);
 	}
