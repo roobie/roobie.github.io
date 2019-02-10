@@ -4,6 +4,7 @@
     "sourceType": "module"
   },
   "rules": {
-    "semi": [2, "never"]
+    "semi": [2, "never"],
+    "comma-dangle": [2, "always-multiline"]
   }
 }

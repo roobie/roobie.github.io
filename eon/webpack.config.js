@@ -5,7 +5,8 @@ module.exports = {
   "entry": "./src/index.js",
   "output": {
     "path": __dirname+'/dist',
-    "filename": "[name].[chunkhash:8].js"
+    // "filename": "[name].[chunkhash:8].js"
+    "filename": "bundle.js"
   },
   "plugins": [
     new HtmlWebpackPlugin()
@@ -26,7 +27,7 @@ module.exports = {
           "loader": "babel-loader",
           "options": {
             "presets": [
-              "env"
+              "@babel/preset-env"
             ]
           }
         }
