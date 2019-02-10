@@ -26,10 +26,14 @@ type alias Model =
 
 -- INIT
 
+newMinimalPersona = Random.generate
+                    ShowNewPersona
+                    (personaGenerator Personae.Level1)
+
 init : () -> (Model, Cmd Msg)
 init _ =
     ( { persona = emptyPersona }
-    , Random.generate ShowNewPersona personaGenerator
+    , newMinimalPersona
     )
 
 
@@ -43,7 +47,7 @@ update msg model =
     case msg of
         GenerateNewPersona ->
             ( model
-            , Random.generate ShowNewPersona personaGenerator
+            , newMinimalPersona
             )
 
         ShowNewPersona persona ->
@@ -65,10 +69,5 @@ view : Model -> Html Msg
 view model =
   div [ class "row"]
       [ div [class "col"]
-            [ div [class "row"] [text (String.fromInt model.persona.age)]
-            , div [class "row"] [text (model.persona.firstName)]
-            , div [class "row"] [text (model.persona.surName)]
-            , div [class "row"] [text (model.persona.species)]
-            , div [class "row"] [text (model.persona.subspecies)]
-            ]
+            []
       ]
