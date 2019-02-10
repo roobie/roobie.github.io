@@ -1,0 +1,7 @@
+{
+  "verbose": true,
+  "ignore": ["dist/", "elm-stuff/"],
+  "execMap": {
+    "elm": "elm make"
+  }
+}
