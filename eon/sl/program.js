@@ -4400,9 +4400,9 @@ var author$project$Personae$Level1 = {$: 'Level1'};
 var author$project$Personae$L1 = function (a) {
 	return {$: 'L1', a: a};
 };
-var author$project$Personae$L1Persona = F3(
-	function (demeanor, apparel, basicProperties) {
-		return {apparel: apparel, basicProperties: basicProperties, demeanor: demeanor};
+var author$project$Personae$L1Persona = F4(
+	function (demeanor, apparel, voice, basicProperties) {
+		return {apparel: apparel, basicProperties: basicProperties, demeanor: demeanor, voice: voice};
 	});
 var author$project$Personae$Apparel = function (a) {
 	return {$: 'Apparel', a: a};
@@ -4715,8 +4715,18 @@ var author$project$Personae$demeanorGenerator = A2(
 	author$project$Personae$defaultString,
 	elm_community$random_extra$Random$Extra$sample(
 		_List_fromArray(
-			['casual', 'nervous', 'angry', 'insane', 'calm', 'sneaky'])));
+			['casual', 'nervous', 'angry', 'insane', 'calm', 'sneaky', 'tired'])));
 var author$project$Personae$genDemeanor = A2(elm$random$Random$map, author$project$Personae$Demeanor, author$project$Personae$demeanorGenerator);
+var author$project$Personae$Voice = function (a) {
+	return {$: 'Voice', a: a};
+};
+var author$project$Personae$voiceGenerator = A2(
+	elm$random$Random$map,
+	author$project$Personae$defaultString,
+	elm_community$random_extra$Random$Extra$sample(
+		_List_fromArray(
+			['raspy', 'low', 'high', 'hoarse', 'coarse', 'powerful', 'tiny', 'thundering'])));
+var author$project$Personae$genVoice = A2(elm$random$Random$map, author$project$Personae$Voice, author$project$Personae$voiceGenerator);
 var author$project$Personae$personaGenerator = function (ptype) {
 	return A2(
 		elm$random$Random$map,
@@ -4726,8 +4736,11 @@ var author$project$Personae$personaGenerator = function (ptype) {
 			author$project$Personae$genBasicProperties,
 			A2(
 				elm_community$random_extra$Random$Extra$andMap,
-				author$project$Personae$genApparel,
-				A2(elm$random$Random$map, author$project$Personae$L1Persona, author$project$Personae$genDemeanor))));
+				author$project$Personae$genVoice,
+				A2(
+					elm_community$random_extra$Random$Extra$andMap,
+					author$project$Personae$genApparel,
+					A2(elm$random$Random$map, author$project$Personae$L1Persona, author$project$Personae$genDemeanor)))));
 };
 var elm$random$Random$Generate = function (a) {
 	return {$: 'Generate', a: a};
@@ -5209,6 +5222,10 @@ var author$project$Personae$decodeDemeanor = function (_n0) {
 	var a = _n0.a;
 	return a;
 };
+var author$project$Personae$decodeVoice = function (_n0) {
+	var a = _n0.a;
+	return a;
+};
 var elm$json$Json$Decode$map = _Json_map1;
 var elm$json$Json$Decode$map2 = _Json_map2;
 var elm$json$Json$Decode$succeed = _Json_succeed;
@@ -5602,6 +5619,27 @@ var author$project$Personae$viewL1Persona = function (persona) {
 											[
 												elm$html$Html$text(
 												author$project$Personae$decodeApparel(persona.apparel))
+											]))
+									])),
+								A2(
+								elm$html$Html$tr,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Voice')
+											])),
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text(
+												author$project$Personae$decodeVoice(persona.voice))
 											]))
 									])),
 								A2(

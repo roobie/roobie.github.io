@@ -32,7 +32,7 @@ E.g. casual, nervous, angry, mad/insane, calm, sneaky
 type Demeanor = Demeanor String
 demeanorGenerator =
     Random.map defaultString
-        (RExtra.sample ["casual", "nervous", "angry", "insane", "calm", "sneaky"])
+        (RExtra.sample ["casual", "nervous", "angry", "insane", "calm", "sneaky", "tired"])
 genDemeanor = demeanorGenerator |> Random.map Demeanor
 decodeDemeanor (Demeanor a) = a
 
@@ -56,7 +56,14 @@ genDisposition = tempGenStr |> Random.map Disposition
 E.g. raspy, low, high, hoarse, coarse, powerful, tiny
 -}
 type Voice = Voice String
-genVoice = tempGenStr |> Random.map Voice
+voiceGenerator =
+    Random.map defaultString
+        (RExtra.sample ["raspy", "low", "high", "hoarse", "coarse", "powerful", "tiny", "thundering"])
+genVoice : Random.Generator Voice
+genVoice = voiceGenerator |> Random.map Voice
+
+decodeVoice : Voice -> String
+decodeVoice (Voice a) = a
 
 {-| Description of the visible apparel the person is sporting
 -}
@@ -108,14 +115,16 @@ how a person moves and generally acts, when observed from afar
 type alias L1Persona =
     { demeanor: Demeanor
     , apparel: Apparel
+    , voice: Voice
     , basicProperties: BasicProperties
     }
 
 type alias L2Persona =
     { demeanor: Demeanor
-    , disposition: Disposition
     , apparel: Apparel
     , voice: Voice
+    , basicProperties: BasicProperties
+    , disposition: Disposition
     }
 
 type Persona
@@ -129,6 +138,7 @@ personaGenerator ptype =
         Level1 ->
             Random.map L1Persona genDemeanor
                 |> RExtra.andMap genApparel
+                |> RExtra.andMap genVoice
                 |> RExtra.andMap genBasicProperties
                 |> Random.map L1
 
@@ -162,6 +172,10 @@ viewL1Persona persona =
                 , tr []
                       [ td [] [text ("Apparel")]
                       , td [] [text (decodeApparel persona.apparel)]
+                      ]
+                , tr []
+                      [ td [] [text ("Voice")]
+                      , td [] [text (decodeVoice persona.voice)]
                       ]
                 , tr []
                       [ td [] [text ("Age")]
