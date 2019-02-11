@@ -793,6 +793,103 @@ function _Utils_ap(xs, ys)
 
 
 
+// MATH
+
+var _Basics_add = F2(function(a, b) { return a + b; });
+var _Basics_sub = F2(function(a, b) { return a - b; });
+var _Basics_mul = F2(function(a, b) { return a * b; });
+var _Basics_fdiv = F2(function(a, b) { return a / b; });
+var _Basics_idiv = F2(function(a, b) { return (a / b) | 0; });
+var _Basics_pow = F2(Math.pow);
+
+var _Basics_remainderBy = F2(function(b, a) { return a % b; });
+
+// https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/divmodnote-letter.pdf
+var _Basics_modBy = F2(function(modulus, x)
+{
+	var answer = x % modulus;
+	return modulus === 0
+		? _Debug_crash(11)
+		:
+	((answer > 0 && modulus < 0) || (answer < 0 && modulus > 0))
+		? answer + modulus
+		: answer;
+});
+
+
+// TRIGONOMETRY
+
+var _Basics_pi = Math.PI;
+var _Basics_e = Math.E;
+var _Basics_cos = Math.cos;
+var _Basics_sin = Math.sin;
+var _Basics_tan = Math.tan;
+var _Basics_acos = Math.acos;
+var _Basics_asin = Math.asin;
+var _Basics_atan = Math.atan;
+var _Basics_atan2 = F2(Math.atan2);
+
+
+// MORE MATH
+
+function _Basics_toFloat(x) { return x; }
+function _Basics_truncate(n) { return n | 0; }
+function _Basics_isInfinite(n) { return n === Infinity || n === -Infinity; }
+
+var _Basics_ceiling = Math.ceil;
+var _Basics_floor = Math.floor;
+var _Basics_round = Math.round;
+var _Basics_sqrt = Math.sqrt;
+var _Basics_log = Math.log;
+var _Basics_isNaN = isNaN;
+
+
+// BOOLEANS
+
+function _Basics_not(bool) { return !bool; }
+var _Basics_and = F2(function(a, b) { return a && b; });
+var _Basics_or  = F2(function(a, b) { return a || b; });
+var _Basics_xor = F2(function(a, b) { return a !== b; });
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
+
+
+
 // TASKS
 
 function _Scheduler_succeed(value)
@@ -981,103 +1078,6 @@ function _Scheduler_step(proc)
 		}
 	}
 }
-
-
-
-// MATH
-
-var _Basics_add = F2(function(a, b) { return a + b; });
-var _Basics_sub = F2(function(a, b) { return a - b; });
-var _Basics_mul = F2(function(a, b) { return a * b; });
-var _Basics_fdiv = F2(function(a, b) { return a / b; });
-var _Basics_idiv = F2(function(a, b) { return (a / b) | 0; });
-var _Basics_pow = F2(Math.pow);
-
-var _Basics_remainderBy = F2(function(b, a) { return a % b; });
-
-// https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/divmodnote-letter.pdf
-var _Basics_modBy = F2(function(modulus, x)
-{
-	var answer = x % modulus;
-	return modulus === 0
-		? _Debug_crash(11)
-		:
-	((answer > 0 && modulus < 0) || (answer < 0 && modulus > 0))
-		? answer + modulus
-		: answer;
-});
-
-
-// TRIGONOMETRY
-
-var _Basics_pi = Math.PI;
-var _Basics_e = Math.E;
-var _Basics_cos = Math.cos;
-var _Basics_sin = Math.sin;
-var _Basics_tan = Math.tan;
-var _Basics_acos = Math.acos;
-var _Basics_asin = Math.asin;
-var _Basics_atan = Math.atan;
-var _Basics_atan2 = F2(Math.atan2);
-
-
-// MORE MATH
-
-function _Basics_toFloat(x) { return x; }
-function _Basics_truncate(n) { return n | 0; }
-function _Basics_isInfinite(n) { return n === Infinity || n === -Infinity; }
-
-var _Basics_ceiling = Math.ceil;
-var _Basics_floor = Math.floor;
-var _Basics_round = Math.round;
-var _Basics_sqrt = Math.sqrt;
-var _Basics_log = Math.log;
-var _Basics_isNaN = isNaN;
-
-
-// BOOLEANS
-
-function _Basics_not(bool) { return !bool; }
-var _Basics_and = F2(function(a, b) { return a && b; });
-var _Basics_or  = F2(function(a, b) { return a || b; });
-var _Basics_xor = F2(function(a, b) { return a !== b; });
-
-
-
-var _Bitwise_and = F2(function(a, b)
-{
-	return a & b;
-});
-
-var _Bitwise_or = F2(function(a, b)
-{
-	return a | b;
-});
-
-var _Bitwise_xor = F2(function(a, b)
-{
-	return a ^ b;
-});
-
-function _Bitwise_complement(a)
-{
-	return ~a;
-};
-
-var _Bitwise_shiftLeftBy = F2(function(offset, a)
-{
-	return a << offset;
-});
-
-var _Bitwise_shiftRightBy = F2(function(offset, a)
-{
-	return a >> offset;
-});
-
-var _Bitwise_shiftRightZfBy = F2(function(offset, a)
-{
-	return a >>> offset;
-});
 
 
 
@@ -4400,9 +4400,9 @@ var author$project$Personae$Level1 = {$: 'Level1'};
 var author$project$Personae$L1 = function (a) {
 	return {$: 'L1', a: a};
 };
-var author$project$Personae$L1Persona = F2(
-	function (demeanor, apparel) {
-		return {apparel: apparel, demeanor: demeanor};
+var author$project$Personae$L1Persona = F3(
+	function (demeanor, apparel, basicProperties) {
+		return {apparel: apparel, basicProperties: basicProperties, demeanor: demeanor};
 	});
 var author$project$Personae$Apparel = function (a) {
 	return {$: 'Apparel', a: a};
@@ -4518,10 +4518,59 @@ var elm$random$Random$map = F2(
 			});
 	});
 var author$project$Personae$genApparel = A2(elm$random$Random$map, author$project$Personae$Apparel, author$project$Personae$tempGenStr);
-var author$project$Personae$Demeanor = function (a) {
-	return {$: 'Demeanor', a: a};
+var author$project$Personae$BasicProperties = F3(
+	function (height, weight, age) {
+		return {age: age, height: height, weight: weight};
+	});
+var elm$core$Basics$lt = _Utils_lt;
+var elm$core$Basics$negate = function (n) {
+	return -n;
 };
-var author$project$Personae$genDemeanor = A2(elm$random$Random$map, author$project$Personae$Demeanor, author$project$Personae$tempGenStr);
+var elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var elm$core$Basics$add = _Basics_add;
+var elm$core$Basics$fdiv = _Basics_fdiv;
+var elm$core$Basics$mul = _Basics_mul;
+var elm$core$Basics$sub = _Basics_sub;
+var elm$core$Basics$toFloat = _Basics_toFloat;
+var elm$core$Bitwise$and = _Bitwise_and;
+var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var elm$random$Random$Seed = F2(
+	function (a, b) {
+		return {$: 'Seed', a: a, b: b};
+	});
+var elm$random$Random$next = function (_n0) {
+	var state0 = _n0.a;
+	var incr = _n0.b;
+	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+};
+var elm$core$Bitwise$xor = _Bitwise_xor;
+var elm$random$Random$peel = function (_n0) {
+	var state = _n0.a;
+	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
+	return ((word >>> 22) ^ word) >>> 0;
+};
+var elm$random$Random$float = F2(
+	function (a, b) {
+		return elm$random$Random$Generator(
+			function (seed0) {
+				var seed1 = elm$random$Random$next(seed0);
+				var range = elm$core$Basics$abs(b - a);
+				var n1 = elm$random$Random$peel(seed1);
+				var n0 = elm$random$Random$peel(seed0);
+				var lo = (134217727 & n1) * 1.0;
+				var hi = (67108863 & n0) * 1.0;
+				var val = ((hi * 1.34217728e8) + lo) / 9.007199254740992e15;
+				var scaled = (val * range) + a;
+				return _Utils_Tuple2(
+					scaled,
+					elm$random$Random$next(seed1));
+			});
+	});
+var author$project$Personae$genAge = A2(elm$random$Random$float, 18, 80);
+var author$project$Personae$genHeight = A2(elm$random$Random$float, 130, 210);
+var author$project$Personae$genWeight = A2(elm$random$Random$float, 35, 120);
 var elm$random$Random$map2 = F3(
 	function (func, _n0, _n1) {
 		var genA = _n0.a;
@@ -4540,32 +4589,151 @@ var elm$random$Random$map2 = F3(
 			});
 	});
 var elm_community$random_extra$Random$Extra$andMap = elm$random$Random$map2(elm$core$Basics$apR);
+var author$project$Personae$genBasicProperties = A2(
+	elm_community$random_extra$Random$Extra$andMap,
+	author$project$Personae$genAge,
+	A2(
+		elm_community$random_extra$Random$Extra$andMap,
+		author$project$Personae$genWeight,
+		A2(elm$random$Random$map, author$project$Personae$BasicProperties, author$project$Personae$genHeight)));
+var author$project$Personae$Demeanor = function (a) {
+	return {$: 'Demeanor', a: a};
+};
+var elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
+var author$project$Personae$defaultString = elm$core$Maybe$withDefault('');
+var elm$core$Basics$eq = _Utils_equal;
+var elm$core$List$foldl = F3(
+	function (func, acc, list) {
+		foldl:
+		while (true) {
+			if (!list.b) {
+				return acc;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				var $temp$func = func,
+					$temp$acc = A2(func, x, acc),
+					$temp$list = xs;
+				func = $temp$func;
+				acc = $temp$acc;
+				list = $temp$list;
+				continue foldl;
+			}
+		}
+	});
+var elm$core$List$length = function (xs) {
+	return A3(
+		elm$core$List$foldl,
+		F2(
+			function (_n0, i) {
+				return i + 1;
+			}),
+		0,
+		xs);
+};
+var elm$core$Maybe$Just = function (a) {
+	return {$: 'Just', a: a};
+};
+var elm$core$Maybe$Nothing = {$: 'Nothing'};
+var elm$core$Basics$remainderBy = _Basics_remainderBy;
+var elm$random$Random$int = F2(
+	function (a, b) {
+		return elm$random$Random$Generator(
+			function (seed0) {
+				var _n0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
+				var lo = _n0.a;
+				var hi = _n0.b;
+				var range = (hi - lo) + 1;
+				if (!((range - 1) & range)) {
+					return _Utils_Tuple2(
+						(((range - 1) & elm$random$Random$peel(seed0)) >>> 0) + lo,
+						elm$random$Random$next(seed0));
+				} else {
+					var threshhold = (((-range) >>> 0) % range) >>> 0;
+					var accountForBias = function (seed) {
+						accountForBias:
+						while (true) {
+							var x = elm$random$Random$peel(seed);
+							var seedN = elm$random$Random$next(seed);
+							if (_Utils_cmp(x, threshhold) < 0) {
+								var $temp$seed = seedN;
+								seed = $temp$seed;
+								continue accountForBias;
+							} else {
+								return _Utils_Tuple2((x % range) + lo, seedN);
+							}
+						}
+					};
+					return accountForBias(seed0);
+				}
+			});
+	});
+var elm_community$random_extra$Random$Extra$sample = function () {
+	var find = F2(
+		function (k, ys) {
+			find:
+			while (true) {
+				if (!ys.b) {
+					return elm$core$Maybe$Nothing;
+				} else {
+					var z = ys.a;
+					var zs = ys.b;
+					if (!k) {
+						return elm$core$Maybe$Just(z);
+					} else {
+						var $temp$k = k - 1,
+							$temp$ys = zs;
+						k = $temp$k;
+						ys = $temp$ys;
+						continue find;
+					}
+				}
+			}
+		});
+	return function (xs) {
+		return A2(
+			elm$random$Random$map,
+			function (i) {
+				return A2(find, i, xs);
+			},
+			A2(
+				elm$random$Random$int,
+				0,
+				elm$core$List$length(xs) - 1));
+	};
+}();
+var author$project$Personae$demeanorGenerator = A2(
+	elm$random$Random$map,
+	author$project$Personae$defaultString,
+	elm_community$random_extra$Random$Extra$sample(
+		_List_fromArray(
+			['casual', 'nervous', 'angry', 'insane', 'calm', 'sneaky'])));
+var author$project$Personae$genDemeanor = A2(elm$random$Random$map, author$project$Personae$Demeanor, author$project$Personae$demeanorGenerator);
 var author$project$Personae$personaGenerator = function (ptype) {
 	return A2(
 		elm$random$Random$map,
 		author$project$Personae$L1,
 		A2(
 			elm_community$random_extra$Random$Extra$andMap,
-			author$project$Personae$genApparel,
-			A2(elm$random$Random$map, author$project$Personae$L1Persona, author$project$Personae$genDemeanor)));
+			author$project$Personae$genBasicProperties,
+			A2(
+				elm_community$random_extra$Random$Extra$andMap,
+				author$project$Personae$genApparel,
+				A2(elm$random$Random$map, author$project$Personae$L1Persona, author$project$Personae$genDemeanor))));
 };
 var elm$random$Random$Generate = function (a) {
 	return {$: 'Generate', a: a};
 };
 var elm$core$Task$andThen = _Scheduler_andThen;
 var elm$core$Task$succeed = _Scheduler_succeed;
-var elm$core$Basics$add = _Basics_add;
-var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
-var elm$random$Random$Seed = F2(
-	function (a, b) {
-		return {$: 'Seed', a: a, b: b};
-	});
-var elm$core$Basics$mul = _Basics_mul;
-var elm$random$Random$next = function (_n0) {
-	var state0 = _n0.a;
-	var incr = _n0.b;
-	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
-};
 var elm$random$Random$initialSeed = function (x) {
 	var _n0 = elm$random$Random$next(
 		A2(elm$random$Random$Seed, 0, 1013904223));
@@ -4618,12 +4786,10 @@ var elm$core$Array$Array_elm_builtin = F4(
 		return {$: 'Array_elm_builtin', a: a, b: b, c: c, d: d};
 	});
 var elm$core$Basics$ceiling = _Basics_ceiling;
-var elm$core$Basics$fdiv = _Basics_fdiv;
 var elm$core$Basics$logBase = F2(
 	function (base, number) {
 		return _Basics_log(number) / _Basics_log(base);
 	});
-var elm$core$Basics$toFloat = _Basics_toFloat;
 var elm$core$Array$shiftStep = elm$core$Basics$ceiling(
 	A2(elm$core$Basics$logBase, 2, elm$core$Array$branchFactor));
 var elm$core$Elm$JsArray$empty = _JsArray_empty;
@@ -4635,25 +4801,6 @@ var elm$core$Array$SubTree = function (a) {
 	return {$: 'SubTree', a: a};
 };
 var elm$core$Elm$JsArray$initializeFromList = _JsArray_initializeFromList;
-var elm$core$List$foldl = F3(
-	function (func, acc, list) {
-		foldl:
-		while (true) {
-			if (!list.b) {
-				return acc;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				var $temp$func = func,
-					$temp$acc = A2(func, x, acc),
-					$temp$list = xs;
-				func = $temp$func;
-				acc = $temp$acc;
-				list = $temp$list;
-				continue foldl;
-			}
-		}
-	});
 var elm$core$List$reverse = function (list) {
 	return A3(elm$core$List$foldl, elm$core$List$cons, _List_Nil, list);
 };
@@ -4679,7 +4826,6 @@ var elm$core$Array$compressNodes = F2(
 			}
 		}
 	});
-var elm$core$Basics$eq = _Utils_equal;
 var elm$core$Tuple$first = function (_n0) {
 	var x = _n0.a;
 	return x;
@@ -4710,7 +4856,6 @@ var elm$core$Basics$max = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) > 0) ? x : y;
 	});
-var elm$core$Basics$sub = _Basics_sub;
 var elm$core$Elm$JsArray$length = _JsArray_length;
 var elm$core$Array$builderToArray = F2(
 	function (reverseNodeList, builder) {
@@ -4736,7 +4881,6 @@ var elm$core$Array$builderToArray = F2(
 		}
 	});
 var elm$core$Basics$idiv = _Basics_idiv;
-var elm$core$Basics$lt = _Utils_lt;
 var elm$core$Elm$JsArray$initialize = _JsArray_initialize;
 var elm$core$Array$initializeHelp = F5(
 	function (fn, fromIndex, len, nodeList, tail) {
@@ -4765,7 +4909,6 @@ var elm$core$Array$initializeHelp = F5(
 		}
 	});
 var elm$core$Basics$le = _Utils_le;
-var elm$core$Basics$remainderBy = _Basics_remainderBy;
 var elm$core$Array$initialize = F2(
 	function (len, fn) {
 		if (len <= 0) {
@@ -4777,10 +4920,6 @@ var elm$core$Array$initialize = F2(
 			return A5(elm$core$Array$initializeHelp, fn, initialFromIndex, len, _List_Nil, tail);
 		}
 	});
-var elm$core$Maybe$Just = function (a) {
-	return {$: 'Just', a: a};
-};
-var elm$core$Maybe$Nothing = {$: 'Nothing'};
 var elm$core$Result$Err = function (a) {
 	return {$: 'Err', a: a};
 };
@@ -4823,16 +4962,6 @@ var elm$core$Char$isDigit = function (_char) {
 };
 var elm$core$Char$isAlphaNum = function (_char) {
 	return elm$core$Char$isLower(_char) || (elm$core$Char$isUpper(_char) || elm$core$Char$isDigit(_char));
-};
-var elm$core$List$length = function (xs) {
-	return A3(
-		elm$core$List$foldl,
-		F2(
-			function (_n0, i) {
-				return i + 1;
-			}),
-		0,
-		xs);
 };
 var elm$core$List$map2 = _List_map2;
 var elm$core$List$rangeHelp = F3(
@@ -5072,6 +5201,14 @@ var author$project$Main$update = F2(
 var author$project$Main$PersonaMsg = function (a) {
 	return {$: 'PersonaMsg', a: a};
 };
+var author$project$Personae$decodeApparel = function (_n0) {
+	var a = _n0.a;
+	return a;
+};
+var author$project$Personae$decodeDemeanor = function (_n0) {
+	var a = _n0.a;
+	return a;
+};
 var elm$json$Json$Decode$map = _Json_map1;
 var elm$json$Json$Decode$map2 = _Json_map2;
 var elm$json$Json$Decode$succeed = _Json_succeed;
@@ -5088,12 +5225,464 @@ var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 	}
 };
 var elm$html$Html$div = _VirtualDom_node('div');
+var elm$html$Html$table = _VirtualDom_node('table');
+var elm$html$Html$tbody = _VirtualDom_node('tbody');
+var elm$html$Html$td = _VirtualDom_node('td');
+var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
+var elm$html$Html$th = _VirtualDom_node('th');
+var elm$html$Html$thead = _VirtualDom_node('thead');
+var elm$html$Html$tr = _VirtualDom_node('tr');
+var elm$core$Basics$ge = _Utils_ge;
+var elm$core$Basics$not = _Basics_not;
+var elm$core$Basics$isInfinite = _Basics_isInfinite;
+var elm$core$Basics$isNaN = _Basics_isNaN;
+var elm$core$Maybe$map = F2(
+	function (f, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return elm$core$Maybe$Just(
+				f(value));
+		} else {
+			return elm$core$Maybe$Nothing;
+		}
+	});
+var elm$core$String$fromFloat = _String_fromNumber;
+var elm$core$String$length = _String_length;
+var elm$core$String$cons = _String_cons;
+var elm$core$String$fromChar = function (_char) {
+	return A2(elm$core$String$cons, _char, '');
+};
+var elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
+var elm$core$String$repeatHelp = F3(
+	function (n, chunk, result) {
+		return (n <= 0) ? result : A3(
+			elm$core$String$repeatHelp,
+			n >> 1,
+			_Utils_ap(chunk, chunk),
+			(!(n & 1)) ? result : _Utils_ap(result, chunk));
+	});
+var elm$core$String$repeat = F2(
+	function (n, chunk) {
+		return A3(elm$core$String$repeatHelp, n, chunk, '');
+	});
+var elm$core$String$padRight = F3(
+	function (n, _char, string) {
+		return _Utils_ap(
+			string,
+			A2(
+				elm$core$String$repeat,
+				n - elm$core$String$length(string),
+				elm$core$String$fromChar(_char)));
+	});
+var elm$core$String$reverse = _String_reverse;
+var elm$core$String$slice = _String_slice;
+var elm$core$Basics$neq = _Utils_notEqual;
+var elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var elm$core$String$foldr = _String_foldr;
+var elm$core$String$toList = function (string) {
+	return A3(elm$core$String$foldr, elm$core$List$cons, _List_Nil, string);
+};
+var myrho$elm_round$Round$addSign = F2(
+	function (signed, str) {
+		var isNotZero = A2(
+			elm$core$List$any,
+			function (c) {
+				return (!_Utils_eq(
+					c,
+					_Utils_chr('0'))) && (!_Utils_eq(
+					c,
+					_Utils_chr('.')));
+			},
+			elm$core$String$toList(str));
+		return _Utils_ap(
+			(signed && isNotZero) ? '-' : '',
+			str);
+	});
+var elm$core$Char$fromCode = _Char_fromCode;
+var myrho$elm_round$Round$increaseNum = function (_n0) {
+	var head = _n0.a;
+	var tail = _n0.b;
+	if (_Utils_eq(
+		head,
+		_Utils_chr('9'))) {
+		var _n1 = elm$core$String$uncons(tail);
+		if (_n1.$ === 'Nothing') {
+			return '01';
+		} else {
+			var headtail = _n1.a;
+			return A2(
+				elm$core$String$cons,
+				_Utils_chr('0'),
+				myrho$elm_round$Round$increaseNum(headtail));
+		}
+	} else {
+		var c = elm$core$Char$toCode(head);
+		return ((c >= 48) && (c < 57)) ? A2(
+			elm$core$String$cons,
+			elm$core$Char$fromCode(c + 1),
+			tail) : '0';
+	}
+};
+var myrho$elm_round$Round$splitComma = function (str) {
+	var _n0 = A2(elm$core$String$split, '.', str);
+	if (_n0.b) {
+		if (_n0.b.b) {
+			var before = _n0.a;
+			var _n1 = _n0.b;
+			var after = _n1.a;
+			return _Utils_Tuple2(before, after);
+		} else {
+			var before = _n0.a;
+			return _Utils_Tuple2(before, '0');
+		}
+	} else {
+		return _Utils_Tuple2('0', '0');
+	}
+};
+var elm$core$String$dropLeft = F2(
+	function (n, string) {
+		return (n < 1) ? string : A3(
+			elm$core$String$slice,
+			n,
+			elm$core$String$length(string),
+			string);
+	});
+var elm$core$String$startsWith = _String_startsWith;
+var elm$core$String$toInt = _String_toInt;
+var elm$core$Tuple$mapFirst = F2(
+	function (func, _n0) {
+		var x = _n0.a;
+		var y = _n0.b;
+		return _Utils_Tuple2(
+			func(x),
+			y);
+	});
+var myrho$elm_round$Round$toDecimal = function (fl) {
+	var _n0 = A2(
+		elm$core$String$split,
+		'e',
+		elm$core$String$fromFloat(
+			elm$core$Basics$abs(fl)));
+	if (_n0.b) {
+		if (_n0.b.b) {
+			var num = _n0.a;
+			var _n1 = _n0.b;
+			var exp = _n1.a;
+			var e = A2(
+				elm$core$Maybe$withDefault,
+				0,
+				elm$core$String$toInt(
+					A2(elm$core$String$startsWith, '+', exp) ? A2(elm$core$String$dropLeft, 1, exp) : exp));
+			var _n2 = myrho$elm_round$Round$splitComma(num);
+			var before = _n2.a;
+			var after = _n2.b;
+			var total = _Utils_ap(before, after);
+			var zeroed = (e < 0) ? A2(
+				elm$core$Maybe$withDefault,
+				'0',
+				A2(
+					elm$core$Maybe$map,
+					function (_n3) {
+						var a = _n3.a;
+						var b = _n3.b;
+						return a + ('.' + b);
+					},
+					A2(
+						elm$core$Maybe$map,
+						elm$core$Tuple$mapFirst(elm$core$String$fromChar),
+						elm$core$String$uncons(
+							_Utils_ap(
+								A2(
+									elm$core$String$repeat,
+									elm$core$Basics$abs(e),
+									'0'),
+								total))))) : A3(
+				elm$core$String$padRight,
+				e + 1,
+				_Utils_chr('0'),
+				total);
+			return _Utils_ap(
+				(fl < 0) ? '-' : '',
+				zeroed);
+		} else {
+			var num = _n0.a;
+			return _Utils_ap(
+				(fl < 0) ? '-' : '',
+				num);
+		}
+	} else {
+		return '';
+	}
+};
+var myrho$elm_round$Round$roundFun = F3(
+	function (functor, s, fl) {
+		if (elm$core$Basics$isInfinite(fl) || elm$core$Basics$isNaN(fl)) {
+			return elm$core$String$fromFloat(fl);
+		} else {
+			var signed = fl < 0;
+			var _n0 = myrho$elm_round$Round$splitComma(
+				myrho$elm_round$Round$toDecimal(
+					elm$core$Basics$abs(fl)));
+			var before = _n0.a;
+			var after = _n0.b;
+			var r = elm$core$String$length(before) + s;
+			var normalized = _Utils_ap(
+				A2(elm$core$String$repeat, (-r) + 1, '0'),
+				A3(
+					elm$core$String$padRight,
+					r,
+					_Utils_chr('0'),
+					_Utils_ap(before, after)));
+			var totalLen = elm$core$String$length(normalized);
+			var roundDigitIndex = A2(elm$core$Basics$max, 1, r);
+			var increase = A2(
+				functor,
+				signed,
+				A3(elm$core$String$slice, roundDigitIndex, totalLen, normalized));
+			var remains = A3(elm$core$String$slice, 0, roundDigitIndex, normalized);
+			var num = increase ? elm$core$String$reverse(
+				A2(
+					elm$core$Maybe$withDefault,
+					'1',
+					A2(
+						elm$core$Maybe$map,
+						myrho$elm_round$Round$increaseNum,
+						elm$core$String$uncons(
+							elm$core$String$reverse(remains))))) : remains;
+			var numLen = elm$core$String$length(num);
+			var numZeroed = (num === '0') ? num : ((s <= 0) ? _Utils_ap(
+				num,
+				A2(
+					elm$core$String$repeat,
+					elm$core$Basics$abs(s),
+					'0')) : ((_Utils_cmp(
+				s,
+				elm$core$String$length(after)) < 0) ? (A3(elm$core$String$slice, 0, numLen - s, num) + ('.' + A3(elm$core$String$slice, numLen - s, numLen, num))) : _Utils_ap(
+				before + '.',
+				A3(
+					elm$core$String$padRight,
+					s,
+					_Utils_chr('0'),
+					after))));
+			return A2(myrho$elm_round$Round$addSign, signed, numZeroed);
+		}
+	});
+var myrho$elm_round$Round$round = myrho$elm_round$Round$roundFun(
+	F2(
+		function (signed, str) {
+			var _n0 = elm$core$String$uncons(str);
+			if (_n0.$ === 'Nothing') {
+				return false;
+			} else {
+				if ('5' === _n0.a.a.valueOf()) {
+					if (_n0.a.b === '') {
+						var _n1 = _n0.a;
+						return !signed;
+					} else {
+						var _n2 = _n0.a;
+						return true;
+					}
+				} else {
+					var _n3 = _n0.a;
+					var _int = _n3.a;
+					return function (i) {
+						return ((i > 53) && signed) || ((i >= 53) && (!signed));
+					}(
+						elm$core$Char$toCode(_int));
+				}
+			}
+		}));
+var author$project$Personae$viewL1Persona = function (persona) {
+	return A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						elm$html$Html$text('L1 Persona')
+					])),
+				A2(
+				elm$html$Html$table,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$thead,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								elm$html$Html$tr,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$th,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Keyword')
+											])),
+										A2(
+										elm$html$Html$th,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Value')
+											]))
+									]))
+							])),
+						A2(
+						elm$html$Html$tbody,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								elm$html$Html$tr,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Demeanor')
+											])),
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text(
+												author$project$Personae$decodeDemeanor(persona.demeanor))
+											]))
+									])),
+								A2(
+								elm$html$Html$tr,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Apparel')
+											])),
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text(
+												author$project$Personae$decodeApparel(persona.apparel))
+											]))
+									])),
+								A2(
+								elm$html$Html$tr,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Age')
+											])),
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text(
+												A2(myrho$elm_round$Round$round, 1, persona.basicProperties.age) + (' ' + 'years'))
+											]))
+									])),
+								A2(
+								elm$html$Html$tr,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Height')
+											])),
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text(
+												A2(myrho$elm_round$Round$round, 1, persona.basicProperties.height) + (' ' + 'cm'))
+											]))
+									])),
+								A2(
+								elm$html$Html$tr,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Weight')
+											])),
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text(
+												A2(myrho$elm_round$Round$round, 1, persona.basicProperties.weight) + (' ' + 'kg'))
+											]))
+									]))
+							]))
+					]))
+			]));
+};
 var author$project$Personae$view = function (model) {
 	if (model.$ === 'EmptyPersona') {
-		return A2(elm$html$Html$div, _List_Nil, _List_Nil);
+		return A2(
+			elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					elm$html$Html$text('Empty persona')
+				]));
 	} else {
 		var persona = model.a;
-		return A2(elm$html$Html$div, _List_Nil, _List_Nil);
+		return author$project$Personae$viewL1Persona(persona);
 	}
 };
 var elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
@@ -5292,17 +5881,6 @@ var elm$core$Task$perform = F2(
 			elm$core$Task$Perform(
 				A2(elm$core$Task$map, toMessage, task)));
 	});
-var elm$core$String$length = _String_length;
-var elm$core$String$slice = _String_slice;
-var elm$core$String$dropLeft = F2(
-	function (n, string) {
-		return (n < 1) ? string : A3(
-			elm$core$String$slice,
-			n,
-			elm$core$String$length(string),
-			string);
-	});
-var elm$core$String$startsWith = _String_startsWith;
 var elm$url$Url$Http = {$: 'Http'};
 var elm$url$Url$Https = {$: 'Https'};
 var elm$core$String$indexes = _String_indexes;
@@ -5314,7 +5892,6 @@ var elm$core$String$left = F2(
 		return (n < 1) ? '' : A3(elm$core$String$slice, 0, n, string);
 	});
 var elm$core$String$contains = _String_contains;
-var elm$core$String$toInt = _String_toInt;
 var elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
 		return {fragment: fragment, host: host, path: path, port_: port_, protocol: protocol, query: query};
