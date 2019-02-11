@@ -2,10 +2,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   "mode": "development",
-  "entry": "./src/index.js",
+  "entry": "./src/names/index.js",
   "output": {
-    "path": __dirname+'/dist',
-    // "filename": "[name].[chunkhash:8].js"
+    "path": __dirname + '/names',
     "filename": "bundle.js"
   },
   "plugins": [
