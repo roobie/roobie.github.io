@@ -1,0 +1,63 @@
+export const rawFemale =
+  `Yuguchi Kayoko
+Izumi Toku
+Yamabe Tamiko
+Kawada Aoba
+Yoichi Seiko
+Furukawa Yukiji
+Kure Rikako
+Watabe Taya
+Sawada Kiyumi
+Hoga Rebun
+Sadow Tomoko
+Shoji Akeno
+Saeki Etsuko
+Shimoda Fuji
+Hanamura Miyako
+Hakuryū Chihiro
+Hatanaka Chika
+Inugami Chise
+Mizutani Tanaka
+Takeshita Kaminari
+Nagamine Kaneie
+Sawada Shoraku
+Shoda Ryosei
+Sasaki Hoitsu
+Moto Gonshiro
+Kajiwara Yoshiyuki
+Terada Yorikane
+Kojima Manzo
+Ishikawa Kamlyn
+Yabuta Hirotada`
+
+export const rawMale =
+  `Nagamine Kaneie
+Sawada Shoraku
+Shoda Ryosei
+Sasaki Hoitsu
+Moto Gonshiro
+Kajiwara Yoshiyuki
+Terada Yorikane
+Kojima Manzo
+Ishikawa Kamlyn
+Yabuta Hirotada
+Matsumura Kiyonori
+Yamashita Murai
+Hirata Namboku
+Kanbayashi Motoki
+Nakano Ryushi
+Inugami Tadamasa
+Kogane Naosuke
+Motome Shichirobei
+Arai Konosuke
+Yamashiro Motoyasu
+Sugiyama Shirai
+Aoki Norihisa
+Nagai Nichiren
+Uchimura Shiba
+Iwayanagi Tadakuni
+Terada Eishi
+Yahiro Terumoto
+Goya Soshitsu
+Fukunaga Mutsohito
+Kinjo Gengyo`

@@ -1,0 +1,43 @@
+export const rawFemale =
+  `Lore Thiel
+Isabel Bacharach
+Nadine Molitor
+Erica Huhn
+Mara Grimminger
+Dora Feistel
+Seraphina Lüthi
+Hannah Schoff
+Celina Rosenhain
+Mirjam Rohrbach
+Nina Geschke
+Emma Prantl
+Heidemarie Glas
+Franziska Schaab
+Rahel Neuer
+Liselotte Stassen
+Luzie Scharwenka
+Theresa Fellner
+Emely Müntefering
+Sibylle Mahlau`
+
+export const rawMale =
+  `Per Westheimer
+Alwin Bartz
+Dominik Krämer
+Mathias Daschner
+Albrecht Wegener
+Gotthard Grau
+Arno Scholz
+Claus Schützenberger
+Andre Honigsberg
+Berend Erlach
+Ulrich Hagel
+Marco Heim
+Eckhard Schindler
+Marian Hämmerli
+Denis Hänel
+Dominik Rathenau
+Ben Heerwagen
+Gunther Heldt
+Mike Schultze
+Axel Schwan`
