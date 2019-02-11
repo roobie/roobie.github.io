@@ -1,9 +1,13 @@
 module Personae exposing
     ( Persona(..)
     , PersonaLevel(..)
+    , Msg
     , personaGenerator
     , emptyPersona
+    , view
     )
+
+import Html exposing (Html, button, div, text)
 
 import Data.Generators exposing (..)
 
@@ -112,3 +116,12 @@ personaGenerator ptype =
 
 emptyPersona : Persona
 emptyPersona = EmptyPersona
+
+type Msg
+    = Nil
+
+view : Persona -> Html Msg
+view model =
+    case model of
+        EmptyPersona -> div [] []
+        L1 persona -> div [] []

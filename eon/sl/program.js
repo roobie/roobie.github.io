@@ -5054,17 +5054,24 @@ var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var author$project$Main$update = F2(
 	function (msg, model) {
-		if (msg.$ === 'GenerateNewPersona') {
-			return _Utils_Tuple2(model, author$project$Main$newMinimalPersona);
-		} else {
-			var persona = msg.a;
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{persona: persona}),
-				elm$core$Platform$Cmd$none);
+		switch (msg.$) {
+			case 'GenerateNewPersona':
+				return _Utils_Tuple2(model, author$project$Main$newMinimalPersona);
+			case 'ShowNewPersona':
+				var persona = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{persona: persona}),
+					elm$core$Platform$Cmd$none);
+			default:
+				var pmsg = msg.a;
+				return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 		}
 	});
+var author$project$Main$PersonaMsg = function (a) {
+	return {$: 'PersonaMsg', a: a};
+};
 var elm$json$Json$Decode$map = _Json_map1;
 var elm$json$Json$Decode$map2 = _Json_map2;
 var elm$json$Json$Decode$succeed = _Json_succeed;
@@ -5081,6 +5088,16 @@ var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 	}
 };
 var elm$html$Html$div = _VirtualDom_node('div');
+var author$project$Personae$view = function (model) {
+	if (model.$ === 'EmptyPersona') {
+		return A2(elm$html$Html$div, _List_Nil, _List_Nil);
+	} else {
+		var persona = model.a;
+		return A2(elm$html$Html$div, _List_Nil, _List_Nil);
+	}
+};
+var elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
+var elm$html$Html$map = elm$virtual_dom$VirtualDom$map;
 var elm$json$Json$Encode$string = _Json_wrap;
 var elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5091,6 +5108,7 @@ var elm$html$Html$Attributes$stringProperty = F2(
 	});
 var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
 var author$project$Main$view = function (model) {
+	var personaView = author$project$Personae$view(model.persona);
 	return A2(
 		elm$html$Html$div,
 		_List_fromArray(
@@ -5105,7 +5123,10 @@ var author$project$Main$view = function (model) {
 					[
 						elm$html$Html$Attributes$class('col')
 					]),
-				_List_Nil)
+				_List_fromArray(
+					[
+						A2(elm$html$Html$map, author$project$Main$PersonaMsg, personaView)
+					]))
 			]));
 };
 var elm$browser$Browser$External = function (a) {

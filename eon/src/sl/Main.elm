@@ -1,7 +1,7 @@
 import Browser
 import Random
-import Personae exposing (Persona, personaGenerator, emptyPersona)
-import Html exposing (Html, button, div, text)
+import Personae as P
+import Html exposing (..)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 
@@ -20,7 +20,7 @@ main =
 -- MODEL
 
 type alias Model =
-    { persona: Persona
+    { persona: P.Persona
     }
 
 
@@ -28,11 +28,11 @@ type alias Model =
 
 newMinimalPersona = Random.generate
                     ShowNewPersona
-                    (personaGenerator Personae.Level1)
+                    (P.personaGenerator P.Level1)
 
 init : () -> (Model, Cmd Msg)
 init _ =
-    ( { persona = emptyPersona }
+    ( { persona = P.emptyPersona }
     , newMinimalPersona
     )
 
@@ -41,8 +41,10 @@ init _ =
 
 type Msg
     = GenerateNewPersona
-    | ShowNewPersona Persona
+    | ShowNewPersona P.Persona
+    | PersonaMsg P.Msg
 
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
         GenerateNewPersona ->
@@ -52,6 +54,11 @@ update msg model =
 
         ShowNewPersona persona ->
             ( {model | persona = persona }
+            , Cmd.none
+            )
+
+        PersonaMsg pmsg ->
+            ( model
             , Cmd.none
             )
 
@@ -67,7 +74,10 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
+  let
+      personaView = P.view model.persona
+  in
   div [ class "row"]
       [ div [class "col"]
-            []
+            [Html.map PersonaMsg personaView]
       ]
