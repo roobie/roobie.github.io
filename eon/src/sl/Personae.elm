@@ -17,13 +17,15 @@ import Random
 import Random.Extra as RExtra
 
 
-tempGenStr = Random.constant ""
+tempGenStr =
+    Random.constant ""
 
 
-defaultString = Maybe.withDefault ""
+defaultString =
+    Maybe.withDefault ""
 
 
-sampleFrom pool =
+sampleWithDefault pool =
     Random.map defaultString
         (RExtra.sample pool)
 
@@ -37,15 +39,17 @@ at the person, but might need a closer look.
 
 E.g. casual, nervous, angry, mad/insane, calm, sneaky
 -}
-type Demeanor = Demeanor String
+type Demeanor =
+    Demeanor String
 
 
 genDemeanor =
-    sampleFrom ["casual", "nervous", "angry", "insane", "calm", "sneaky", "tired"]
+    sampleWithDefault ["casual", "nervous", "angry", "insane", "calm", "sneaky", "tired"]
         |> Random.map Demeanor
 
 
-decodeDemeanor (Demeanor a) = a
+decodeDemeanor (Demeanor a) =
+    a
 
 {-| The Disposition should describe the person's temperament
 in a closer aspect than what Demeanor would. Also the general
@@ -59,11 +63,12 @@ Would consider robbing one
 - Loves being right. So much so, that the person almost never admits.
 or even realises, that s/he is wrong.
 -}
-type Disposition = Disposition String
+type Disposition =
+    Disposition String
 
 
 genDisposition =
-    sampleFrom [ "Thinks violence solves all problems"
+    sampleWithDefault [ "Thinks violence solves all problems"
                , "Hates banks with a passion"
                , "Loves being right (hates being wrong)"
                ]
@@ -74,40 +79,51 @@ genDisposition =
 
 E.g. raspy, low, high, hoarse, coarse, powerful, tiny
 -}
-type Voice = Voice String
+type Voice =
+    Voice String
 
 
 genVoice : Random.Generator Voice
 genVoice =
-    sampleFrom ["raspy", "low", "high", "hoarse", "coarse", "powerful", "tiny", "thundering"]
+    sampleWithDefault ["raspy", "low", "high", "hoarse", "coarse", "powerful", "tiny", "thundering"]
         |> Random.map Voice
 
 
 decodeVoice : Voice -> String
-decodeVoice (Voice a) = a
+decodeVoice (Voice a) =
+    a
 
 
 {-| Description of the visible apparel the person is sporting
 -}
-type Apparel = Apparel String
+type Apparel =
+    Apparel String
 
 
 genApparel =
-    sampleFrom [ "dark cape"
+    sampleWithDefault [ "dark cape"
                , "bright dress"
                ]
         |> Random.map Apparel
 
 
-decodeApparel (Apparel a) = a
+decodeApparel (Apparel a) =
+    a
 
 
 {-| Description of the not so visible apparel the person is sporting
 -}
-type ObscuredApparel = ObscuredApparel String
+type ObscuredApparel =
+    ObscuredApparel String
 
 
-genObscuredApparel = tempGenStr |> Random.map ObscuredApparel
+genObscuredApparel =
+    sampleWithDefault ["hidden dagger in the boot"]
+        |> Random.map ObscuredApparel
+
+
+decodeObscuredApparel (ObscuredApparel a) =
+    a
 
 
 {-| BasicProperties should describe things about a person
@@ -126,13 +142,16 @@ type alias BasicProperties =
     }
 
 
-genHeight = (Random.float 130 210)
+genHeight =
+    (Random.float 130 210)
 
 
-genWeight = (Random.float 35 120)
+genWeight =
+    (Random.float 35 120)
 
 
-genAge = (Random.float 18 80)
+genAge =
+    (Random.float 18 80)
 
 
 genBasicProperties =
@@ -171,6 +190,8 @@ type alias L2Persona =
     , voice: Voice
     , basicProperties: BasicProperties
     , disposition: Disposition
+    , extendedProperties: ExtendedProperties
+    , obscuredApparel: ObscuredApparel
     }
 
 

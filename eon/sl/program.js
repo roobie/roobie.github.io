@@ -4641,7 +4641,7 @@ var elm_community$random_extra$Random$Extra$sample = function () {
 				elm$core$List$length(xs) - 1));
 	};
 }();
-var author$project$Personae$sampleFrom = function (pool) {
+var author$project$Personae$sampleWithDefault = function (pool) {
 	return A2(
 		elm$random$Random$map,
 		author$project$Personae$defaultString,
@@ -4654,7 +4654,7 @@ var elm$core$Basics$apR = F2(
 var author$project$Personae$genApparel = A2(
 	elm$random$Random$map,
 	author$project$Personae$Apparel,
-	author$project$Personae$sampleFrom(
+	author$project$Personae$sampleWithDefault(
 		_List_fromArray(
 			['dark cape', 'bright dress'])));
 var author$project$Personae$BasicProperties = F3(
@@ -4717,7 +4717,7 @@ var author$project$Personae$Demeanor = function (a) {
 var author$project$Personae$genDemeanor = A2(
 	elm$random$Random$map,
 	author$project$Personae$Demeanor,
-	author$project$Personae$sampleFrom(
+	author$project$Personae$sampleWithDefault(
 		_List_fromArray(
 			['casual', 'nervous', 'angry', 'insane', 'calm', 'sneaky', 'tired'])));
 var author$project$Personae$Voice = function (a) {
@@ -4726,7 +4726,7 @@ var author$project$Personae$Voice = function (a) {
 var author$project$Personae$genVoice = A2(
 	elm$random$Random$map,
 	author$project$Personae$Voice,
-	author$project$Personae$sampleFrom(
+	author$project$Personae$sampleWithDefault(
 		_List_fromArray(
 			['raspy', 'low', 'high', 'hoarse', 'coarse', 'powerful', 'tiny', 'thundering'])));
 var author$project$Personae$personaGenerator = function (ptype) {
