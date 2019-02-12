@@ -4407,6 +4407,16 @@ var author$project$Personae$L1Persona = F4(
 var author$project$Personae$Apparel = function (a) {
 	return {$: 'Apparel', a: a};
 };
+var elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
+var author$project$Personae$defaultString = elm$core$Maybe$withDefault('');
 var elm$core$Basics$identity = function (x) {
 	return x;
 };
@@ -4493,17 +4503,6 @@ var elm$core$Set$toList = function (_n0) {
 var elm$random$Random$Generator = function (a) {
 	return {$: 'Generator', a: a};
 };
-var elm$random$Random$constant = function (value) {
-	return elm$random$Random$Generator(
-		function (seed) {
-			return _Utils_Tuple2(value, seed);
-		});
-};
-var author$project$Personae$tempGenStr = elm$random$Random$constant('');
-var elm$core$Basics$apR = F2(
-	function (x, f) {
-		return f(x);
-	});
 var elm$random$Random$map = F2(
 	function (func, _n0) {
 		var genA = _n0.a;
@@ -4517,99 +4516,9 @@ var elm$random$Random$map = F2(
 					seed1);
 			});
 	});
-var author$project$Personae$genApparel = A2(elm$random$Random$map, author$project$Personae$Apparel, author$project$Personae$tempGenStr);
-var author$project$Personae$BasicProperties = F3(
-	function (height, weight, age) {
-		return {age: age, height: height, weight: weight};
-	});
-var elm$core$Basics$lt = _Utils_lt;
-var elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var elm$core$Basics$abs = function (n) {
-	return (n < 0) ? (-n) : n;
-};
-var elm$core$Basics$add = _Basics_add;
-var elm$core$Basics$fdiv = _Basics_fdiv;
-var elm$core$Basics$mul = _Basics_mul;
-var elm$core$Basics$sub = _Basics_sub;
-var elm$core$Basics$toFloat = _Basics_toFloat;
-var elm$core$Bitwise$and = _Bitwise_and;
-var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
-var elm$random$Random$Seed = F2(
-	function (a, b) {
-		return {$: 'Seed', a: a, b: b};
-	});
-var elm$random$Random$next = function (_n0) {
-	var state0 = _n0.a;
-	var incr = _n0.b;
-	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
-};
-var elm$core$Bitwise$xor = _Bitwise_xor;
-var elm$random$Random$peel = function (_n0) {
-	var state = _n0.a;
-	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
-	return ((word >>> 22) ^ word) >>> 0;
-};
-var elm$random$Random$float = F2(
-	function (a, b) {
-		return elm$random$Random$Generator(
-			function (seed0) {
-				var seed1 = elm$random$Random$next(seed0);
-				var range = elm$core$Basics$abs(b - a);
-				var n1 = elm$random$Random$peel(seed1);
-				var n0 = elm$random$Random$peel(seed0);
-				var lo = (134217727 & n1) * 1.0;
-				var hi = (67108863 & n0) * 1.0;
-				var val = ((hi * 1.34217728e8) + lo) / 9.007199254740992e15;
-				var scaled = (val * range) + a;
-				return _Utils_Tuple2(
-					scaled,
-					elm$random$Random$next(seed1));
-			});
-	});
-var author$project$Personae$genAge = A2(elm$random$Random$float, 18, 80);
-var author$project$Personae$genHeight = A2(elm$random$Random$float, 130, 210);
-var author$project$Personae$genWeight = A2(elm$random$Random$float, 35, 120);
-var elm$random$Random$map2 = F3(
-	function (func, _n0, _n1) {
-		var genA = _n0.a;
-		var genB = _n1.a;
-		return elm$random$Random$Generator(
-			function (seed0) {
-				var _n2 = genA(seed0);
-				var a = _n2.a;
-				var seed1 = _n2.b;
-				var _n3 = genB(seed1);
-				var b = _n3.a;
-				var seed2 = _n3.b;
-				return _Utils_Tuple2(
-					A2(func, a, b),
-					seed2);
-			});
-	});
-var elm_community$random_extra$Random$Extra$andMap = elm$random$Random$map2(elm$core$Basics$apR);
-var author$project$Personae$genBasicProperties = A2(
-	elm_community$random_extra$Random$Extra$andMap,
-	author$project$Personae$genAge,
-	A2(
-		elm_community$random_extra$Random$Extra$andMap,
-		author$project$Personae$genWeight,
-		A2(elm$random$Random$map, author$project$Personae$BasicProperties, author$project$Personae$genHeight)));
-var author$project$Personae$Demeanor = function (a) {
-	return {$: 'Demeanor', a: a};
-};
-var elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
-var author$project$Personae$defaultString = elm$core$Maybe$withDefault('');
 var elm$core$Basics$eq = _Utils_equal;
+var elm$core$Basics$sub = _Basics_sub;
+var elm$core$Basics$add = _Basics_add;
 var elm$core$List$foldl = F3(
 	function (func, acc, list) {
 		foldl:
@@ -4643,7 +4552,29 @@ var elm$core$Maybe$Just = function (a) {
 	return {$: 'Just', a: a};
 };
 var elm$core$Maybe$Nothing = {$: 'Nothing'};
+var elm$core$Basics$lt = _Utils_lt;
+var elm$core$Basics$negate = function (n) {
+	return -n;
+};
 var elm$core$Basics$remainderBy = _Basics_remainderBy;
+var elm$core$Bitwise$and = _Bitwise_and;
+var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var elm$core$Basics$mul = _Basics_mul;
+var elm$random$Random$Seed = F2(
+	function (a, b) {
+		return {$: 'Seed', a: a, b: b};
+	});
+var elm$random$Random$next = function (_n0) {
+	var state0 = _n0.a;
+	var incr = _n0.b;
+	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+};
+var elm$core$Bitwise$xor = _Bitwise_xor;
+var elm$random$Random$peel = function (_n0) {
+	var state = _n0.a;
+	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
+	return ((word >>> 22) ^ word) >>> 0;
+};
 var elm$random$Random$int = F2(
 	function (a, b) {
 		return elm$random$Random$Generator(
@@ -4710,23 +4641,94 @@ var elm_community$random_extra$Random$Extra$sample = function () {
 				elm$core$List$length(xs) - 1));
 	};
 }();
-var author$project$Personae$demeanorGenerator = A2(
+var author$project$Personae$sampleFrom = function (pool) {
+	return A2(
+		elm$random$Random$map,
+		author$project$Personae$defaultString,
+		elm_community$random_extra$Random$Extra$sample(pool));
+};
+var elm$core$Basics$apR = F2(
+	function (x, f) {
+		return f(x);
+	});
+var author$project$Personae$genApparel = A2(
 	elm$random$Random$map,
-	author$project$Personae$defaultString,
-	elm_community$random_extra$Random$Extra$sample(
+	author$project$Personae$Apparel,
+	author$project$Personae$sampleFrom(
+		_List_fromArray(
+			['dark cape', 'bright dress'])));
+var author$project$Personae$BasicProperties = F3(
+	function (height, weight, age) {
+		return {age: age, height: height, weight: weight};
+	});
+var elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var elm$core$Basics$fdiv = _Basics_fdiv;
+var elm$core$Basics$toFloat = _Basics_toFloat;
+var elm$random$Random$float = F2(
+	function (a, b) {
+		return elm$random$Random$Generator(
+			function (seed0) {
+				var seed1 = elm$random$Random$next(seed0);
+				var range = elm$core$Basics$abs(b - a);
+				var n1 = elm$random$Random$peel(seed1);
+				var n0 = elm$random$Random$peel(seed0);
+				var lo = (134217727 & n1) * 1.0;
+				var hi = (67108863 & n0) * 1.0;
+				var val = ((hi * 1.34217728e8) + lo) / 9.007199254740992e15;
+				var scaled = (val * range) + a;
+				return _Utils_Tuple2(
+					scaled,
+					elm$random$Random$next(seed1));
+			});
+	});
+var author$project$Personae$genAge = A2(elm$random$Random$float, 18, 80);
+var author$project$Personae$genHeight = A2(elm$random$Random$float, 130, 210);
+var author$project$Personae$genWeight = A2(elm$random$Random$float, 35, 120);
+var elm$random$Random$map2 = F3(
+	function (func, _n0, _n1) {
+		var genA = _n0.a;
+		var genB = _n1.a;
+		return elm$random$Random$Generator(
+			function (seed0) {
+				var _n2 = genA(seed0);
+				var a = _n2.a;
+				var seed1 = _n2.b;
+				var _n3 = genB(seed1);
+				var b = _n3.a;
+				var seed2 = _n3.b;
+				return _Utils_Tuple2(
+					A2(func, a, b),
+					seed2);
+			});
+	});
+var elm_community$random_extra$Random$Extra$andMap = elm$random$Random$map2(elm$core$Basics$apR);
+var author$project$Personae$genBasicProperties = A2(
+	elm_community$random_extra$Random$Extra$andMap,
+	author$project$Personae$genAge,
+	A2(
+		elm_community$random_extra$Random$Extra$andMap,
+		author$project$Personae$genWeight,
+		A2(elm$random$Random$map, author$project$Personae$BasicProperties, author$project$Personae$genHeight)));
+var author$project$Personae$Demeanor = function (a) {
+	return {$: 'Demeanor', a: a};
+};
+var author$project$Personae$genDemeanor = A2(
+	elm$random$Random$map,
+	author$project$Personae$Demeanor,
+	author$project$Personae$sampleFrom(
 		_List_fromArray(
 			['casual', 'nervous', 'angry', 'insane', 'calm', 'sneaky', 'tired'])));
-var author$project$Personae$genDemeanor = A2(elm$random$Random$map, author$project$Personae$Demeanor, author$project$Personae$demeanorGenerator);
 var author$project$Personae$Voice = function (a) {
 	return {$: 'Voice', a: a};
 };
-var author$project$Personae$voiceGenerator = A2(
+var author$project$Personae$genVoice = A2(
 	elm$random$Random$map,
-	author$project$Personae$defaultString,
-	elm_community$random_extra$Random$Extra$sample(
+	author$project$Personae$Voice,
+	author$project$Personae$sampleFrom(
 		_List_fromArray(
 			['raspy', 'low', 'high', 'hoarse', 'coarse', 'powerful', 'tiny', 'thundering'])));
-var author$project$Personae$genVoice = A2(elm$random$Random$map, author$project$Personae$Voice, author$project$Personae$voiceGenerator);
 var author$project$Personae$personaGenerator = function (ptype) {
 	return A2(
 		elm$random$Random$map,
