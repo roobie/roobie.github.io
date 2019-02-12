@@ -26,9 +26,11 @@ defaultString =
     Maybe.withDefault ""
 
 
-sampleWithDefault pool =
-    Random.map defaultString
+sampleWithDefault defaultValue pool =
+    Random.map (Maybe.withDefault defaultValue)
         (RExtra.sample pool)
+sampleWithDefaultString =
+    sampleWithDefault ""
 
 
 {-| The Demeanor should indicate on a high level
@@ -45,7 +47,7 @@ type Demeanor =
 
 
 genDemeanor =
-    sampleWithDefault ["casual", "nervous", "angry", "insane", "calm", "sneaky", "tired"]
+    sampleWithDefaultString ["casual", "nervous", "angry", "insane", "calm", "sneaky", "tired"]
         |> Random.map Demeanor
 
 
@@ -69,7 +71,7 @@ type Disposition =
 
 
 genDisposition =
-    sampleWithDefault [ "Thinks violence solves all problems"
+    sampleWithDefaultString [ "Thinks violence solves all problems"
                , "Hates banks with a passion"
                , "Loves being right (hates being wrong)"
                ]
@@ -86,7 +88,7 @@ type Voice =
 
 genVoice : Random.Generator Voice
 genVoice =
-    sampleWithDefault ["raspy", "low", "high", "hoarse", "coarse", "powerful", "tiny", "thundering"]
+    sampleWithDefaultString ["raspy", "low", "high", "hoarse", "coarse", "powerful", "tiny", "thundering"]
         |> Random.map Voice
 
 
@@ -102,7 +104,7 @@ type Apparel =
 
 
 genApparel =
-    sampleWithDefault [ "dark cape"
+    sampleWithDefaultString [ "dark cape"
                , "bright dress"
                ]
         |> Random.map Apparel
@@ -119,7 +121,7 @@ type ObscuredApparel =
 
 
 genObscuredApparel =
-    sampleWithDefault ["hidden dagger in the boot"]
+    sampleWithDefaultString ["hidden dagger in the boot"]
         |> Random.map ObscuredApparel
 
 
@@ -129,12 +131,6 @@ decodeObscuredApparel (ObscuredApparel a) =
 
 {-| BasicProperties should describe things about a person
 that is easily observable by others.
-
-Even though it would contain exact data, when describing
-them for the players, one would give approximate values.
-E.g. 87.3 kg ->
-sometimes "about 70 or 80 kg"
-sometimes "somewhere around 80-90 kg"
 |-}
 type alias BasicProperties =
     { stature: Stature
@@ -143,20 +139,42 @@ type alias BasicProperties =
     }
 
 
-type Stature = Stature String
+type Stature = Stature (String, String)
+
+
 genStature =
-    sampleWithDefault ["tall", "short"]
+    let
+        lstCombinable = ["bent", "crooked", "dominant", "rickety"]
+        lstTall = List.map (Tuple.pair "tall") lstCombinable
+        lstShort = List.map (Tuple.pair "short") lstCombinable
+        lst = List.concat [lstTall, lstShort]
+    in
+    sampleWithDefault ("", "") lst
         |> Random.map Stature
-decodeStature (Stature a) = a
+
+
+decodeStature (Stature (a, b)) = a ++ ", " ++ b
+
+
 type Build = Build String
+
+
 genBuild =
-    sampleWithDefault ["heavy", "light"]
+    sampleWithDefaultString ["heavy", "light", "muscular", "slim", "athletic", "shapely"]
         |> Random.map Build
+
+
 decodeBuild (Build a) = a
+
+
 type Age = Age String
+
+
 genAge =
-    sampleWithDefault ["young", "old"]
+    sampleWithDefaultString ["young", "old", "adult", "adolescent", "teen"]
         |> Random.map Age
+
+
 decodeAge (Age a) = a
 
 

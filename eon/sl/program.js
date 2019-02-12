@@ -4416,7 +4416,6 @@ var elm$core$Maybe$withDefault = F2(
 			return _default;
 		}
 	});
-var author$project$Personae$defaultString = elm$core$Maybe$withDefault('');
 var elm$core$Basics$identity = function (x) {
 	return x;
 };
@@ -4641,12 +4640,14 @@ var elm_community$random_extra$Random$Extra$sample = function () {
 				elm$core$List$length(xs) - 1));
 	};
 }();
-var author$project$Personae$sampleWithDefault = function (pool) {
-	return A2(
-		elm$random$Random$map,
-		author$project$Personae$defaultString,
-		elm_community$random_extra$Random$Extra$sample(pool));
-};
+var author$project$Personae$sampleWithDefault = F2(
+	function (defaultValue, pool) {
+		return A2(
+			elm$random$Random$map,
+			elm$core$Maybe$withDefault(defaultValue),
+			elm_community$random_extra$Random$Extra$sample(pool));
+	});
+var author$project$Personae$sampleWithDefaultString = author$project$Personae$sampleWithDefault('');
 var elm$core$Basics$apR = F2(
 	function (x, f) {
 		return f(x);
@@ -4654,7 +4655,7 @@ var elm$core$Basics$apR = F2(
 var author$project$Personae$genApparel = A2(
 	elm$random$Random$map,
 	author$project$Personae$Apparel,
-	author$project$Personae$sampleWithDefault(
+	author$project$Personae$sampleWithDefaultString(
 		_List_fromArray(
 			['dark cape', 'bright dress'])));
 var author$project$Personae$BasicProperties = F3(
@@ -4667,27 +4668,131 @@ var author$project$Personae$Age = function (a) {
 var author$project$Personae$genAge = A2(
 	elm$random$Random$map,
 	author$project$Personae$Age,
-	author$project$Personae$sampleWithDefault(
+	author$project$Personae$sampleWithDefaultString(
 		_List_fromArray(
-			['young', 'old'])));
+			['young', 'old', 'adult', 'adolescent', 'teen'])));
 var author$project$Personae$Build = function (a) {
 	return {$: 'Build', a: a};
 };
 var author$project$Personae$genBuild = A2(
 	elm$random$Random$map,
 	author$project$Personae$Build,
-	author$project$Personae$sampleWithDefault(
+	author$project$Personae$sampleWithDefaultString(
 		_List_fromArray(
-			['heavy', 'light'])));
+			['heavy', 'light', 'muscular', 'slim', 'athletic', 'shapely'])));
 var author$project$Personae$Stature = function (a) {
 	return {$: 'Stature', a: a};
 };
-var author$project$Personae$genStature = A2(
-	elm$random$Random$map,
-	author$project$Personae$Stature,
-	author$project$Personae$sampleWithDefault(
+var elm$core$Basics$gt = _Utils_gt;
+var elm$core$List$reverse = function (list) {
+	return A3(elm$core$List$foldl, elm$core$List$cons, _List_Nil, list);
+};
+var elm$core$List$foldrHelper = F4(
+	function (fn, acc, ctr, ls) {
+		if (!ls.b) {
+			return acc;
+		} else {
+			var a = ls.a;
+			var r1 = ls.b;
+			if (!r1.b) {
+				return A2(fn, a, acc);
+			} else {
+				var b = r1.a;
+				var r2 = r1.b;
+				if (!r2.b) {
+					return A2(
+						fn,
+						a,
+						A2(fn, b, acc));
+				} else {
+					var c = r2.a;
+					var r3 = r2.b;
+					if (!r3.b) {
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(fn, c, acc)));
+					} else {
+						var d = r3.a;
+						var r4 = r3.b;
+						var res = (ctr > 500) ? A3(
+							elm$core$List$foldl,
+							fn,
+							acc,
+							elm$core$List$reverse(r4)) : A4(elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(
+									fn,
+									c,
+									A2(fn, d, res))));
+					}
+				}
+			}
+		}
+	});
+var elm$core$List$foldr = F3(
+	function (fn, acc, ls) {
+		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
+	});
+var elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
+		}
+	});
+var elm$core$List$concat = function (lists) {
+	return A3(elm$core$List$foldr, elm$core$List$append, _List_Nil, lists);
+};
+var elm$core$List$map = F2(
+	function (f, xs) {
+		return A3(
+			elm$core$List$foldr,
+			F2(
+				function (x, acc) {
+					return A2(
+						elm$core$List$cons,
+						f(x),
+						acc);
+				}),
+			_List_Nil,
+			xs);
+	});
+var elm$core$Tuple$pair = F2(
+	function (a, b) {
+		return _Utils_Tuple2(a, b);
+	});
+var author$project$Personae$genStature = function () {
+	var lstCombinable = _List_fromArray(
+		['bent', 'crooked', 'dominant', 'rickety']);
+	var lstShort = A2(
+		elm$core$List$map,
+		elm$core$Tuple$pair('short'),
+		lstCombinable);
+	var lstTall = A2(
+		elm$core$List$map,
+		elm$core$Tuple$pair('tall'),
+		lstCombinable);
+	var lst = elm$core$List$concat(
 		_List_fromArray(
-			['tall', 'short'])));
+			[lstTall, lstShort]));
+	return A2(
+		elm$random$Random$map,
+		author$project$Personae$Stature,
+		A2(
+			author$project$Personae$sampleWithDefault,
+			_Utils_Tuple2('', ''),
+			lst));
+}();
 var elm$random$Random$map2 = F3(
 	function (func, _n0, _n1) {
 		var genA = _n0.a;
@@ -4719,7 +4824,7 @@ var author$project$Personae$Demeanor = function (a) {
 var author$project$Personae$genDemeanor = A2(
 	elm$random$Random$map,
 	author$project$Personae$Demeanor,
-	author$project$Personae$sampleWithDefault(
+	author$project$Personae$sampleWithDefaultString(
 		_List_fromArray(
 			['casual', 'nervous', 'angry', 'insane', 'calm', 'sneaky', 'tired'])));
 var author$project$Personae$Voice = function (a) {
@@ -4728,7 +4833,7 @@ var author$project$Personae$Voice = function (a) {
 var author$project$Personae$genVoice = A2(
 	elm$random$Random$map,
 	author$project$Personae$Voice,
-	author$project$Personae$sampleWithDefault(
+	author$project$Personae$sampleWithDefaultString(
 		_List_fromArray(
 			['raspy', 'low', 'high', 'hoarse', 'coarse', 'powerful', 'tiny', 'thundering'])));
 var author$project$Personae$personaGenerator = function (ptype) {
@@ -4820,9 +4925,6 @@ var elm$core$Array$SubTree = function (a) {
 	return {$: 'SubTree', a: a};
 };
 var elm$core$Elm$JsArray$initializeFromList = _JsArray_initializeFromList;
-var elm$core$List$reverse = function (list) {
-	return A3(elm$core$List$foldl, elm$core$List$cons, _List_Nil, list);
-};
 var elm$core$Array$compressNodes = F2(
 	function (nodes, acc) {
 		compressNodes:
@@ -4870,7 +4972,6 @@ var elm$core$Basics$apL = F2(
 		return f(x);
 	});
 var elm$core$Basics$floor = _Basics_floor;
-var elm$core$Basics$gt = _Utils_gt;
 var elm$core$Basics$max = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) > 0) ? x : y;
@@ -5237,8 +5338,10 @@ var author$project$Personae$decodeDemeanor = function (_n0) {
 	return a;
 };
 var author$project$Personae$decodeStature = function (_n0) {
-	var a = _n0.a;
-	return a;
+	var _n1 = _n0.a;
+	var a = _n1.a;
+	var b = _n1.b;
+	return a + (', ' + b);
 };
 var author$project$Personae$decodeVoice = function (_n0) {
 	var a = _n0.a;
@@ -5540,75 +5643,6 @@ var elm$core$Task$Perform = function (a) {
 	return {$: 'Perform', a: a};
 };
 var elm$core$Task$init = elm$core$Task$succeed(_Utils_Tuple0);
-var elm$core$List$foldrHelper = F4(
-	function (fn, acc, ctr, ls) {
-		if (!ls.b) {
-			return acc;
-		} else {
-			var a = ls.a;
-			var r1 = ls.b;
-			if (!r1.b) {
-				return A2(fn, a, acc);
-			} else {
-				var b = r1.a;
-				var r2 = r1.b;
-				if (!r2.b) {
-					return A2(
-						fn,
-						a,
-						A2(fn, b, acc));
-				} else {
-					var c = r2.a;
-					var r3 = r2.b;
-					if (!r3.b) {
-						return A2(
-							fn,
-							a,
-							A2(
-								fn,
-								b,
-								A2(fn, c, acc)));
-					} else {
-						var d = r3.a;
-						var r4 = r3.b;
-						var res = (ctr > 500) ? A3(
-							elm$core$List$foldl,
-							fn,
-							acc,
-							elm$core$List$reverse(r4)) : A4(elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
-						return A2(
-							fn,
-							a,
-							A2(
-								fn,
-								b,
-								A2(
-									fn,
-									c,
-									A2(fn, d, res))));
-					}
-				}
-			}
-		}
-	});
-var elm$core$List$foldr = F3(
-	function (fn, acc, ls) {
-		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
-	});
-var elm$core$List$map = F2(
-	function (f, xs) {
-		return A3(
-			elm$core$List$foldr,
-			F2(
-				function (x, acc) {
-					return A2(
-						elm$core$List$cons,
-						f(x),
-						acc);
-				}),
-			_List_Nil,
-			xs);
-	});
 var elm$core$Task$map = F2(
 	function (func, taskA) {
 		return A2(
