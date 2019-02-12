@@ -4648,8 +4648,8 @@ var author$project$Personae$sampleWithDefault = F2(
 			elm_community$random_extra$Random$Extra$sample(pool));
 	});
 var author$project$Personae$sampleWithDefaultString = author$project$Personae$sampleWithDefault('');
-var elm$core$Basics$apR = F2(
-	function (x, f) {
+var elm$core$Basics$apL = F2(
+	function (f, x) {
 		return f(x);
 	});
 var author$project$Personae$genApparel = A2(
@@ -4657,7 +4657,7 @@ var author$project$Personae$genApparel = A2(
 	author$project$Personae$Apparel,
 	author$project$Personae$sampleWithDefaultString(
 		_List_fromArray(
-			['dark cape', 'bright dress'])));
+			['dark', 'bright', 'colorful'])));
 var author$project$Personae$BasicProperties = F3(
 	function (stature, build, age) {
 		return {age: age, build: build, stature: stature};
@@ -4665,6 +4665,10 @@ var author$project$Personae$BasicProperties = F3(
 var author$project$Personae$Age = function (a) {
 	return {$: 'Age', a: a};
 };
+var elm$core$Basics$apR = F2(
+	function (x, f) {
+		return f(x);
+	});
 var author$project$Personae$genAge = A2(
 	elm$random$Random$map,
 	author$project$Personae$Age,
@@ -4772,19 +4776,20 @@ var elm$core$Tuple$pair = F2(
 		return _Utils_Tuple2(a, b);
 	});
 var author$project$Personae$genStature = function () {
-	var lstCombinable = _List_fromArray(
-		['bent', 'crooked', 'dominant', 'rickety']);
-	var lstShort = A2(
+	var lstB = _List_fromArray(
+		['bent', 'crooked', 'dominant', 'normal posture']);
+	var lstA = _List_fromArray(
+		['short', 'normal height', 'tall']);
+	var lsts = A2(
 		elm$core$List$map,
-		elm$core$Tuple$pair('short'),
-		lstCombinable);
-	var lstTall = A2(
-		elm$core$List$map,
-		elm$core$Tuple$pair('tall'),
-		lstCombinable);
-	var lst = elm$core$List$concat(
-		_List_fromArray(
-			[lstTall, lstShort]));
+		function (a) {
+			return A2(
+				elm$core$List$map,
+				elm$core$Tuple$pair(a),
+				lstB);
+		},
+		lstA);
+	var lst = elm$core$List$concat(lsts);
 	return A2(
 		elm$random$Random$map,
 		author$project$Personae$Stature,
@@ -4966,10 +4971,6 @@ var elm$core$Array$treeFromBuilder = F2(
 				continue treeFromBuilder;
 			}
 		}
-	});
-var elm$core$Basics$apL = F2(
-	function (f, x) {
-		return f(x);
 	});
 var elm$core$Basics$floor = _Basics_floor;
 var elm$core$Basics$max = F2(

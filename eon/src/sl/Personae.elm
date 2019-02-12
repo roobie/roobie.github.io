@@ -65,6 +65,10 @@ something with this person has a high chance in ending up in a fight.
 Would consider robbing one
 - Loves being right. So much so, that the person almost never admits.
 or even realises, that s/he is wrong.
+- Psychopathic
+- Manipulative
+- Trusting
+- Lazy / Carefree
 -}
 type Disposition =
     Disposition String
@@ -88,8 +92,17 @@ type Voice =
 
 genVoice : Random.Generator Voice
 genVoice =
-    sampleWithDefaultString ["raspy", "low", "high", "hoarse", "coarse", "powerful", "tiny", "thundering"]
-        |> Random.map Voice
+    Random.map Voice <|
+        sampleWithDefaultString
+        [ "raspy"
+        , "low"
+        , "high"
+        , "hoarse"
+        , "coarse"
+        , "powerful"
+        , "tiny"
+        , "thundering"
+        ]
 
 
 decodeVoice : Voice -> String
@@ -104,10 +117,11 @@ type Apparel =
 
 
 genApparel =
-    sampleWithDefaultString [ "dark cape"
-               , "bright dress"
-               ]
-        |> Random.map Apparel
+    Random.map Apparel <|
+        sampleWithDefaultString [ "dark"
+                                , "bright"
+                                , "colorful"
+                                ]
 
 
 decodeApparel (Apparel a) =
@@ -144,10 +158,11 @@ type Stature = Stature (String, String)
 
 genStature =
     let
-        lstCombinable = ["bent", "crooked", "dominant", "rickety"]
-        lstTall = List.map (Tuple.pair "tall") lstCombinable
-        lstShort = List.map (Tuple.pair "short") lstCombinable
-        lst = List.concat [lstTall, lstShort]
+        -- could probably be done in a better way.
+        lstA = ["short", "normal height", "tall"]
+        lstB = ["bent", "crooked", "dominant", "normal posture"]
+        lsts = List.map (\a -> List.map (Tuple.pair a) lstB) lstA
+        lst = List.concat lsts
     in
     sampleWithDefault ("", "") lst
         |> Random.map Stature
