@@ -2,21 +2,32 @@
   <head>
     <meta charset="UTF-8"/>
     <title>Roobie @ github.io</title>
+    <style>
+     html {
+       background: black;
+       font-family: sans-serif;
+       color: azure;
+     }
+     .flex {display:flex;}
+     .center-content {justify-content: center;}
+     .f1 {flex: 1;}
+     .row {display:flex;}
+     .col {display:flex;flex-direction:column;}
+     ul.no-bullets {list-style:none;padding:0;margin:0;}
+     a {color:red;}
+     a:visited {color:magenta;}
+    </style>
   </head>
   <body>
-    <ul>
-      <li>
-        <a href="./gendude">Gendude for OSR</a>
-      </li>
-      <li>
-        <a href="./mc">MC</a>
-      </li>
-      <li>
-        <a href="./eon/names">Eon - namngenerator</a>
-      </li>
-      <li>
-        <a href="./eon/sl">Eon - SL only</a>
-      </li>
-    </ul>
+    <div class="col">
+      <div class="row center-content">
+        <h1 class="">Random stuff</h1>
+      </div>
+      <div class="row center-content">
+        <ul class="no-bullets">
+          <li><a href="./gendude">OSR Gendude</a></li>
+        </ul>
+      </div>
+    </div>
   </body>
 </html>
