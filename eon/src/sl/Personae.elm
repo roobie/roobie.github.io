@@ -8,6 +8,7 @@ module Personae exposing
     )
 
 import Html exposing (..)
+import Html.Attributes as HtmlAttr
 
 import Round
 
@@ -136,27 +137,32 @@ sometimes "about 70 or 80 kg"
 sometimes "somewhere around 80-90 kg"
 |-}
 type alias BasicProperties =
-    { height: Float
-    , weight: Float
-    , age: Float
+    { stature: Stature
+    , build: Build
+    , age: Age
     }
 
 
-genHeight =
-    (Random.float 130 210)
-
-
-genWeight =
-    (Random.float 35 120)
-
-
+type Stature = Stature String
+genStature =
+    sampleWithDefault ["tall", "short"]
+        |> Random.map Stature
+decodeStature (Stature a) = a
+type Build = Build String
+genBuild =
+    sampleWithDefault ["heavy", "light"]
+        |> Random.map Build
+decodeBuild (Build a) = a
+type Age = Age String
 genAge =
-    (Random.float 18 80)
+    sampleWithDefault ["young", "old"]
+        |> Random.map Age
+decodeAge (Age a) = a
 
 
 genBasicProperties =
-    Random.map BasicProperties genHeight
-        |> RExtra.andMap genWeight
+    Random.map BasicProperties genStature
+        |> RExtra.andMap genBuild
         |> RExtra.andMap genAge
 
 
@@ -231,16 +237,28 @@ viewL1Persona persona =
     div []
         [ div [] [text "L1 Persona"]
         , table []
-            [ thead []
-                  [ tr []
-                        [ th [] [text "Keyword"]
-                        , th [] [text "Value"]
-                        ]
+            [ colgroup []
+                  [ col [HtmlAttr.style "width" "25%"] []
+                  , col [HtmlAttr.style "width" "75%"] []
                   ]
+            , thead []
+                [ tr []
+                      [ th [] [text "Keyword"]
+                      , th [] [text "Value"]
+                      ]
+                ]
             , tbody []
                 [ tr []
                       [ td [] [text ("Demeanor")]
                       , td [] [text (decodeDemeanor persona.demeanor)]
+                      ]
+                , tr []
+                      [ td [] [text ("Stature")]
+                      , td [] [text (decodeStature persona.basicProperties.stature)]
+                      ]
+                , tr []
+                      [ td [] [text ("Build")]
+                      , td [] [text (decodeBuild persona.basicProperties.build)]
                       ]
                 , tr []
                       [ td [] [text ("Apparel")]
@@ -252,15 +270,7 @@ viewL1Persona persona =
                       ]
                 , tr []
                       [ td [] [text ("Age")]
-                      , td [] [text ((Round.round 1 persona.basicProperties.age) ++ " " ++ "years")]
-                      ]
-                , tr []
-                      [ td [] [text ("Height")]
-                      , td [] [text ((Round.round 1 persona.basicProperties.height) ++ " " ++ "cm")]
-                      ]
-                , tr []
-                      [ td [] [text ("Weight")]
-                      , td [] [text ((Round.round 1 persona.basicProperties.weight) ++ " " ++ "kg")]
+                      , td [] [text (decodeAge persona.basicProperties.age)]
                       ]
                 ]
             ]

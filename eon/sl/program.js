@@ -4658,34 +4658,36 @@ var author$project$Personae$genApparel = A2(
 		_List_fromArray(
 			['dark cape', 'bright dress'])));
 var author$project$Personae$BasicProperties = F3(
-	function (height, weight, age) {
-		return {age: age, height: height, weight: weight};
+	function (stature, build, age) {
+		return {age: age, build: build, stature: stature};
 	});
-var elm$core$Basics$abs = function (n) {
-	return (n < 0) ? (-n) : n;
+var author$project$Personae$Age = function (a) {
+	return {$: 'Age', a: a};
 };
-var elm$core$Basics$fdiv = _Basics_fdiv;
-var elm$core$Basics$toFloat = _Basics_toFloat;
-var elm$random$Random$float = F2(
-	function (a, b) {
-		return elm$random$Random$Generator(
-			function (seed0) {
-				var seed1 = elm$random$Random$next(seed0);
-				var range = elm$core$Basics$abs(b - a);
-				var n1 = elm$random$Random$peel(seed1);
-				var n0 = elm$random$Random$peel(seed0);
-				var lo = (134217727 & n1) * 1.0;
-				var hi = (67108863 & n0) * 1.0;
-				var val = ((hi * 1.34217728e8) + lo) / 9.007199254740992e15;
-				var scaled = (val * range) + a;
-				return _Utils_Tuple2(
-					scaled,
-					elm$random$Random$next(seed1));
-			});
-	});
-var author$project$Personae$genAge = A2(elm$random$Random$float, 18, 80);
-var author$project$Personae$genHeight = A2(elm$random$Random$float, 130, 210);
-var author$project$Personae$genWeight = A2(elm$random$Random$float, 35, 120);
+var author$project$Personae$genAge = A2(
+	elm$random$Random$map,
+	author$project$Personae$Age,
+	author$project$Personae$sampleWithDefault(
+		_List_fromArray(
+			['young', 'old'])));
+var author$project$Personae$Build = function (a) {
+	return {$: 'Build', a: a};
+};
+var author$project$Personae$genBuild = A2(
+	elm$random$Random$map,
+	author$project$Personae$Build,
+	author$project$Personae$sampleWithDefault(
+		_List_fromArray(
+			['heavy', 'light'])));
+var author$project$Personae$Stature = function (a) {
+	return {$: 'Stature', a: a};
+};
+var author$project$Personae$genStature = A2(
+	elm$random$Random$map,
+	author$project$Personae$Stature,
+	author$project$Personae$sampleWithDefault(
+		_List_fromArray(
+			['tall', 'short'])));
 var elm$random$Random$map2 = F3(
 	function (func, _n0, _n1) {
 		var genA = _n0.a;
@@ -4709,8 +4711,8 @@ var author$project$Personae$genBasicProperties = A2(
 	author$project$Personae$genAge,
 	A2(
 		elm_community$random_extra$Random$Extra$andMap,
-		author$project$Personae$genWeight,
-		A2(elm$random$Random$map, author$project$Personae$BasicProperties, author$project$Personae$genHeight)));
+		author$project$Personae$genBuild,
+		A2(elm$random$Random$map, author$project$Personae$BasicProperties, author$project$Personae$genStature)));
 var author$project$Personae$Demeanor = function (a) {
 	return {$: 'Demeanor', a: a};
 };
@@ -4801,10 +4803,12 @@ var elm$core$Array$Array_elm_builtin = F4(
 		return {$: 'Array_elm_builtin', a: a, b: b, c: c, d: d};
 	});
 var elm$core$Basics$ceiling = _Basics_ceiling;
+var elm$core$Basics$fdiv = _Basics_fdiv;
 var elm$core$Basics$logBase = F2(
 	function (base, number) {
 		return _Basics_log(number) / _Basics_log(base);
 	});
+var elm$core$Basics$toFloat = _Basics_toFloat;
 var elm$core$Array$shiftStep = elm$core$Basics$ceiling(
 	A2(elm$core$Basics$logBase, 2, elm$core$Array$branchFactor));
 var elm$core$Elm$JsArray$empty = _JsArray_empty;
@@ -5216,11 +5220,23 @@ var author$project$Main$update = F2(
 var author$project$Main$PersonaMsg = function (a) {
 	return {$: 'PersonaMsg', a: a};
 };
+var author$project$Personae$decodeAge = function (_n0) {
+	var a = _n0.a;
+	return a;
+};
 var author$project$Personae$decodeApparel = function (_n0) {
 	var a = _n0.a;
 	return a;
 };
+var author$project$Personae$decodeBuild = function (_n0) {
+	var a = _n0.a;
+	return a;
+};
 var author$project$Personae$decodeDemeanor = function (_n0) {
+	var a = _n0.a;
+	return a;
+};
+var author$project$Personae$decodeStature = function (_n0) {
 	var a = _n0.a;
 	return a;
 };
@@ -5243,6 +5259,8 @@ var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 			return 3;
 	}
 };
+var elm$html$Html$col = _VirtualDom_node('col');
+var elm$html$Html$colgroup = _VirtualDom_node('colgroup');
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$html$Html$table = _VirtualDom_node('table');
 var elm$html$Html$tbody = _VirtualDom_node('tbody');
@@ -5252,286 +5270,8 @@ var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
 var elm$html$Html$th = _VirtualDom_node('th');
 var elm$html$Html$thead = _VirtualDom_node('thead');
 var elm$html$Html$tr = _VirtualDom_node('tr');
-var elm$core$Basics$ge = _Utils_ge;
-var elm$core$Basics$not = _Basics_not;
-var elm$core$Basics$isInfinite = _Basics_isInfinite;
-var elm$core$Basics$isNaN = _Basics_isNaN;
-var elm$core$Maybe$map = F2(
-	function (f, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return elm$core$Maybe$Just(
-				f(value));
-		} else {
-			return elm$core$Maybe$Nothing;
-		}
-	});
-var elm$core$String$fromFloat = _String_fromNumber;
-var elm$core$String$length = _String_length;
-var elm$core$String$cons = _String_cons;
-var elm$core$String$fromChar = function (_char) {
-	return A2(elm$core$String$cons, _char, '');
-};
-var elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
-var elm$core$String$repeatHelp = F3(
-	function (n, chunk, result) {
-		return (n <= 0) ? result : A3(
-			elm$core$String$repeatHelp,
-			n >> 1,
-			_Utils_ap(chunk, chunk),
-			(!(n & 1)) ? result : _Utils_ap(result, chunk));
-	});
-var elm$core$String$repeat = F2(
-	function (n, chunk) {
-		return A3(elm$core$String$repeatHelp, n, chunk, '');
-	});
-var elm$core$String$padRight = F3(
-	function (n, _char, string) {
-		return _Utils_ap(
-			string,
-			A2(
-				elm$core$String$repeat,
-				n - elm$core$String$length(string),
-				elm$core$String$fromChar(_char)));
-	});
-var elm$core$String$reverse = _String_reverse;
-var elm$core$String$slice = _String_slice;
-var elm$core$Basics$neq = _Utils_notEqual;
-var elm$core$List$any = F2(
-	function (isOkay, list) {
-		any:
-		while (true) {
-			if (!list.b) {
-				return false;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				if (isOkay(x)) {
-					return true;
-				} else {
-					var $temp$isOkay = isOkay,
-						$temp$list = xs;
-					isOkay = $temp$isOkay;
-					list = $temp$list;
-					continue any;
-				}
-			}
-		}
-	});
-var elm$core$String$foldr = _String_foldr;
-var elm$core$String$toList = function (string) {
-	return A3(elm$core$String$foldr, elm$core$List$cons, _List_Nil, string);
-};
-var myrho$elm_round$Round$addSign = F2(
-	function (signed, str) {
-		var isNotZero = A2(
-			elm$core$List$any,
-			function (c) {
-				return (!_Utils_eq(
-					c,
-					_Utils_chr('0'))) && (!_Utils_eq(
-					c,
-					_Utils_chr('.')));
-			},
-			elm$core$String$toList(str));
-		return _Utils_ap(
-			(signed && isNotZero) ? '-' : '',
-			str);
-	});
-var elm$core$Char$fromCode = _Char_fromCode;
-var myrho$elm_round$Round$increaseNum = function (_n0) {
-	var head = _n0.a;
-	var tail = _n0.b;
-	if (_Utils_eq(
-		head,
-		_Utils_chr('9'))) {
-		var _n1 = elm$core$String$uncons(tail);
-		if (_n1.$ === 'Nothing') {
-			return '01';
-		} else {
-			var headtail = _n1.a;
-			return A2(
-				elm$core$String$cons,
-				_Utils_chr('0'),
-				myrho$elm_round$Round$increaseNum(headtail));
-		}
-	} else {
-		var c = elm$core$Char$toCode(head);
-		return ((c >= 48) && (c < 57)) ? A2(
-			elm$core$String$cons,
-			elm$core$Char$fromCode(c + 1),
-			tail) : '0';
-	}
-};
-var myrho$elm_round$Round$splitComma = function (str) {
-	var _n0 = A2(elm$core$String$split, '.', str);
-	if (_n0.b) {
-		if (_n0.b.b) {
-			var before = _n0.a;
-			var _n1 = _n0.b;
-			var after = _n1.a;
-			return _Utils_Tuple2(before, after);
-		} else {
-			var before = _n0.a;
-			return _Utils_Tuple2(before, '0');
-		}
-	} else {
-		return _Utils_Tuple2('0', '0');
-	}
-};
-var elm$core$String$dropLeft = F2(
-	function (n, string) {
-		return (n < 1) ? string : A3(
-			elm$core$String$slice,
-			n,
-			elm$core$String$length(string),
-			string);
-	});
-var elm$core$String$startsWith = _String_startsWith;
-var elm$core$String$toInt = _String_toInt;
-var elm$core$Tuple$mapFirst = F2(
-	function (func, _n0) {
-		var x = _n0.a;
-		var y = _n0.b;
-		return _Utils_Tuple2(
-			func(x),
-			y);
-	});
-var myrho$elm_round$Round$toDecimal = function (fl) {
-	var _n0 = A2(
-		elm$core$String$split,
-		'e',
-		elm$core$String$fromFloat(
-			elm$core$Basics$abs(fl)));
-	if (_n0.b) {
-		if (_n0.b.b) {
-			var num = _n0.a;
-			var _n1 = _n0.b;
-			var exp = _n1.a;
-			var e = A2(
-				elm$core$Maybe$withDefault,
-				0,
-				elm$core$String$toInt(
-					A2(elm$core$String$startsWith, '+', exp) ? A2(elm$core$String$dropLeft, 1, exp) : exp));
-			var _n2 = myrho$elm_round$Round$splitComma(num);
-			var before = _n2.a;
-			var after = _n2.b;
-			var total = _Utils_ap(before, after);
-			var zeroed = (e < 0) ? A2(
-				elm$core$Maybe$withDefault,
-				'0',
-				A2(
-					elm$core$Maybe$map,
-					function (_n3) {
-						var a = _n3.a;
-						var b = _n3.b;
-						return a + ('.' + b);
-					},
-					A2(
-						elm$core$Maybe$map,
-						elm$core$Tuple$mapFirst(elm$core$String$fromChar),
-						elm$core$String$uncons(
-							_Utils_ap(
-								A2(
-									elm$core$String$repeat,
-									elm$core$Basics$abs(e),
-									'0'),
-								total))))) : A3(
-				elm$core$String$padRight,
-				e + 1,
-				_Utils_chr('0'),
-				total);
-			return _Utils_ap(
-				(fl < 0) ? '-' : '',
-				zeroed);
-		} else {
-			var num = _n0.a;
-			return _Utils_ap(
-				(fl < 0) ? '-' : '',
-				num);
-		}
-	} else {
-		return '';
-	}
-};
-var myrho$elm_round$Round$roundFun = F3(
-	function (functor, s, fl) {
-		if (elm$core$Basics$isInfinite(fl) || elm$core$Basics$isNaN(fl)) {
-			return elm$core$String$fromFloat(fl);
-		} else {
-			var signed = fl < 0;
-			var _n0 = myrho$elm_round$Round$splitComma(
-				myrho$elm_round$Round$toDecimal(
-					elm$core$Basics$abs(fl)));
-			var before = _n0.a;
-			var after = _n0.b;
-			var r = elm$core$String$length(before) + s;
-			var normalized = _Utils_ap(
-				A2(elm$core$String$repeat, (-r) + 1, '0'),
-				A3(
-					elm$core$String$padRight,
-					r,
-					_Utils_chr('0'),
-					_Utils_ap(before, after)));
-			var totalLen = elm$core$String$length(normalized);
-			var roundDigitIndex = A2(elm$core$Basics$max, 1, r);
-			var increase = A2(
-				functor,
-				signed,
-				A3(elm$core$String$slice, roundDigitIndex, totalLen, normalized));
-			var remains = A3(elm$core$String$slice, 0, roundDigitIndex, normalized);
-			var num = increase ? elm$core$String$reverse(
-				A2(
-					elm$core$Maybe$withDefault,
-					'1',
-					A2(
-						elm$core$Maybe$map,
-						myrho$elm_round$Round$increaseNum,
-						elm$core$String$uncons(
-							elm$core$String$reverse(remains))))) : remains;
-			var numLen = elm$core$String$length(num);
-			var numZeroed = (num === '0') ? num : ((s <= 0) ? _Utils_ap(
-				num,
-				A2(
-					elm$core$String$repeat,
-					elm$core$Basics$abs(s),
-					'0')) : ((_Utils_cmp(
-				s,
-				elm$core$String$length(after)) < 0) ? (A3(elm$core$String$slice, 0, numLen - s, num) + ('.' + A3(elm$core$String$slice, numLen - s, numLen, num))) : _Utils_ap(
-				before + '.',
-				A3(
-					elm$core$String$padRight,
-					s,
-					_Utils_chr('0'),
-					after))));
-			return A2(myrho$elm_round$Round$addSign, signed, numZeroed);
-		}
-	});
-var myrho$elm_round$Round$round = myrho$elm_round$Round$roundFun(
-	F2(
-		function (signed, str) {
-			var _n0 = elm$core$String$uncons(str);
-			if (_n0.$ === 'Nothing') {
-				return false;
-			} else {
-				if ('5' === _n0.a.a.valueOf()) {
-					if (_n0.a.b === '') {
-						var _n1 = _n0.a;
-						return !signed;
-					} else {
-						var _n2 = _n0.a;
-						return true;
-					}
-				} else {
-					var _n3 = _n0.a;
-					var _int = _n3.a;
-					return function (i) {
-						return ((i > 53) && signed) || ((i >= 53) && (!signed));
-					}(
-						elm$core$Char$toCode(_int));
-				}
-			}
-		}));
+var elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var elm$html$Html$Attributes$style = elm$virtual_dom$VirtualDom$style;
 var author$project$Personae$viewL1Persona = function (persona) {
 	return A2(
 		elm$html$Html$div,
@@ -5550,6 +5290,26 @@ var author$project$Personae$viewL1Persona = function (persona) {
 				_List_Nil,
 				_List_fromArray(
 					[
+						A2(
+						elm$html$Html$colgroup,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								elm$html$Html$col,
+								_List_fromArray(
+									[
+										A2(elm$html$Html$Attributes$style, 'width', '25%')
+									]),
+								_List_Nil),
+								A2(
+								elm$html$Html$col,
+								_List_fromArray(
+									[
+										A2(elm$html$Html$Attributes$style, 'width', '75%')
+									]),
+								_List_Nil)
+							])),
 						A2(
 						elm$html$Html$thead,
 						_List_Nil,
@@ -5612,6 +5372,48 @@ var author$project$Personae$viewL1Persona = function (persona) {
 										_List_Nil,
 										_List_fromArray(
 											[
+												elm$html$Html$text('Stature')
+											])),
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text(
+												author$project$Personae$decodeStature(persona.basicProperties.stature))
+											]))
+									])),
+								A2(
+								elm$html$Html$tr,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Build')
+											])),
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text(
+												author$project$Personae$decodeBuild(persona.basicProperties.build))
+											]))
+									])),
+								A2(
+								elm$html$Html$tr,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$td,
+										_List_Nil,
+										_List_fromArray(
+											[
 												elm$html$Html$text('Apparel')
 											])),
 										A2(
@@ -5662,49 +5464,7 @@ var author$project$Personae$viewL1Persona = function (persona) {
 										_List_fromArray(
 											[
 												elm$html$Html$text(
-												A2(myrho$elm_round$Round$round, 1, persona.basicProperties.age) + (' ' + 'years'))
-											]))
-									])),
-								A2(
-								elm$html$Html$tr,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										elm$html$Html$td,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('Height')
-											])),
-										A2(
-										elm$html$Html$td,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text(
-												A2(myrho$elm_round$Round$round, 1, persona.basicProperties.height) + (' ' + 'cm'))
-											]))
-									])),
-								A2(
-								elm$html$Html$tr,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										elm$html$Html$td,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('Weight')
-											])),
-										A2(
-										elm$html$Html$td,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text(
-												A2(myrho$elm_round$Round$round, 1, persona.basicProperties.weight) + (' ' + 'kg'))
+												author$project$Personae$decodeAge(persona.basicProperties.age))
 											]))
 									]))
 							]))
@@ -5921,6 +5681,17 @@ var elm$core$Task$perform = F2(
 			elm$core$Task$Perform(
 				A2(elm$core$Task$map, toMessage, task)));
 	});
+var elm$core$String$length = _String_length;
+var elm$core$String$slice = _String_slice;
+var elm$core$String$dropLeft = F2(
+	function (n, string) {
+		return (n < 1) ? string : A3(
+			elm$core$String$slice,
+			n,
+			elm$core$String$length(string),
+			string);
+	});
+var elm$core$String$startsWith = _String_startsWith;
 var elm$url$Url$Http = {$: 'Http'};
 var elm$url$Url$Https = {$: 'Https'};
 var elm$core$String$indexes = _String_indexes;
@@ -5932,6 +5703,7 @@ var elm$core$String$left = F2(
 		return (n < 1) ? '' : A3(elm$core$String$slice, 0, n, string);
 	});
 var elm$core$String$contains = _String_contains;
+var elm$core$String$toInt = _String_toInt;
 var elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
 		return {fragment: fragment, host: host, path: path, port_: port_, protocol: protocol, query: query};

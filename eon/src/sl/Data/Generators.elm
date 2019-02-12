@@ -15,3 +15,11 @@ genFirstName : Generator String
 genFirstName = sample firstNames |> map defaultString
 
 genSpecies = sample Data.Species.common |> map defaultString
+
+
+genHeight =
+    (Random.float 130 210)
+
+
+genWeight =
+    (Random.float 35 120)
