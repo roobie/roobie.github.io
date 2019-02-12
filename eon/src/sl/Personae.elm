@@ -47,8 +47,16 @@ type Demeanor =
 
 
 genDemeanor =
-    sampleWithDefaultString ["casual", "nervous", "angry", "insane", "calm", "sneaky", "tired"]
-        |> Random.map Demeanor
+    Random.map Demeanor <|
+        sampleWithDefaultString
+            ["casual"
+            , "nervous"
+            , "angry"
+            , "insane"
+            , "calm"
+            , "sneaky"
+            , "tired"
+            ]
 
 
 decodeDemeanor (Demeanor a) =
@@ -75,11 +83,12 @@ type Disposition =
 
 
 genDisposition =
-    sampleWithDefaultString [ "Thinks violence solves all problems"
-               , "Hates banks with a passion"
-               , "Loves being right (hates being wrong)"
-               ]
-        |> Random.map Disposition
+    Random.map Disposition <|
+        sampleWithDefaultString
+            [ "Thinks violence solves all problems"
+            , "Hates banks with a passion"
+            , "Loves being right (hates being wrong)"
+            ]
 
 
 {-| A description of the person's voice

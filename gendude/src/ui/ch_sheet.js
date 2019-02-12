@@ -17,9 +17,12 @@ function getCols () {
 
 export const styles = csjs`
 html, body {
+    font-size: 20px;
+    font-family: fantasy;
 }
 
-html, html input {
+html, html input, html table {
+    font-size: 20px;
     font-family: fantasy;
 }
 
@@ -31,6 +34,15 @@ body {
     box-sizing: border-box;
 }
 
+table {
+    width: 100%;
+    table-layout: fixed;
+    flex: 1;
+}
+table td {
+    padding: 1rem;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -40,6 +52,10 @@ body {
 
 .row {
     display: flex;
+}
+
+.spaceAround {
+  justify-content: space-around;
 }
 
 ${getCols()}
@@ -56,12 +72,12 @@ ${getCols()}
 }
 
 button {
-  border: 5px solid cornflowerblue;
+  border: 5px outset navy;
   background: transparent;
   background-color: transparent;
   color: white;
 }
-.guard-overflow {
+.guardOverflow {
   overflow: scroll;
 }
 
@@ -69,7 +85,7 @@ button {
 .metaInfo extends .col_1, .sheetSection { }
 .classesInfo extends .col_1, .sheetSection { }
 .attrsInfo extends .col_1, .sheetSection {
-    max-width: 150px;
+    max-width: 500px;
 }
 
 .spacer {
@@ -84,7 +100,7 @@ button {
 
 .bg,
 .bg label, .bg table {
-    background: rgba(12,12,12,0.8);
+    background: rgba(12,12,12,0.5);
     color: #eee;
 }
 .bg input {
@@ -121,7 +137,7 @@ export default class ChSheetComp {
 
   view (vnode) {
     return m('div', {className: `${styles.container} ${styles.bg}`}, [
-      m('div', {className: `${styles.sheet} ${styles.row}`}, [
+      m('div', {className: `${styles.sheet} ${styles.row} ${styles.spaceAround}`}, [
         m('button', {
           type: 'button',
           onclick: (e) => {
@@ -192,32 +208,39 @@ export default class ChSheetComp {
         m('hr')
       ]),
 
-      m('div', {className: `${styles.sheet} ${styles.row}`}, [
+      m('div', {className: `${styles.sheet} ${styles.row} ${styles.spaceAround}`}, [
         m('div', {className: styles.attrsInfo}, [
           m('table', [
+            m('caption', 'Primära attribut'),
             m('tbody', [
               m('tr', [
-                m('td', 'styrka (str)'),
+                m('td', 'styrka'),
+                m('td', '(str)'),
                 m('td', {className: styles.numberField}, this.char.attributes.str)
               ]),
               m('tr', [
-                m('td', 'smidighet (dex)'),
+                m('td', 'smidighet'),
+                m('td', '(dex)'),
                 m('td', {className: styles.numberField}, this.char.attributes.dex)
               ]),
               m('tr', [
-                m('td', 'uthållighet (con)'),
+                m('td', 'uthållighet'),
+                m('td', '(con)'),
                 m('td', {className: styles.numberField}, this.char.attributes.con)
               ]),
               m('tr', [
-                m('td', 'minne (int)'),
+                m('td', 'minne'),
+                m('td', '(int)'),
                 m('td', {className: styles.numberField}, this.char.attributes.int)
               ]),
               m('tr', [
-                m('td', 'visdom (wis)'),
+                m('td', 'visdom'),
+                m('td', '(wis)'),
                 m('td', {className: styles.numberField}, this.char.attributes.wis)
               ]),
               m('tr', [
-                m('td', 'utstrålning (cha)'),
+                m('td', 'utstrålning'),
+                m('td', '(cha)'),
                 m('td', {className: styles.numberField}, this.char.attributes.cha)
               ]),
               m('tr', [
@@ -225,6 +248,7 @@ export default class ChSheetComp {
               ]),
               m('tr', [
                 m('td', 'summa, attribut'),
+                m('td', ''),
                 m('td', {className: styles.numberField},
                   Object.keys(this.char.attributes)
                   .map(x => parseInt(this.char.attributes[x], 10))
@@ -234,17 +258,91 @@ export default class ChSheetComp {
           ])
         ]),
       ]),
-      m('div', {className: ''}),
 
-      m('div', {className: 'guard-overflow'}, [
-        m('pre', JSON.stringify(this.char, null, 2))
+      m('div', {className: `${styles.spacer} ${styles.row}`}, [
+        m('hr')
       ]),
+
+      m('div', {className: `${styles.sheet} ${styles.row} ${styles.spaceAround}`}, [
+        m('div', {className: styles.attrsInfo}, [
+          m('table', [
+            m('caption', 'Deriverade attribut'),
+            m('tbody', [
+              m('tr', [
+                m('td', 'XP per nivå modifikation'),
+                m('td', ''),
+                m('td', {className: styles.numberField}, this.char.requiredExperienceFactor)
+              ]),
+              m('tr', [
+                m('td', 'Hälsopoäng (nivå 1)'),
+                m('td', '(HP)'),
+                m('td', {className: styles.numberField}, this.char.derived.lvl1hp)
+              ]),
+              m('tr', [
+                m('td', 'Rustningsklass (nivå 1)'),
+                m('td', '(AC)'),
+                m('td', {className: styles.numberField}, this.char.derived.ac)
+              ]),
+              m('tr', [
+                m('td', 'Attackbonus, närstrid (nivå 1)'),
+                m('td', '(AB, Melee)'),
+                m('td', {className: styles.numberField}, this.char.derived.attackBonus.melee)
+              ]),
+              m('tr', [
+                m('td', 'Attackbonus, avstånd (nivå 1)'),
+                m('td', '(AB, Ranged)'),
+                m('td', {className: styles.numberField}, this.char.derived.attackBonus.ranged)
+              ]),
+              m('tr', [
+                m('td', 'Attackbonus, bas (nivå 1)'),
+                m('td', '(BAB)'),
+                m('td', {className: styles.numberField}, this.char.derived.baseAttackBonus.base)
+              ]),
+              m('tr', [
+                m('td', 'Attackbonus, per nivå'),
+                m('td', '(BAB, per level)'),
+                m('td', {className: styles.numberField}, this.char.derived.baseAttackBonus.perLevel)
+              ]),
+              m('tr', [
+                m('td', 'Räddningskast (nivå 1)'),
+                m('td', '(Saving throw bonus)'),
+                m('td', {className: styles.numberField}, this.char.derived.baseAttackBonus.savingThrowBonus)
+              ]),
+            ]),
+          ]),
+        ]),
+      ]),
+      m('div', {className: `${styles.spacer} ${styles.row}`}, [
+        m('hr')
+      ]),
+
+      m('div', {className: `${styles.sheet} ${styles.row} ${styles.spaceAround}`}, [
+        m('div', {className: styles.attrsInfo}, [
+          m('table', [
+            m('caption', 'Förmågor'),
+            m('tbody', this.char.abilities.map(ab => {
+              return m('tr', [
+                  m('td', ab)
+                ])
+            })),
+          ]),
+        ]),
+      ]),
+      m('div', {className: ''}),
 
       m('div', {className: ''}, [
         m('h3', 'Tips'),
         m('ul', [
-          m('li', 'Du kan trycka på tangenten N för att få en ny gubbe')
+          m('li', 'Du kan trycka på tangenten N för att få en ny gubbe'),
+          m('li', 'Nedan är din gubbe serialiserad - alltså i ett data format som program kan läsa. Enkelt sätt att spara resultatet på'),
         ])
+      ]),
+
+      m('div', {className: ""}, [
+        m('textarea', {
+          style: "width:100%;height:150px;background:transparent;color:#ddd;",
+          value: JSON.stringify(this.char, null, 2)
+        })
       ]),
     ])
   }

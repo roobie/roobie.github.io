@@ -1670,64 +1670,66 @@
 	csjs_1.getCss = getCss$2;
 
 	const translations = {
-	    // meta
-	    'male': 'man',
-	    'female': 'kvinna',
-	    'non-binary': 'icke-binär',
+	  // meta
+	  'male': 'man',
+	  'female': 'kvinna',
+	  'non-binary': 'icke-binär',
 
-	    // races
-	    'dwarf': 'dvärg',
-	    'gnome': 'tomte',
-	    'wood elf': 'skogsalv',
-	    'drow': 'mörkeralv',
-	    'high elf': 'högalv',
-	    'halfling': 'halvlängdsman/kvinna',
-	    'half elf': 'halvalv',
-	    'half orc': 'halvorch',
-	    'goblin': 'goblin',
-	    'kobold': 'kobold',
-	    'faerie': 'fé',
-	    'human': 'människa',
+	  // races
+	  'dwarf': 'dvärg',
+	  'gnome': 'tomte',
+	  'wood elf': 'skogsalv',
+	  'drow': 'mörkeralv',
+	  'high elf': 'högalv',
+	  'halfling': 'halvlängdsman/kvinna',
+	  'half elf': 'halvalv',
+	  'half orc': 'halvorch',
+	  'goblin': 'goblin',
+	  'kobold': 'kobold',
+	  'faerie': 'fé',
+	  'human': 'människa',
 
-	    // classes
-	    'barbarian': 'barbar',
-	    'bard': 'bard',
-	    'cleric': 'präst/inna',
-	    'druid': 'druid',
-	    'fighter': 'krigare',
-	    'mage': 'magiker',
-	    'monk': 'munk',
-	    'paladin': 'tempelriddare',
-	    'ranger': 'utbygdsjägare',
-	    'rogue': 'skurk',
+	  // classes
+	  'barbarian': 'barbar',
+	  'bard': 'bard',
+	  'cleric': 'präst/inna',
+	  'druid': 'druid',
+	  'fighter': 'krigare',
+	  'mage': 'magiker',
+	  'monk': 'munk',
+	  'paladin': 'tempelriddare',
+	  'ranger': 'utbygdsjägare',
+	  'rogue': 'skurk',
 
-	    'rage': 'bärsärkagång',
-	    'backstab': 'lönnstick',
-	    'darkvision': 'mörkersyn',
-	    'night vision': 'nattsyn',
+	  'rage': 'bärsärkagång',
+	  'backstab': 'lönnstick',
+	  'darkvision': 'mörkersyn',
+	  'night vision': 'nattsyn',
+	  'arcane spellcasting': 'magisk förmåga',
+	  'music': 'musik',
 
-	    'passive': 'passiv',
-	    'day': 'dag',
+	  'passive': 'passiv',
+	  'day': 'dag',
 	};
 
 	function translate(word) {
-	    const something = translations[word];
-	    if (!something) return word
-	    return something
+	  const something = translations[word];
+	  if (!something) return word
+	  return something
 	}
 
 	function translateObj(obj, type = null) {
-	    if (type === 'ability') {
-	        if (typeof obj === 'object') {
-	            if (obj.per) {
-	                return `${translate(obj.name)} (${translate(obj.amount)}/${translate(obj.per)})`
-	            } else {
-	                return `${translate(obj.name)} (${translate(obj.amount)})`
-	            }
-	        }
+	  if (type === 'ability') {
+	    if (typeof obj === 'object') {
+	      if (obj.per) {
+	        return `${translate(obj.name)} (${translate(obj.amount)}/${translate(obj.per)})`
+	      } else {
+	        return `${translate(obj.name)} (${translate(obj.amount)})`
+	      }
 	    }
+	  }
 
-	    return translate(obj.name || obj)
+	  return translate(obj.name || obj)
 	}
 
 	function range(n) {
@@ -8290,7 +8292,7 @@ ALONSO         0.004 90.040   1219`;
 	    const clazz = classData[className];
 	    const age = race.ageFactor * (die(20) + 18) | 0;
 
-	    const gender = d100() === 1 ? 'NB' : d6() <= 3 ? 'M' : 'F';
+	    const gender = d100() <= 20 ? 'NB' : d6() <= 3 ? 'M' : 'F';
 
 	    const add = (a, b) => a + b;
 	    const rollAttr = (mod) => {
@@ -8495,9 +8497,12 @@ ALONSO         0.004 90.040   1219`;
 
 	const styles = csjs_1`
 html, body {
+    font-size: 20px;
+    font-family: fantasy;
 }
 
-html, html input {
+html, html input, html table {
+    font-size: 20px;
     font-family: fantasy;
 }
 
@@ -8509,6 +8514,15 @@ body {
     box-sizing: border-box;
 }
 
+table {
+    width: 100%;
+    table-layout: fixed;
+    flex: 1;
+}
+table td {
+    padding: 1rem;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -8518,6 +8532,10 @@ body {
 
 .row {
     display: flex;
+}
+
+.spaceAround {
+  justify-content: space-around;
 }
 
 ${getCols()}
@@ -8534,12 +8552,12 @@ ${getCols()}
 }
 
 button {
-  border: 5px solid cornflowerblue;
+  border: 5px outset navy;
   background: transparent;
   background-color: transparent;
   color: white;
 }
-.guard-overflow {
+.guardOverflow {
   overflow: scroll;
 }
 
@@ -8547,7 +8565,7 @@ button {
 .metaInfo extends .col_1, .sheetSection { }
 .classesInfo extends .col_1, .sheetSection { }
 .attrsInfo extends .col_1, .sheetSection {
-    max-width: 150px;
+    max-width: 500px;
 }
 
 .spacer {
@@ -8562,7 +8580,7 @@ button {
 
 .bg,
 .bg label, .bg table {
-    background: rgba(12,12,12,0.8);
+    background: rgba(12,12,12,0.5);
     color: #eee;
 }
 .bg input {
@@ -8599,7 +8617,7 @@ button {
 
 	  view (vnode) {
 	    return mithril('div', {className: `${styles.container} ${styles.bg}`}, [
-	      mithril('div', {className: `${styles.sheet} ${styles.row}`}, [
+	      mithril('div', {className: `${styles.sheet} ${styles.row} ${styles.spaceAround}`}, [
 	        mithril('button', {
 	          type: 'button',
 	          onclick: (e) => {
@@ -8670,32 +8688,39 @@ button {
 	        mithril('hr')
 	      ]),
 
-	      mithril('div', {className: `${styles.sheet} ${styles.row}`}, [
+	      mithril('div', {className: `${styles.sheet} ${styles.row} ${styles.spaceAround}`}, [
 	        mithril('div', {className: styles.attrsInfo}, [
 	          mithril('table', [
+	            mithril('caption', 'Primära attribut'),
 	            mithril('tbody', [
 	              mithril('tr', [
-	                mithril('td', 'styrka (str)'),
+	                mithril('td', 'styrka'),
+	                mithril('td', '(str)'),
 	                mithril('td', {className: styles.numberField}, this.char.attributes.str)
 	              ]),
 	              mithril('tr', [
-	                mithril('td', 'smidighet (dex)'),
+	                mithril('td', 'smidighet'),
+	                mithril('td', '(dex)'),
 	                mithril('td', {className: styles.numberField}, this.char.attributes.dex)
 	              ]),
 	              mithril('tr', [
-	                mithril('td', 'uthållighet (con)'),
+	                mithril('td', 'uthållighet'),
+	                mithril('td', '(con)'),
 	                mithril('td', {className: styles.numberField}, this.char.attributes.con)
 	              ]),
 	              mithril('tr', [
-	                mithril('td', 'minne (int)'),
+	                mithril('td', 'minne'),
+	                mithril('td', '(int)'),
 	                mithril('td', {className: styles.numberField}, this.char.attributes.int)
 	              ]),
 	              mithril('tr', [
-	                mithril('td', 'visdom (wis)'),
+	                mithril('td', 'visdom'),
+	                mithril('td', '(wis)'),
 	                mithril('td', {className: styles.numberField}, this.char.attributes.wis)
 	              ]),
 	              mithril('tr', [
-	                mithril('td', 'utstrålning (cha)'),
+	                mithril('td', 'utstrålning'),
+	                mithril('td', '(cha)'),
 	                mithril('td', {className: styles.numberField}, this.char.attributes.cha)
 	              ]),
 	              mithril('tr', [
@@ -8703,6 +8728,7 @@ button {
 	              ]),
 	              mithril('tr', [
 	                mithril('td', 'summa, attribut'),
+	                mithril('td', ''),
 	                mithril('td', {className: styles.numberField},
 	                  Object.keys(this.char.attributes)
 	                  .map(x => parseInt(this.char.attributes[x], 10))
@@ -8712,17 +8738,91 @@ button {
 	          ])
 	        ]),
 	      ]),
-	      mithril('div', {className: ''}),
 
-	      mithril('div', {className: 'guard-overflow'}, [
-	        mithril('pre', JSON.stringify(this.char, null, 2))
+	      mithril('div', {className: `${styles.spacer} ${styles.row}`}, [
+	        mithril('hr')
 	      ]),
+
+	      mithril('div', {className: `${styles.sheet} ${styles.row} ${styles.spaceAround}`}, [
+	        mithril('div', {className: styles.attrsInfo}, [
+	          mithril('table', [
+	            mithril('caption', 'Deriverade attribut'),
+	            mithril('tbody', [
+	              mithril('tr', [
+	                mithril('td', 'XP per nivå modifikation'),
+	                mithril('td', ''),
+	                mithril('td', {className: styles.numberField}, this.char.requiredExperienceFactor)
+	              ]),
+	              mithril('tr', [
+	                mithril('td', 'Hälsopoäng (nivå 1)'),
+	                mithril('td', '(HP)'),
+	                mithril('td', {className: styles.numberField}, this.char.derived.lvl1hp)
+	              ]),
+	              mithril('tr', [
+	                mithril('td', 'Rustningsklass (nivå 1)'),
+	                mithril('td', '(AC)'),
+	                mithril('td', {className: styles.numberField}, this.char.derived.ac)
+	              ]),
+	              mithril('tr', [
+	                mithril('td', 'Attackbonus, närstrid (nivå 1)'),
+	                mithril('td', '(AB, Melee)'),
+	                mithril('td', {className: styles.numberField}, this.char.derived.attackBonus.melee)
+	              ]),
+	              mithril('tr', [
+	                mithril('td', 'Attackbonus, avstånd (nivå 1)'),
+	                mithril('td', '(AB, Ranged)'),
+	                mithril('td', {className: styles.numberField}, this.char.derived.attackBonus.ranged)
+	              ]),
+	              mithril('tr', [
+	                mithril('td', 'Attackbonus, bas (nivå 1)'),
+	                mithril('td', '(BAB)'),
+	                mithril('td', {className: styles.numberField}, this.char.derived.baseAttackBonus.base)
+	              ]),
+	              mithril('tr', [
+	                mithril('td', 'Attackbonus, per nivå'),
+	                mithril('td', '(BAB, per level)'),
+	                mithril('td', {className: styles.numberField}, this.char.derived.baseAttackBonus.perLevel)
+	              ]),
+	              mithril('tr', [
+	                mithril('td', 'Räddningskast (nivå 1)'),
+	                mithril('td', '(Saving throw bonus)'),
+	                mithril('td', {className: styles.numberField}, this.char.derived.baseAttackBonus.savingThrowBonus)
+	              ]),
+	            ]),
+	          ]),
+	        ]),
+	      ]),
+	      mithril('div', {className: `${styles.spacer} ${styles.row}`}, [
+	        mithril('hr')
+	      ]),
+
+	      mithril('div', {className: `${styles.sheet} ${styles.row} ${styles.spaceAround}`}, [
+	        mithril('div', {className: styles.attrsInfo}, [
+	          mithril('table', [
+	            mithril('caption', 'Förmågor'),
+	            mithril('tbody', this.char.abilities.map(ab => {
+	              return mithril('tr', [
+	                  mithril('td', ab)
+	                ])
+	            })),
+	          ]),
+	        ]),
+	      ]),
+	      mithril('div', {className: ''}),
 
 	      mithril('div', {className: ''}, [
 	        mithril('h3', 'Tips'),
 	        mithril('ul', [
-	          mithril('li', 'Du kan trycka på tangenten N för att få en ny gubbe')
+	          mithril('li', 'Du kan trycka på tangenten N för att få en ny gubbe'),
+	          mithril('li', 'Nedan är din gubbe serialiserad - alltså i ett data format som program kan läsa. Enkelt sätt att spara resultatet på'),
 	        ])
+	      ]),
+
+	      mithril('div', {className: ""}, [
+	        mithril('textarea', {
+	          style: "width:100%;height:150px;background:transparent;color:#ddd;",
+	          value: JSON.stringify(this.char, null, 2)
+	        })
 	      ]),
 	    ])
 	  }

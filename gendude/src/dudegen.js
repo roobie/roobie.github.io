@@ -57,7 +57,7 @@ export function genDude() {
     const clazz = classData[className]
     const age = race.ageFactor * (die(20) + 18) | 0
 
-    const gender = d100() === 1 ? 'NB' : d6() <= 3 ? 'M' : 'F'
+    const gender = d100() <= 20 ? 'NB' : d6() <= 3 ? 'M' : 'F'
 
     const add = (a, b) => a + b
     const rollAttr = (mod) => {
