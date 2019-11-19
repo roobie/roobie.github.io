@@ -20,6 +20,6 @@
   },
   "dependencies": {
     "csjs": "^1.1.0",
-    "mithril": "^1.1.6"
+    "mithril": "^1.1.7"
   }
 }
