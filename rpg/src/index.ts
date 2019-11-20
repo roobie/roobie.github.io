@@ -8,46 +8,52 @@ document.addEventListener('DOMContentLoaded', main)
 interface State {
     path: string
 }
-let state = {path: location.hash.slice(1)}
-const EState = E(push => {})
-const onNewState = EState.signal
-function setState (pstate: Partial<State>): void {
-    EState.push({...state, ...pstate})
-}
 
-window.addEventListener(
-    'hashchange',
-    () => setState({path: location.hash.slice(1)}),
-    false);
-
-async function main(e: HTMLEvent): void {
-    let c = 0
-    for (;;) {
-        console.log('loops', ++c)
-        state = await renderLoop(state)
+function main(): void {
+    let state = {
+        path: location.hash.slice(1),
     }
-}
+    const EState = E(push => {})
+    const onNewState = EState.signal
+    function setState (pstate: Partial<State>): void {
+        EState.push({...state, ...pstate})
+    }
+    window.addEventListener(
+        'hashchange',
+        () => setState({path: location.hash.slice(1)}),
+        false);
 
-function renderLoop(): Promise<State> {
-    return new Promise((resolve) => {
-        const [newState, tmpl] = dispatch(state)
-        render(tmpl, document.body)
-        onNewState(state => resolve(state))
+    renderLoop(state, setState)
+    onNewState(newState => {
+        state = newState
+        renderLoop(newState, setState)
     })
 }
 
-function dispatch(state: State): [State, any] {
-    console.log(state)
+
+function renderLoop(state: State, setState: (Partial<State>): void): State {
+    const tmpl = dispatch(state, setState)
+    render(tmpl, document.body)
+}
+
+function dispatch(state: State, setState: (Partial<State>): void): any {
     switch (state.path) {
-        case '': return viewRoot()
-        default: return []
+        case '': return viewRoot(state, setState)
+        default: return html`<h1>Not found</h1>`
     }
 }
 
-function viewRoot(state: State): [State, any] {
-    return [state, html`
+function viewRoot(state: State, setState: (Partial<State>): void): any {
+    return html`
 <ul>
-    <li><button type="button>Hello</button></li>
+    <li>
+        <button type="button"
+            @click=${() => setState({c: (state.c || 0)+1})}
+        >
+            Hello ${state.c}
+        </button>
+    </li>
+<pre>${JSON.stringify(state)}</pre>
 </ul>
-`]
+`
 }
