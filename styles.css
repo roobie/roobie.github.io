@@ -1,13 +1,24 @@
-html {
+html, body {
     background: #222;
     font-family: sans-serif;
     color: #efefef;
+    min-height: 100vh;
 }
+
 .flex {display:flex;}
 .center-content {justify-content: center;}
 .f1 {flex: 1;}
+.f2 {flex: 2;}
+.f3 {flex: 3;}
 .row {display:flex;}
 .col {display:flex;flex-direction:column;}
 ul.no-bullets {list-style:none;padding:0;margin:0;}
 a {color:red;}
 a:visited {color:magenta;}
+.bb {border-bottom:1px dotted salmon;}
+
+@media (max-width : 961px) {
+    .filler {
+        display: none;
+    }
+}
