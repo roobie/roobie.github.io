@@ -4,14 +4,15 @@ html, body {
     color: #efefef;
     min-height: 100vh;
 }
+body {margin: 0; padding:0;}
 
 .flex {display:flex;}
 .center-content {justify-content: center;}
 .f1 {flex: 1;}
 .f2 {flex: 2;}
 .f3 {flex: 3;}
-.row {display:flex;}
-.col {display:flex;flex-direction:column;}
+.row {display:flex;margin:1rem 0;}
+.col {display:flex;flex-direction:column;margin:0 1rem;}
 ul.no-bullets {list-style:none;padding:0;margin:0;}
 a {color:red;}
 a:visited {color:magenta;}
