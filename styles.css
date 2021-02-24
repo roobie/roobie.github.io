@@ -1,7 +1,5 @@
 html, body {
-    background: #222;
     font-family: sans-serif;
-    color: #efefef;
     min-height: 100vh;
 }
 body {margin: 0; padding:0;}
@@ -14,7 +12,7 @@ body {margin: 0; padding:0;}
 .row {display:flex;margin:1rem 0;}
 .col {display:flex;flex-direction:column;margin:0 1rem;}
 ul.no-bullets {list-style:none;padding:0;margin:0;}
-a {color:red;}
+a {color:#aa1232;}
 a:visited {color:magenta;}
 .bb {border-bottom:1px dotted salmon;}
 
