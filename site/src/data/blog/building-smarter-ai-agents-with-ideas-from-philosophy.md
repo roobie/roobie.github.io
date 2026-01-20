@@ -1,7 +1,7 @@
 ---
 author: Björn Roberg, GPT-5.1
-pubDatetime: 2026-01-21T13:00:00Z
-modDatetime: 2026-01-21T13:00:00Z
+pubDatetime: 2026-01-19T13:00:00Z
+modDatetime: 2026-01-19T13:00:00Z
 title: Building Smarter AI Agents With Ideas From Philosophy
 slug: building-smarter-ai-agents-with-ideas-from-philosophy
 featured: true
