@@ -1,7 +1,7 @@
 ---
 author: Björn Roberg
-pubDatetime: 2026-01-21T13:00:00Z
-modDatetime: 2026-01-21T13:00:00Z
+pubDatetime: 2026-01-21T11:00:00Z
+modDatetime: 2026-01-21T11:00:00Z
 title: Terminal multiplexers
 slug: terminal-multiplexers
 featured: true
