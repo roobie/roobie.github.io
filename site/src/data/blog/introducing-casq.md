@@ -87,8 +87,8 @@ Over time, you’ll ingest many snapshots, builds, or experiment runs. Not all o
 You can:
 
 ```bash
-casq gc --dry-run   # see what would be removed
-casq gc             # actually perform deletion
+casq collect-garbage --dry-run   # see what would be removed
+casq collect-garbage             # actually perform deletion
 ```
 
 Cleaning up old build caches or snapshots becomes as simple as **dropping a ref** and running GC.
@@ -101,30 +101,38 @@ A typical flow looks like this:
 
 ```bash
 # Initialize a store in the current directory
-casq init
+casq initialize
+#>/path/to/store
 
 # Add a directory tree, creating a named reference
-casq add myproject/ --ref-name snapshot-2024-01-21
-
-# List root references
-casq ls
-# snapshot-2024-01-21 -> abc123...
+HASH=$(casq put myproject/ --reference snapshot-2024-01-21)
+#>e4d5d6833b5f1824da0080ca67ae5627b20a5a60a222325e0cc828705bc952b3
 
 # Explore the tree behind a hash
-casq ls abc123...
+casq list $HASH
+#>file-a.txt
+#>file-b.txt
 
-# Retrieve a single file by hash
-casq cat <hash>
+# Explore and manage references
+casq references list
+#>e4d5d6833b5f1824da0080ca67ae5627b20a5a60a222325e0cc828705bc952b3 snapshot-2024-01-21
+casq references add $HASH another-name-for-my-data
+casq references remove another-name-for-my-data
+
+# Retrieve a single file by hash (prints to stdout)
+HASH=$(casq put my-file.txt)
+casq get $HASH
+#>... the contents of my-file.txt...
 
 # Materialize a whole tree back to the filesystem
-casq materialize abc123... ./out
+casq materialize e4d5d6833b5f1824da0080ca67ae5627b20a5a60a222325e0cc828705bc952b3 ./out
 
 # Tidy up unused objects
-casq gc --dry-run
-casq gc
+casq collect-garbage --dry-run
+casq collect-garbage
 ```
 
-That’s the entire mental model: **init → add → list → retrieve → collect**.
+That’s the entire mental model: **initialize → put → list → get/materialize → collect**.
 
 ---
 
@@ -157,7 +165,7 @@ For personal machines, dev boxes, or small servers, you might want:
 `casq` lets you periodically:
 
 ```bash
-casq add ~/projects --ref-name projects-$(date +%Y-%m-%d)
+casq put ~/projects --reference projects-$(date +%Y-%m-%d)
 ```
 
 Over time, you build a set of snapshot refs. Old snapshots can be deleted simply by removing refs and running GC, while deduplication ensures you’re not wasting space on unchanged files.
@@ -232,6 +240,8 @@ Because `casq_core` is just a Rust library with a clear, file-based model, it’
 - **Streaming I/O** – no need to load whole files into memory.
 - **Directory sharding** – avoids filesystem hot-spots on large stores.
 - **Automatic deduplication** – less disk churn for repeated content.
+- **Compression** – Larger files are automatically compressed using zstd.
+- **Chunking** – Larger files are chunked.
 
 ### Current Limitations
 
@@ -239,8 +249,7 @@ In exchange for simplicity:
 
 - **Local-only** – no network or remote backends (by design).
 - **Single-user** – no concurrency or locking story yet.
-- **No compression or encryption** – you can layer these externally if needed.
-- **No chunking** – one file = one blob; large-file, block-level deduplication is out of scope for now.
+- **No encryption** – no encryption - use other tools for that.
 - **POSIX-focused** – full permission preservation is POSIX-only.
 
 If you need a multi-tenant backup system with remote, encrypted, deduplicated snapshots, tools like restic or borg are still the right choice. `casq` focuses on being the **simple building block** for local CAS needs.
@@ -261,11 +270,11 @@ After that:
 ```bash
 mkdir my-store
 cd my-store
-casq init
+casq initialize
 
-casq add ../some-project --ref-name first-snapshot
-casq ls
-casq materialize <hash> ./restored
+HASH=$(casq put ../some-project --reference first-snapshot)
+casq list
+casq materialize $HASH ./restored
 ```
 
 For embedding in your own Rust tools, add `casq_core` to your workspace and wire it into your existing workflows (build caches, artifact stores, snapshot features, etc.).

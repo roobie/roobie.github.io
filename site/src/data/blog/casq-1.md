@@ -22,17 +22,16 @@ Content-addressed file store using BLAKE3
 Usage: casq [OPTIONS] <COMMAND>
 
 Commands:
-  init         Initialize a new store
-  add          Add files or directories to the store
-  materialize  Materialize an object to the filesystem
-  cat          Output blob content to stdout
-  ls           List tree contents or show blob info (lists refs if no hash given)
-  stat         Show object metadata
-  gc           Garbage collect unreferenced objects
-  orphans      Find orphaned tree roots (unreferenced trees)
-  journal      View operation journal
-  refs         Manage references
-  help         Print this message or the help of the given subcommand(s)
+  initialize       Initialize a new store
+  put              Put files or directories to the store
+  materialize      Materialize an object to the filesystem
+  get              Output blob content and write it to stdout
+  list             List tree children
+  metadata         Show object metadata
+  collect-garbage  Garbage collect unreferenced objects
+  find-orphans     Find orphaned objects (unreferenced trees and blobs)
+  references       Manage references
+  help             Print this message or the help of the given subcommand(s)
 
 Options:
   -r, --root <ROOT>  Store root directory (defaults to CASQ_ROOT env var or ./casq-store)
@@ -48,7 +47,7 @@ Suppose there's a shared `CASQ_DIR` on the CI runner (or persistent volume).
 1. Compute **input hashes** for:
    - Source tree
    - Dependency lockfile(s)
-   - Toolchain config (e.g. `.mise.toml`)
+   - Toolchain config (e.g. `mise.toml`)
 2. Derive **build cache key** = hash of those three hashes.
 3. If `casq` already has that build tree:
    - Restore build artifacts from `casq`.
@@ -57,7 +56,7 @@ Suppose there's a shared `CASQ_DIR` on the CI runner (or persistent volume).
    - Build normally.
    - Store resulting build tree into `casq`.
 5. Do the same pattern for **tests** and **packaging**.
-6. Periodically run `casq gc`.
+6. Periodically run `casq collect-garbage`.
 
 ---
 
@@ -95,9 +94,9 @@ jobs:
       - name: Compute input hashes
         id: hashes
         run: |
-          SRC_HASH=$(casq add src)
-          DEPS_HASH=$(casq add package-lock.json)      # or Cargo.lock, go.sum, etc.
-          TOOLCHAIN_HASH=$(casq add mise.toml)         # e.g. .nvmrc, .tool-versions, etc.
+          SRC_HASH=$(casq put src)
+          DEPS_HASH=$(casq put package-lock.json)      # or Cargo.lock, go.sum, etc.
+          TOOLCHAIN_HASH=$(casq put mise.toml)         # e.g. .nvmrc, .tool-versions, etc.
 
           echo "src_hash=$SRC_HASH"             >> $GITHUB_OUTPUT
           echo "deps_hash=$DEPS_HASH"           >> $GITHUB_OUTPUT
@@ -119,7 +118,7 @@ Here `src_hash`, `deps_hash`, `toolchain_hash` are all **content-addressed snaps
       - name: Try restore build from casq
         id: restore-build
         run: |
-          if casq stat "${{ steps.hashes.outputs.build_key }}"; then
+          if casq metadata "${{ steps.hashes.outputs.build_key }}"; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
             casq materialize "${{ steps.hashes.outputs.build_key }}" build
           else
@@ -134,7 +133,7 @@ Here `src_hash`, `deps_hash`, `toolchain_hash` are all **content-addressed snaps
           npm run build -- --out-dir build
 
           # Store build output tree addressed by build_key
-          BUILD_TREE_HASH=$(casq add build --ref-name "${{ steps.hashes.outputs.build_key }}")
+          BUILD_TREE_HASH=$(casq put build --reference "${{ steps.hashes.outputs.build_key }}")
 ```
 
 ---
@@ -146,7 +145,7 @@ Here `src_hash`, `deps_hash`, `toolchain_hash` are all **content-addressed snaps
         id: test-key
         run: |
           # Test key can depend on src, deps, toolchain, and build tree
-          BUILD_TREE_HASH=$(casq add build)
+          BUILD_TREE_HASH=$(casq put build)
           echo -e "${{ steps.hashes.outputs.src_hash }}\n${{ steps.hashes.outputs.deps_hash }}\n${{ steps.hashes.outputs.toolchain_hash }}\n$BUILD_TREE_HASH" > test-inputs.txt
           TEST_KEY=$(blake3 test-inputs.txt | cut -d ' ' -f 1)
           echo "test_key=$TEST_KEY" >> $GITHUB_OUTPUT
@@ -154,7 +153,7 @@ Here `src_hash`, `deps_hash`, `toolchain_hash` are all **content-addressed snaps
       - name: Try reuse test results from casq
         id: restore-test
         run: |
-          if casq stat "${{ steps.test-key.outputs.test_key }}"; then
+          if casq metadata "${{ steps.test-key.outputs.test_key }}"; then
             echo "test_cache_hit=true" >> $GITHUB_OUTPUT
             casq materialize "${{ steps.test-key.outputs.test_key }}" test-results
           else
@@ -165,7 +164,7 @@ Here `src_hash`, `deps_hash`, `toolchain_hash` are all **content-addressed snaps
         if: steps.restore-test.outputs.test_cache_hit == 'false'
         run: |
           npm test -- --reporter junit --reporter-options mochaFile=test-results/results.xml
-          casq add test-results --ref-name "test-${{ steps.test-key.outputs.test_key }}"
+          casq put test-results --reference "test-${{ steps.test-key.outputs.test_key }}"
 ```
 
 This lets you **skip tests entirely** if both inputs *and* build output are unchanged.
@@ -195,7 +194,7 @@ jobs:
         env:
           CASQ_DIR: .casq-store
         run: |
-          casq gc
+          casq collect-garbage
 ```
 
 ---
