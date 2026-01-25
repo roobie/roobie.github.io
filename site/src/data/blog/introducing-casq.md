@@ -93,6 +93,11 @@ casq collect-garbage             # actually perform deletion
 
 Cleaning up old build caches or snapshots becomes as simple as **dropping a ref** and running GC.
 
+```bash
+casq references remove my-old-ref
+casq collect-garbage
+```
+
 ---
 
 ## CLI at a Glance
