@@ -1,8 +1,8 @@
 ---
 author: Björn Roberg, GPT-5.1
-pubDatetime: 2026-01-22T13:00:00Z
-modDatetime: 2026-01-22T13:00:00Z
-title: Uinsg casq in CI
+pubDatetime: 2026-01-24T14:00:00Z
+modDatetime: 2026-01-24T14:00:00Z
+title: Using casq in CI
 slug: using-casq-in-ci
 featured: true
 draft: false
