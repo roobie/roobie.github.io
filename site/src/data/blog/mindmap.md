@@ -173,49 +173,63 @@ Please let me know of your thoughts at [rfc/mindmap](https://github.com/roobie/r
 ## Example
 
 ```markdown
-[0] **Meta: Agent Prime Directive** - Before coding: read [1-9], then [10-14]; grep for your task; treat this file as index and code as source of truth; always update affected nodes after changes.
+# Project MINDMAP
 
-[1] **Meta: Node Format** - Each node is one line: `[N] **TypePrefix: Title** - description with [N] references`. IDs are stable once created; update content, not IDs.
+[0] **🎯 PRIME DIRECTIVE FOR AI AGENTS:** This mindmap is your primary knowledge index. Read nodes [1-9] first (they explain the system), then read overview nodes [10-14] for project context. Follow `[N]` links to navigate. **Always update this file as you work.**
 
-[2] **Meta: Node Types** - `AE:` Architecture Element, `WF:` Workflow, `DR:` Decision Record, `BUG:` Bug Record, `TODO:` Task, `Meta:` Mindmap docs.
+[1] **Meta: Mind Map Format** - This is a graph-based documentation format where each node is one line: `[N] **Title** - content with [N] references`. The format is homoiconic—these instructions are themselves nodes demonstrating the format [2][3][4]. Nodes enable atomic line-by-line updates, grep-based search, VCS-friendly diffs, and LLM-native citation syntax [5][6].
 
-[3] **Meta: Update Protocol** - Before work, grep for keywords; after work, update existing nodes or add new ones if concept recurs or isn’t obvious from code; mark stale nodes `(verify YYYY-MM-DD)`.
+[2] **Meta: Node Syntax** - Format is `[N] **Title** - description with [N] references`. Each node is exactly one line (use `\n` for internal breaks if needed). Titles use markdown bold `**...**`. References use citation syntax `[N]` which LLMs recognize from academic papers [1][3]. Node IDs are sequential integers starting from 1.
 
-[4] **Meta: Deprecation Rule** - Never delete nodes in place; prefix with `**[DEPRECATED → N_new]` and point to the replacement node.
+[3] **Meta: Node Types** - Nodes are prefixed by type: `**AE: X**` (Architecture Element), `**WF: X**` (Workflow), `**DR: X**` (Decision Record), `**BUG: X**` (Bug Record), `**TODO: X**` (Planned Work), `**Meta: X**` (Documentation about this mindmap itself) [1][2][4]. Use `**[DEPRECATED → N]**` prefix for outdated nodes that redirect elsewhere [6].
 
-[5] **Project Purpose** - Simple web app that lets users sign up, log in, and view a personal dashboard with basic account info.
+[4] **Meta: Quick Start for New Agents** - First time here? (1) Read [1-9] to understand the format, (2) Read [10-14] for project overview, (3) Grep for your task: `grep -i "auth"` then read matching nodes, (4) Follow `[N]` links to dive deeper, (5) Update nodes as you work per protocol [6][7][8].
 
-[6] **Tech Stack** - Node.js 20, Express 4, PostgreSQL 15 via Prisma, JWT auth with jsonwebtoken, React 18 frontend (separate repo, not covered here).
+[5] **Meta: Why This Format Works** - Line-oriented structure allows atomic updates (replace line N to update node N), instant grep lookup (`grep "^\[42\]"` finds node 42), diff-friendly changes (only edited lines change), and zero parsing overhead [1][2]. The `[N]` citation syntax leverages LLM training on academic papers—agents already know how to follow references [3].
 
-[7] **Entry Points** - Backend starts at `src/server.ts`; HTTP routes registered in `src/routes/*.ts`; auth middleware in `src/auth/middleware.ts`.
+[6] **Meta: Update Protocol** - **MANDATORY:** (1) Before starting work, grep for related nodes and read them [4], (2) After making changes, update affected nodes immediately, (3) Add new nodes only if concept is referenced 3+ times OR non-obvious from code, (4) For bug fixes create `**BUG:**` node with root cause + solution + commit hash [3], (5) For deprecation use `**[DEPRECATED → N_new]**` prefix and keep the line [3], (6) If node seems outdated mark `(verify YYYY-MM-DD)` and fix within 2 commits [7][8].
 
-[8] **Architecture Overview** - Monolithic Express app with layers: routes → services → data access (Prisma); JWT-based stateless auth; feature modules grouped by domain (`auth`, `user`, `dashboard`).
+[7] **Meta: Node Lifecycle Example** - Initial: `[12] **AE: AuthService** - Handles JWT validation using jsonwebtoken [15][22]`. After refactor: `[12] **AE: AuthService** - Handles JWT validation using Passport.js [15][22][31] (updated 2026-02-02)`. After deprecation: `[12] **[DEPRECATED → 45] AE: AuthService** - Replaced by PassportAuthService [45]` [6][3].
 
-[9] **Key Decisions Overview** - Use JWT for stateless auth [20]; store passwords with bcrypt [21]; keep rate limiting in middleware layer [22].
+[8] **Meta: Reality vs Mindmap** - **Critical rule:** If the mindmap contradicts the actual codebase, the code is the source of truth—but you must update the mindmap immediately to reflect reality [6]. The mindmap is an index, not a specification. Stale nodes are worse than missing nodes because they mislead future agents.
 
-[10] **AE: AuthService** - Core auth logic in `src/auth/service.ts`: signup, login, password hash/verify, JWT issue/verify; used by auth routes and middleware [11][12][20][21].
+[9] **Meta: Scaling Strategy** - Small projects: <50 nodes. Medium: <100 nodes. Large: split into domain-specific files like `MINDMAP.auth.md`, `MINDMAP.payments.md` [10]. Link from main mindmap: `[15] **AE: Auth System** - See MINDMAP.auth.md for details. Uses JWT [12][22]`. Each sub-mindmap has its own [1-9] meta nodes and [10-14] overview nodes following this same format [1][3].
 
-[11] **AE: AuthRoutes** - Express routes in `src/auth/routes.ts`: `/signup`, `/login`, `/me`; delegate to [10]; validate request body shape; send JWT in JSON response.
+---
 
-[12] **AE: AuthMiddleware** - JWT verification middleware in `src/auth/middleware.ts`; reads `Authorization: Bearer <token>`, verifies via [10], attaches `req.user` or returns 401; used on protected routes [13][20].
+[12] **Project Purpose** - Simple web app that lets users sign up, log in, and view a personal dashboard with basic account info.
 
-[13] **AE: DashboardRoutes** - Protected routes in `src/dashboard/routes.ts`: `/dashboard` returns user summary; all routes use [12]; queries user data via `UserRepository` [14].
+[13] **Tech Stack** - Node.js 20, Express 4, PostgreSQL 15 via Prisma, JWT auth with jsonwebtoken, React 18 frontend (separate repo, not covered here).
 
-[14] **AE: UserRepository** - Data access in `src/user/repository.ts`; wraps Prisma client for `User` model: `createUser`, `findByEmail`, `findById`; used by [10][13].
+[14] **Entry Points** - Backend starts at `src/server.ts`; HTTP routes registered in `src/routes/*.ts`; auth middleware in `src/auth/middleware.ts`.
 
-[15] **WF: User Signup Flow** - Client POSTs `/signup` → [11] validates body → [10] hashes password with bcrypt [21], creates user via [14], issues JWT [20] → response returns token + basic profile.
+[15] **Architecture Overview** - Monolithic Express app with layers: routes → services → data access (Prisma); JWT-based stateless auth; feature modules grouped by domain (`auth`, `user`, `dashboard`).
 
-[16] **WF: User Login Flow** - Client POSTs `/login` → [11] validates → [10] verifies password, issues JWT [20] → response returns token; on next requests, client sends `Authorization` header for [12].
+[16] **Key Decisions Overview** - Use JWT for stateless auth [27]; store passwords with bcrypt [26]; keep rate limiting in middleware layer [29].
 
-[17] **WF: View Dashboard** - Client GETs `/dashboard` with JWT → [12] verifies and populates `req.user` → [13] loads user data via [14] → returns dashboard JSON.
+[17] **AE: AuthService** - Core auth logic in `src/auth/service.ts`: signup, login, password hash/verify, JWT issue/verify; used by auth routes and middleware [18][19][27][28].
 
-[18] **DR: Use JWT For Session Auth** - Chosen over server-side sessions to support stateless scale-out and easier integration with separate frontend; trade-offs: token revocation is harder, tokens must be short-lived [10][12][15][16].
+[18] **AE: AuthRoutes** - Express routes in `src/auth/routes.ts`: `/signup`, `/login`, `/me`; delegate to [17]; validate request body shape; send JWT in JSON response.
 
-[19] **DR: Store Passwords With Bcrypt** - Use bcrypt via `bcryptjs` with cost factor 12 for password hashing; chosen for library maturity and ecosystem support; alternatives (Argon2, scrypt) deferred for now [10][21].
+[19] **AE: AuthMiddleware** - JWT verification middleware in `src/auth/middleware.ts`; reads `Authorization: Bearer <token>`, verifies via [17], attaches `req.user` or returns 401; used on protected routes [20][27].
 
-[20] **AE: JwtStrategy** - Thin wrapper in `src/auth/jwt.ts` around `jsonwebtoken` for sign/verify with app-wide config (secret, expiry); used by [10][12][18].
+[20] **AE: DashboardRoutes** - Protected routes in `src/dashboard/routes.ts`: `/dashboard` returns user summary; all routes use [19]; queries user data via `UserRepository` [21].
 
-[21] **BUG: Incorrect 500 On Invalid Token** - Root cause: [12] threw uncaught error from `jsonwebtoken.verify`; fix: catch and map to 401; tests added in `src/auth/middleware.test.ts`; fixed in commit `abc1234` (2026-02-02) [12][20].
+[21] **AE: UserRepository** - Data access in `src/user/repository.ts`; wraps Prisma client for `User` model: `createUser`, `findByEmail`, `findById`; used by [17][20].
 
-[22] **TODO: Add Rate Limiting To Login** - Implement rate limiting middleware for `/login` to mitigate brute force; likely use `express-rate-limit`, attach before [11]; update [16] and add DR once strategy is chosen.
+[22] **WF: User Signup Flow** - Client POSTs `/signup` → [18] validates body → [17] hashes password with bcrypt [26], creates user via [21], issues JWT [27] → response returns token + basic profile.
+
+[23] **WF: User Login Flow** - Client POSTs `/login` → [18] validates → [17] verifies password, issues JWT [27] → response returns token; on next requests, client sends `Authorization` header for [19].
+
+[24] **WF: View Dashboard** - Client GETs `/dashboard` with JWT → [19] verifies and populates `req.user` → [20] loads user data via [21] → returns dashboard JSON.
+
+[25] **DR: Use JWT For Session Auth** - Chosen over server-side sessions to support stateless scale-out and easier integration with separate frontend; trade-offs: token revocation is harder, tokens must be short-lived [17][19][22][23].
+
+[26] **DR: Store Passwords With Bcrypt** - Use bcrypt via `bcryptjs` with cost factor 12 for password hashing; chosen for library maturity and ecosystem support; alternatives (Argon2, scrypt) deferred for now [17][28].
+
+[27] **AE: JwtStrategy** - Thin wrapper in `src/auth/jwt.ts` around `jsonwebtoken` for sign/verify with app-wide config (secret, expiry); used by [17][19][25].
+
+[28] **BUG: Incorrect 500 On Invalid Token** - Root cause: [19] threw uncaught error from `jsonwebtoken.verify`; fix: catch and map to 401; tests added in `src/auth/middleware.test.ts`; fixed in commit `abc1234` (2026-02-02) [19][27].
+
+[29] **TODO: Add Rate Limiting To Login** - Implement rate limiting middleware for `/login` to mitigate brute force; likely use `express-rate-limit`, attach before [18]; update [23] and add DR once strategy is chosen.
 ```
