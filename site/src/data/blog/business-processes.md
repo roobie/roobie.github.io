@@ -1,7 +1,7 @@
 ---
 author: Björn Roberg, GPT-5.1
 pubDatetime: 2026-01-21T19:00:00Z
-modDatetime: 2026-01-21T19:00:00Z
+modDatetime: 2026-02-07T22:45:00Z
 title: Notes on agentic applications in business processes
 slug: notes-on-agentic-applications-in-business-processes
 featured: true
@@ -10,7 +10,7 @@ tags:
   - discussion
   - braindump
   - agents
-description: This post explores how to pair agentic workflows with durable workflow engines, add structure using finite state machines and simple Markov policies, plug in MCP servers for tools, and grow from a small pilot into stable, production-ready workflows.
+description: This post explores how to pair agentic workflows with durable workflow engines (specifically Temporal), add structure using finite state machines, plug in MCP servers for tools, and grow from a small pilot into stable, production-ready workflows.
 ---
 
 Position: **durable workflows** pair naturally with **agentic workflows**.
@@ -26,14 +26,14 @@ Put together, you get:
 This post walks through:
 - Where this combination is strong.
 - How to add structure to agentic systems with **finite state machines (FSMs)**.
-- How **Markov-style (probabilistic) policies** might improve agentic systems.
+- How to implement this in **Temporal**, the leading durable workflow engine.
 - Practical next steps for pushing these ideas further.
 
 ---
 
 ## Where Durable + Agentic Workflows Shine
 
-These are business areas where “smart but fragile” agents become “smart and production-safe” once wrapped in durable orchestration.
+These are business areas where "smart but fragile" agents become "smart and production-safe" once wrapped in durable orchestration.
 
 ### High-Fit Business Areas
 
@@ -56,19 +56,19 @@ Pattern: anywhere you have **multi-step, cross-system processes with human nuanc
 
 ## FSMs: Putting Guardrails Around Agents
 
-A core challenge with agents is that they’re “too free-form.” FSMs are a simple, powerful way to **constrain behavior without killing flexibility**.
+A core challenge with agents is that they're "too free-form." FSMs are a simple, powerful way to **constrain behavior without killing flexibility**.
 
 ### Basic Idea
 
-- **States** = stable “modes” of the interaction.
+- **States** = stable "modes" of the interaction.
   Example states: `CollectRequirements`, `Disambiguate`, `Plan`, `ExecuteTools`, `Summarize`, `Escalate`.
 - **Transitions** = allowed moves between states, guarded by conditions.
-- **Agent role** = act *within* a state; the FSM controls *which state it’s in* and when it can move.
+- **Agent role** = act *within* a state; the FSM controls *which state it's in* and when it can move.
 
 Think of it as:
 
-- Agent = “what to say / which tool to call”.
-- FSM = “when are we done collecting info vs. executing vs. summarizing”.
+- Agent = "what to say / which tool to call".
+- FSM = "when are we done collecting info vs. executing vs. summarizing".
 
 ### Toy FSM for an Agentic Workflow
 
@@ -113,7 +113,7 @@ function transition(state: State, ctx: Context): State {
 }
 ```
 
-The LLM’s job is to update `Context` (e.g., set `readyToExecute`, fill `plan`, mark `done`). The FSM decides what’s allowed next.
+The LLM's job is to update `Context` (e.g., set `readyToExecute`, fill `plan`, mark `done`). The FSM decides what's allowed next.
 
 ---
 
@@ -123,7 +123,7 @@ MCP servers provide **tooling backends** (APIs, DB access, services). An FSM can
 
 - Restrict **which MCP tools** can be used in which states.
 - Enforce **required fields** before moving to execution.
-- Make “meta-decisions” about when to escalate vs. keep trying tools.
+- Make "meta-decisions" about when to escalate vs. keep trying tools.
 
 Example:
 
@@ -132,102 +132,305 @@ Example:
 | CollectRequirements | None (chat only)                                         | Mandatory fields present (`email`, `accountId`, `goal`)       |
 | Plan                | Read-only MCP tools (search, knowledge base, schemas)    | Plan text + a list of tool calls with arguments               |
 | ExecuteTools        | Full MCP access for this domain                          | Either `done=true` or `maxSteps` reached                      |
-| Summarize           | Read-only history + notification tools                   | At least one tool run, or explicit “no-op” explanation        |
+| Summarize           | Read-only history + notification tools                   | At least one tool run, or explicit "no-op" explanation        |
 | Escalate            | Ticketing / human handoff tools                          | Escalation reason + relevant context bundle                   |
 
 This yields a **more enforceable contract** between your agent and your infrastructure.
 
 ---
 
-## Markov Chains: Probabilistic Control over Agent Strategies
+## Implementing This in Production Workflows
 
-FSMs are deterministic; sometimes you want **probabilistic “what tends to work next?”** behavior. That’s where a Markov-style model fits: treat **“what the agent tries next”** as a stochastic policy.
+The architecture above is engine-agnostic, but real implementations vary. Here's how the pieces map onto **Temporal**, the most popular durable workflow engine for agentic systems.
 
-### Framing
+### Temporal Fundamentals
 
-- **State** = coarse context features + last action/result
-  Example:
-  ```text
-  (hasUserAnswered, lastToolFamily, errorClass, stepIndex)
-  ```
-- **Action** = high-level strategy, not token-level output
-  Examples: `ask_followup`, `retry_last_tool`, `switch_tool_family`, `escalate`, `short_circuit_success`.
-- **Transition probabilities** = “from this state, which action usually works best?”
+Temporal provides:
+- **Workflows**: Long-lived, deterministic orchestration logic (survives failures, retries)
+- **Activities**: Individual tasks that can fail, retry, timeout independently
+- **Signals**: External inputs to running workflows (user messages, escalations, etc.)
+- **Durability**: Complete execution history, automatic state recovery
 
-This is a small Markov Decision Process (MDP) over **agent strategies**.
+### Mapping the Architecture to Temporal
 
-### Simple Markov Policy Table
+**Workflow = FSM + Orchestration**
 
-Imagine we’re handling tool errors:
+Your FSM transitions and context live inside a Temporal Workflow. The workflow handles durability; the FSM handles *where the agent should be* at each step.
 
-| State (simplified)                   | Next Action          | Probability |
-|--------------------------------------|----------------------|-------------|
-| `(errorClass=timeout, retries=0)`    | `retry_last_tool`    | 0.7         |
-|                                      | `switch_tool_family` | 0.2         |
-|                                      | `escalate`           | 0.1         |
-| `(errorClass=timeout, retries>=2)`   | `switch_tool_family` | 0.6         |
-|                                      | `escalate`           | 0.4         |
-| `(errorClass=validation, retries=0)` | `ask_followup`       | 0.8         |
-|                                      | `escalate`           | 0.2         |
+```typescript
+// Your agentic workflow in Temporal
+async function agenticWorkflow(input: WorkflowInput): Promise<WorkflowResult> {
+  // Initialize FSM state and context
+  let state: WorkflowState = "CollectRequirements";
+  let context: Context = {
+    userInputs: [],
+    plan: null,
+    toolsRun: 0,
+    errors: [],
+    readyToExecute: false,
+    done: false,
+  };
 
-You can learn or hand-tune these numbers based on what historically works.
+  // Main loop: keep going until done
+  while (!context.done && state !== "Escalate" && state !== "Summarize") {
+    // FSM transition
+    const nextState = transition(state, context);
 
-### Pseudocode for a Markov Policy Wrapper
-
-```ts
-type HighLevelAction =
-  | "ask_followup"
-  | "retry_last_tool"
-  | "switch_tool_family"
-  | "escalate"
-  | "short_circuit_success";
-
-interface MarkovState {
-  errorClass: "none" | "timeout" | "validation" | "unknown";
-  retries: number;
-  stepIndex: number;
-}
-
-function sampleNextAction(s: MarkovState): HighLevelAction {
-  if (s.errorClass === "timeout" && s.retries === 0) {
-    return weightedSample({
-      retry_last_tool: 0.7,
-      switch_tool_family: 0.2,
-      escalate: 0.1,
+    // Call agent as an activity (this is where LLM invocation happens)
+    const agentResult = await activities.invokeAgent({
+      state: nextState,
+      context,
+      allowedTools: toolsForState(nextState),
+      systemPrompt: promptForState(nextState),
     });
+
+    // Validate tool calls against allowed tools for this state
+    for (const toolCall of agentResult.toolCalls || []) {
+      const allowed = toolsForState(nextState);
+      if (!allowed.includes(toolCall.name)) {
+        // Constraint violation: log and escalate if repeated
+        context.errors.push(
+          `Tool ${toolCall.name} not allowed in state ${nextState}`
+        );
+        if (context.errors.length > 2) {
+          state = "Escalate";
+          break;
+        }
+        continue;
+      }
+    }
+
+    // Run tools (as activity, so failures are retried)
+    if (agentResult.toolCalls && agentResult.toolCalls.length > 0) {
+      try {
+        const toolResults = await activities.runTools({
+          toolCalls: agentResult.toolCalls,
+          mimeType: "application/json",
+        });
+
+        context.toolsRun += toolResults.length;
+        context.errors = [];  // Reset errors on success
+      } catch (error) {
+        context.errors.push(error.message);
+        // Decision: retry in same state, or escalate?
+        if (context.errors.length > 2) {
+          state = "Escalate";
+          break;
+        }
+      }
+    }
+
+    // Update context from agent result
+    context = {
+      ...context,
+      userInputs: [...context.userInputs, agentResult.reasoning],
+      plan: agentResult.plan || context.plan,
+      readyToExecute: agentResult.readyToExecute ?? context.readyToExecute,
+      done: agentResult.done ?? context.done,
+    };
+
+    // Transition to next state
+    state = nextState;
+
+    // Guard: prevent infinite loops
+    if (context.toolsRun > 50) {
+      state = "Escalate";
+    }
   }
 
-  if (s.errorClass === "timeout" && s.retries >= 2) {
-    return weightedSample({
-      switch_tool_family: 0.6,
-      escalate: 0.4,
+  // Final step based on terminal state
+  if (state === "Summarize") {
+    const summary = await activities.invokeAgent({
+      state: "Summarize",
+      context,
+      allowedTools: ["notificationTools"],
+      systemPrompt: promptForState("Summarize"),
     });
+    return { status: "completed", context, summary };
+  } else if (state === "Escalate") {
+    const escalation = await activities.escalate({
+      context,
+      reason: context.errors.at(-1) || "max steps reached",
+    });
+    return { status: "escalated", context, escalationId: escalation.id };
   }
 
-  // …other cases…
-
-  return "escalate";
+  return { status: "unknown", context };
 }
 ```
 
-The LLM still decides content and tool arguments; the Markov layer decides **which high-level move** to try next.
+**Activities = Tool Execution + Retries**
+
+Each external action is an activity. Temporal automatically retries on failure:
+
+```typescript
+// Activity: invoke the LLM
+const invokeAgent = async (input: {
+  state: WorkflowState;
+  context: Context;
+  allowedTools: string[];
+  systemPrompt: string;
+}): Promise<AgentResult> => {
+  const client = new Anthropic();
+
+  // Build tool descriptions from allowed list
+  const toolDefs = buildToolDefinitions(input.allowedTools);
+
+  const response = await client.messages.create({
+    model: "claude-3-5-sonnet-20241022",
+    max_tokens: 2000,
+    system: input.systemPrompt,
+    tools: toolDefs,
+    messages: [
+      {
+        role: "user",
+        content: formatContextForAgent(input.state, input.context),
+      },
+    ],
+  });
+
+  return parseAgentResponse(response);
+};
+
+// Activity: run tool calls (with retries per tool)
+const runTools = async (input: {
+  toolCalls: ToolCall[];
+  mimeType: string;
+}): Promise<ToolResult[]> => {
+  const results: ToolResult[] = [];
+
+  for (const call of input.toolCalls) {
+    // Each tool call gets its own retry policy in Temporal UI
+    const result = await executeTool(call.name, call.input);
+    results.push({
+      toolName: call.name,
+      success: !result.error,
+      output: result.error ? null : result.output,
+      error: result.error?.message || null,
+      duration: result.duration,
+    });
+  }
+
+  return results;
+};
+
+// Activity: escalate to human
+const escalate = async (input: {
+  context: Context;
+  reason: string;
+}): Promise<{ id: string }> => {
+  const ticket = await createTicket({
+    type: "agentic_escalation",
+    reason: input.reason,
+    contextSnapshot: input.context,
+    timestamp: new Date(),
+  });
+
+  // Optionally notify a human
+  await notifyEscalation(ticket.id);
+
+  return { id: ticket.id };
+};
+```
+
+### Observability & Debugging with Temporal
+
+Temporal's built-in observability is excellent:
+
+1. **Workflow History**: Every state transition, activity call, and result is logged
+   - View in Temporal UI: state machine flows, inputs, outputs
+   - Query: "show me all workflows that hit Escalate in CollectRequirements"
+
+2. **Activity Retries**: Temporal tracks each retry
+   - See which activities fail repeatedly
+   - Tune retry policies per activity/state
+
+3. **Metrics**: Native support for Prometheus, Datadog, etc.
+   - Workflow duration per state
+   - Tool success rates
+   - Error rates by type
+
+4. **Debugging**: Replay failed workflows
+   - Re-run from any point without side effects
+   - Test fixes before pushing to production
+
+### Example Temporal Configuration
+
+```typescript
+// Register workflow and activities
+const client = new WorkflowClient();
+const worker = await Worker.create({
+  workflowsPath: require.resolve("./workflows"),
+  activitiesPath: require.resolve("./activities"),
+  connection,
+  taskQueue: "agentic-workflows",
+});
+
+await worker.run();
+
+// Start a workflow instance
+async function startAgenticWorkflow(userId: string, goal: string) {
+  const result = await client.workflow.execute(agenticWorkflow, {
+    args: [{ userId, goal }],
+    taskQueue: "agentic-workflows",
+    workflowId: `agentic-${userId}-${Date.now()}`,
+    // Retry policy: if entire workflow fails, retry for 24 hours
+    retry: {
+      initialInterval: "1m",
+      maximumInterval: "10m",
+      maximumAttempts: 100,  // 24h worth of retries
+    },
+  });
+
+  return result;
+}
+
+// Query a running workflow
+async function getWorkflowStatus(workflowId: string) {
+  const workflow = client.getWorkflowHandle(workflowId);
+  const state = await workflow.query(getState);  // Custom query
+  return state;  // { state: "ExecuteTools", context: {...} }
+}
+
+// Send a signal (e.g., user message)
+async function sendUserMessage(workflowId: string, message: string) {
+  const workflow = client.getWorkflowHandle(workflowId);
+  await workflow.signal(handleUserInput, { message });
+}
+```
+
+### When Temporal Shines
+
+✓ **Multi-step orchestration** across days/weeks (onboarding, claims, KYC)
+✓ **Guaranteed durability** (crash-safe, audit trail)
+✓ **Observability** (UI shows FSM state, tool calls, retries)
+✓ **Coordination** (signals, timeouts, escalations built-in)
+✓ **At-scale** (1000s of concurrent workflows)
+
+✗ **Low-latency** (workflow min ~100ms per step)
+✗ **Simple synchronous** calls (overkill for single-step tasks)
+
+### Alternative: Step Functions (AWS) or DIY
+
+If you're AWS-first, Step Functions gives you similar FSM + durability but with a visual JSON definition. If you want total control, a simple queue + worker pattern with persistent state works too, though you'll re-implement retry logic.
+
+For most LLM-powered workflows at scale, **Temporal is the sweet spot**: battle-tested, observable, and specifically designed for exactly this pattern.
 
 ---
 
 ## Combining It All with Durable Workflows
 
-Durable workflows give you **reliability over time**; FSMs/Markov give you **command and control**; agents/MCP give you **semantics and capabilities**.
+Durable workflows give you **reliability over time**; FSMs give you **command and control**; agents/MCP give you **semantics and capabilities**.
 
 ### Execution Loop Sketch
 
 1. **Load workflow instance**
-   - Current FSM/Markov state
+   - Current FSM state
    - Context (user inputs, history, plan, tool results)
 
-2. **Decide control step**
-   - Use FSM or Markov policy to pick:
-     - Next state (if FSM), and/or
-     - Next high-level action (strategy).
+2. **Decide next state**
+   - Use FSM transition rules to pick:
+     - Next state (and allowed tools for that state)
 
 3. **Invoke agent + MCP tools**
    - Call the LLM with:
@@ -237,27 +440,21 @@ Durable workflows give you **reliability over time**; FSMs/Markov give you **com
 
 4. **Update state & persist**
    - Update context from LLM + tool results (e.g., `readyToExecute`, `done`, `errors[]`).
-   - Compute next FSM/Markov state.
-   - Persist again; schedule next “tick” or finish.
+   - Compute next FSM state.
+   - Persist again; schedule next "tick" or finish.
 
 5. **Repeat until terminal state** (`Summarize` or `Escalate`).
 
-Pseudo-workflow tick:
+Pseudo-workflow tick (durable workflow engine handles retries, timeouts, recovery):
 
 ```ts
 async function workflowTick(instanceId: string) {
   const { state, context } = await loadInstance(instanceId);
 
   const nextState = transition(state, context);           // FSM step
-  const highLevelAction = sampleNextAction({
-    errorClass: context.errors.at(-1)?.class ?? "none",   // Markov step
-    retries: context.retries,
-    stepIndex: context.stepIndex,
-  });
 
   const llmResult = await callAgent({
     state: nextState,
-    action: highLevelAction,
     context,
     allowedTools: toolsForState(nextState),
   });
@@ -296,23 +493,23 @@ Examples:
 
 Implement:
 
-- 4–6 FSM states only.
-- A minimal Markov policy for error handling.
+- 4-6 FSM states only.
 - One MCP server with a small tool surface (read + write endpoints).
+- Deploy on Temporal (local development, then Temporal Cloud).
 
 ### 2. Make States and Actions Observable
 
 Log:
 
-- Current FSM state and chosen high-level action.
+- Current FSM state and inputs to the agent.
 - All MCP tool calls (inputs, outputs, duration).
 - Transitions that lead to escalations or failures.
 
 This makes it easy to:
 
 - Tune FSM transition rules (e.g., add guards when things go wrong).
-- Adjust Markov probabilities based on observed success rates.
-- Explain behavior to stakeholders.
+- Spot error patterns and refine state logic.
+- Explain behavior to stakeholders (Temporal UI does this visually).
 
 ### 3. Explicitly Define Contracts per State
 
@@ -320,12 +517,12 @@ For each state, write down:
 
 - **Goals:** What must be true when leaving this state?
 - **Allowed tools:** Which MCP tools can be called from here?
-- **Forbidden behaviors:** What the agent must not do (e.g., “do not send external emails yet”).
+- **Forbidden behaviors:** What the agent must not do (e.g., "do not send external emails yet").
 
 This can live as:
 
 - A configuration file, and
-- A snippet embedded into the agent’s system prompt for that state.
+- A snippet embedded into the agent's system prompt for that state.
 
 ### 4. Close the Loop with Metrics
 
@@ -333,13 +530,13 @@ Track at least:
 
 - **Completion rate**: How often the workflow finishes without escalation.
 - **Mean steps per workflow**: Too many → your FSM is under-constrained or your prompts are unclear.
-- **Error / escalation classes**: Group by state and action to see where to add guards or new actions.
+- **Error / escalation classes**: Group by state and action to see where to add guards or new states.
 
 Then:
 
 - Refine FSM transitions where failures cluster.
-- Update Markov action probabilities to favor what works.
-- Add new high-level actions when you see recurring patterns (e.g., a new kind of fallback).
+- Improve prompts and tool design based on observed errors.
+- Add new states when you see recurring patterns requiring new decision points.
 
 ### 5. Gradually Increase Autonomy and Scope
 
@@ -351,6 +548,6 @@ Once the initial flow is stable:
 
 Always keep:
 
-- **Durable workflow** as your backbone (so long processes never “evaporate”).
-- **FSM/Markov** as explicit control logic you can inspect and tune.
+- **Durable workflow (Temporal)** as your backbone (so long processes never "evaporate").
+- **FSM** as explicit control logic you can inspect and tune.
 - **Agents and MCP** as the flexible, semantic layer operating inside those constraints.
