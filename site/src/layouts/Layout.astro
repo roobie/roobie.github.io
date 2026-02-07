@@ -4,6 +4,7 @@ import { ClientRouter } from "astro:transitions";
 import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import { SITE } from "@/config";
 import "@/styles/global.css";
+import { SimpleAnalytics } from 'astro-simpleanalytics-plugin';
 
 type Props = {
   title?: string;
@@ -166,6 +167,8 @@ const structuredData = {
         };
       })();
     </script>
+
+    <SimpleAnalytics />
   </head>
   <body>
     <slot />
