@@ -2,15 +2,15 @@
 author: Björn Roberg, Claude
 pubDatetime: 2026-02-09T00:45:00Z
 modDatetime: 2026-02-09T00:45:00Z
-title: Linear Types for Agent Safety: A New Approach to Trustworthy AI Systems
-slug: linera-agentics
+title: Linear Types for Agent Safety: An Approach to Trustworthy AI Systems
+slug: linear-agentics
 featured: true
 draft: false
 tags:
   - agents
   - type-system
   - hypothesis
-description: What if we could make these failures impossible—not through runtime monitoring that can be bypassed, but through a type system that rejects unsafe code before it ever runs?
+description: Discussing a type system that rejects unsafe code before it ever runs.
 ---
 
 **The fundamental problem with AI agents today is that we can't prove they're safe—we can only test them and hope.** An agent might work perfectly in development, pass all your tests, and then leak credentials in production because it reused an API key in an unexpected way. Or it might exhaust your cloud budget because nothing prevented it from spawning unlimited API calls.
