@@ -80,7 +80,7 @@ description: MarkyMarkov - a PoC leveraging Markov chains for coding - shows tha
 
 ### 1. Introduction
 
-**What is Marky?**
+**What is Markymarkov?**
 
 Markymarkov is a Markov Chain-based code guidance system designed to help LLM agents generate better code. Unlike traditional linters or type checkers that enforce fixed rules, Markymarkov learns patterns directly from your codebase and uses those patterns to validate and guide code generation in real-time.
 
