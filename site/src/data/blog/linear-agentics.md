@@ -2,7 +2,7 @@
 author: Björn Roberg, Claude
 pubDatetime: 2026-02-09T00:45:00Z
 modDatetime: 2026-02-09T00:45:00Z
-title: Linear Types for Agent Safety: An Approach to Trustworthy AI Systems
+title: Linear Types for Agent Safety - An Approach to Trustworthy AI Systems
 slug: linear-agentics
 featured: true
 draft: false
