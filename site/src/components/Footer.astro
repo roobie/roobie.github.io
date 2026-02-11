@@ -1,4 +1,5 @@
 ---
+import UsageNotice from "@/components/UsageNotice.astro";
 import type { HTMLAttributes } from "astro/types";
 import Socials from "./Socials.astro";
 
@@ -28,5 +29,8 @@ const { noMarginTop = false, class: className, ...attrs } = Astro.props;
       <span class="hidden sm:inline">&nbsp;|&nbsp;</span>
       <span>All rights reserved.</span>
     </div>
+  </div>
+  <div>
+    <UsageNotice/>
   </div>
 </footer>

@@ -25,7 +25,7 @@ function getPreferTheme(): string {
 let themeValue = window.theme?.themeValue ?? getPreferTheme();
 
 function setPreference(): void {
-  localStorage.setItem(THEME, themeValue);
+  // localStorage.setItem(THEME, themeValue);
   reflectPreference();
 }
 

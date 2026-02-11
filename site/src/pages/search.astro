@@ -52,7 +52,7 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
           history.replaceState(history.state, "", "?" + params.toString()); // Push the new URL without reloading
 
           const backUrl = pageFindSearch?.dataset?.backurl;
-          sessionStorage.setItem("backUrl", backUrl + "?" + params.toString());
+          // sessionStorage.setItem("backUrl", backUrl + "?" + params.toString());
 
           return term;
         },
