@@ -1,3 +1,18 @@
+---
+author: Björn Roberg, Claude
+pubDatetime: 2026-02-11T04:00:00Z
+modDatetime: 2026-02-11T04:00:00Z
+title: Currying agents
+slug: currying-agents
+featured: true
+draft: false
+tags:
+  - tool
+  - computing
+  - agents
+description: How one can leverage partial application of agents - borrowing from the functional programming paradigm.
+---
+
 **Currying in LLM agents means breaking down a complex agent task into a chain of smaller, specialized functions where each step takes some inputs and returns a new function waiting for the next piece of information.**
 
 ---
