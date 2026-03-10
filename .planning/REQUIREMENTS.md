@@ -54,21 +54,21 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SCAF-01 | — | Pending |
-| SCAF-02 | — | Pending |
-| SCAF-03 | — | Pending |
-| VOIC-01 | — | Pending |
-| VOIC-02 | — | Pending |
-| PUBL-01 | — | Pending |
-| PUBL-02 | — | Pending |
-| MGMT-01 | — | Pending |
-| MGMT-02 | — | Pending |
+| SCAF-01 | Phase 2 | Pending |
+| SCAF-02 | Phase 2 | Pending |
+| SCAF-03 | Phase 3 | Pending |
+| VOIC-01 | Phase 2 | Pending |
+| VOIC-02 | Phase 1 | Pending |
+| PUBL-01 | Phase 2 | Pending |
+| PUBL-02 | Phase 3 | Pending |
+| MGMT-01 | Phase 1 | Pending |
+| MGMT-02 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 9 total
-- Mapped to phases: 0
-- Unmapped: 9
+- Mapped to phases: 9
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-10*
-*Last updated: 2026-03-10 after initial definition*
+*Last updated: 2026-03-10 after roadmap creation — all 9 v1 requirements mapped*
