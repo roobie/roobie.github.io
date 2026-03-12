@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-03-10)
 Phase: 1 of 3 (Workflow Foundation)
 Plan: 0 of ? in current phase
 Status: Ready to plan
-Last activity: 2026-03-12 — Quick task 1 completed (new blog post)
+Last activity: 2026-03-12 - Completed quick task 1: new blogpost
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -52,6 +52,12 @@ None yet.
 ### Blockers/Concerns
 
 None yet.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | new blogpost | 2026-03-12 | 335f181 | [1-new-blogpost](./quick/1-new-blogpost/) |
 
 ## Session Continuity
 
