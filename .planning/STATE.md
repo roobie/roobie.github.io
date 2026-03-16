@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 04-apply-edits-as-per-the-frontend-designer-s-suggestions/04-01-PLAN.md
-last_updated: "2026-03-16T15:31:21.603Z"
+stopped_at: Completed 04-02-PLAN.md
+last_updated: "2026-03-16T15:31:42.699Z"
 last_activity: "2026-03-12 - Completed quick task 1: new blogpost"
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
   percent: 33
 ---
 
@@ -51,6 +51,7 @@ Progress: [███░░░░░░░] 33%
 
 *Updated after each plan completion*
 | Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions P01 | 4 | 2 tasks | 6 files |
+| Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions P02 | 8 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,8 @@ Recent decisions affecting current work:
 - [Init]: Content-only project scope — blog infrastructure works, focus on writing
 - [Init]: AI as co-author, not ghostwriter — credited in author frontmatter field
 - [Phase 04]: Dual font token system: --font-app (monospace) for UI chrome, --font-body (serif) for .app-prose blog prose content
+- [Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions]: Removed README link from hero entirely rather than relocating it
+- [Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions]: Tag pills limited to 3 per card to keep list density reasonable
 
 ### Pending Todos
 
@@ -83,6 +86,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T15:31:21.602Z
-Stopped at: Completed 04-apply-edits-as-per-the-frontend-designer-s-suggestions/04-01-PLAN.md
+Last session: 2026-03-16T15:31:42.698Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None
