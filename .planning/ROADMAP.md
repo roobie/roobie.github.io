@@ -64,7 +64,7 @@ Phases execute in numeric order: 1 → 2 → 3
 **Goal:** Apply low-tech, content-focused UI/UX improvements from frontend design review -- typography, hero, card hierarchy, dark mode contrast, footer license, about bio, date format, and pagination
 **Requirements**: Ad-hoc (design review)
 **Depends on:** None (independent of content workflow phases)
-**Plans:** 3 plans
+**Plans:** 2/3 plans executed
 
 Plans:
 - [ ] 04-01-PLAN.md — Font system, dark mode border fix, date format, pagination config
