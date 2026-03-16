@@ -70,3 +70,13 @@ Plans:
 - [ ] 04-01-PLAN.md — Font system, dark mode border fix, date format, pagination config
 - [ ] 04-02-PLAN.md — Hero rewrite, card tag pills, footer license, about page bio
 - [ ] 04-03-PLAN.md — Visual verification checkpoint
+
+### Phase 5: Apply edits as per the AI SEO suggestions
+
+**Goal:** Fix structured data and Open Graph meta tags so BlogPosting JSON-LD only emits on post pages, og:type is present on all pages, and article-level OG tags improve AI discoverability
+**Requirements**: Ad-hoc (AI SEO audit)
+**Depends on:** Phase 4
+**Plans:** 1 plan
+
+Plans:
+- [ ] 05-01-PLAN.md — Conditional structured data, og:type, article:author/tag, tags prop threading
