@@ -4,7 +4,7 @@ pubDatetime: 2026-02-11T04:00:00Z
 modDatetime: 2026-02-11T04:00:00Z
 title: Currying agents
 slug: currying-agents
-featured: true
+featured: false
 draft: false
 tags:
   - tool

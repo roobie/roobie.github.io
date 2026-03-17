@@ -10,7 +10,7 @@ type Props = {
 
 const { variant: Heading = "h2", id, data, filePath } = Astro.props;
 
-const { title, description, ...props } = data;
+const { title, description, tags, ...props } = data;
 ---
 
 <li class="my-6">
@@ -29,5 +29,19 @@ const { title, description, ...props } = data;
     </Heading>
   </a>
   <Datetime {...props} />
-  <p>{description}</p>
+  <p class="text-sm opacity-70">{description}</p>
+  {tags && tags.length > 0 && (
+    <ul class="mt-1 flex flex-wrap gap-1">
+      {tags.slice(0, 3).map(tag => (
+        <li>
+          <a
+            href={`/tags/${slugifyStr(tag)}/`}
+            class="inline-block rounded border border-border px-1.5 py-0.5 text-xs text-foreground/70 hover:border-accent hover:text-accent"
+          >
+            {tag}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
 </li>

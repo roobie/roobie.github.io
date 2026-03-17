@@ -3,8 +3,13 @@ layout: ../layouts/AboutLayout.astro
 title: "About"
 ---
 
-Content in this blog is licensed by [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) unless otherwise indicated.
+I'm Björn Roberg, a software developer based in Sweden. I spend my days building
+systems that have to work reliably, and my spare time wondering why they don't.
+I write here to slow down my thinking — to examine ideas about technology,
+epistemology, and how we reason about complex things. If any of it is useful to
+you, great; if it starts a conversation, even better.
 
-This blog is powered by [AstroPaper](https://github.com/satnaing/astro-paper)
+Content in this blog is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+unless otherwise indicated.
 
-AstroPaper is a minimal, accessible and SEO-friendly blog theme built with [Astro](https://astro.build/) and [Tailwind CSS](https://tailwindcss.com/).
+This blog is powered by [AstroPaper](https://github.com/satnaing/astro-paper).

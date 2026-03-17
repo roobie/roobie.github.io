@@ -4,7 +4,7 @@ pubDatetime: 2026-01-21T19:00:00Z
 modDatetime: 2026-02-07T22:45:00Z
 title: Notes on agentic applications in business processes
 slug: notes-on-agentic-applications-in-business-processes
-featured: true
+featured: false
 draft: false
 tags:
   - discussion

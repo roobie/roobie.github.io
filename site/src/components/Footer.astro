@@ -27,7 +27,17 @@ const { noMarginTop = false, class: className, ...attrs } = Astro.props;
     <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row">
       <span>Copyright &#169; {currentYear}</span>
       <span class="hidden sm:inline">&nbsp;|&nbsp;</span>
-      <span>All rights reserved.</span>
+      <span>
+        Content licensed under{" "}
+        <a
+          href="https://creativecommons.org/licenses/by/4.0/"
+          class="underline decoration-dashed underline-offset-4 hover:text-accent"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          CC BY 4.0
+        </a>
+      </span>
     </div>
   </div>
   <div>

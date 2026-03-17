@@ -1,3 +1,19 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: planning
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-03-16T17:02:39.729Z"
+last_activity: "2026-03-12 - Completed quick task 1: new blogpost"
+progress:
+  total_phases: 5
+  completed_phases: 2
+  total_plans: 4
+  completed_plans: 4
+  percent: 33
+---
+
 # Project State
 
 ## Project Reference
@@ -14,7 +30,7 @@ Plan: 0 of ? in current phase
 Status: Ready to plan
 Last activity: 2026-03-12 - Completed quick task 1: new blogpost
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [███░░░░░░░] 33%
 
 ## Performance Metrics
 
@@ -34,6 +50,10 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions P01 | 4 | 2 tasks | 6 files |
+| Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions P02 | 8 | 2 tasks | 4 files |
+| Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions P03 | 5 | 2 tasks | 0 files |
+| Phase 05-apply-edits-as-per-the-ai-seo-suggestions P01 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -44,10 +64,21 @@ Recent decisions affecting current work:
 
 - [Init]: Content-only project scope — blog infrastructure works, focus on writing
 - [Init]: AI as co-author, not ghostwriter — credited in author frontmatter field
+- [Phase 04]: Dual font token system: --font-app (monospace) for UI chrome, --font-body (serif) for .app-prose blog prose content
+- [Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions]: Removed README link from hero entirely rather than relocating it
+- [Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions]: Tag pills limited to 3 per card to keep list density reasonable
+- [Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions]: All visual changes from plans 01 and 02 approved by human reviewer without regressions
+- [Phase 05-apply-edits-as-per-the-ai-seo-suggestions]: Use pubDatetime as the single discriminator for post vs. non-post page logic in Layout.astro
+- [Phase 05-apply-edits-as-per-the-ai-seo-suggestions]: og:type set to article when pubDatetime is truthy, website otherwise — covers all page types without a new prop
 
 ### Pending Todos
 
 None yet.
+
+### Roadmap Evolution
+
+- Phase 4 added: Apply edits as per the frontend-designer's suggestions
+- Phase 5 added: Apply edits as per the AI SEO suggestions
 
 ### Blockers/Concerns
 
@@ -61,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12
-Stopped at: Completed quick-1 (new blog post)
+Last session: 2026-03-16T17:00:11.925Z
+Stopped at: Completed 05-01-PLAN.md
 Resume file: None

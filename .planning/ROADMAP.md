@@ -58,3 +58,25 @@ Phases execute in numeric order: 1 → 2 → 3
 | 1. Workflow Foundation | 0/? | Not started | - |
 | 2. Core Content Workflow | 0/? | Not started | - |
 | 3. Workflow Enhancement | 0/? | Not started | - |
+
+### Phase 4: Apply edits as per the frontend-designer's suggestions
+
+**Goal:** Apply low-tech, content-focused UI/UX improvements from frontend design review -- typography, hero, card hierarchy, dark mode contrast, footer license, about bio, date format, and pagination
+**Requirements**: Ad-hoc (design review)
+**Depends on:** None (independent of content workflow phases)
+**Plans:** 2/3 plans executed
+
+Plans:
+- [ ] 04-01-PLAN.md — Font system, dark mode border fix, date format, pagination config
+- [ ] 04-02-PLAN.md — Hero rewrite, card tag pills, footer license, about page bio
+- [ ] 04-03-PLAN.md — Visual verification checkpoint
+
+### Phase 5: Apply edits as per the AI SEO suggestions
+
+**Goal:** Fix structured data and Open Graph meta tags so BlogPosting JSON-LD only emits on post pages, og:type is present on all pages, and article-level OG tags improve AI discoverability
+**Requirements**: Ad-hoc (AI SEO audit)
+**Depends on:** Phase 4
+**Plans:** 1 plan
+
+Plans:
+- [ ] 05-01-PLAN.md — Conditional structured data, og:type, article:author/tag, tags prop threading

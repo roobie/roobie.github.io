@@ -17,11 +17,12 @@ html[data-theme="dark"] {
   --foreground: #eaedf3;
   --accent: #ff6b01;
   --muted: #343f60;
-  --border: #ab4b08;
+  --border: #c05a10;
 }
 
 @theme inline {
   --font-app: var(--font-google-sans-code);
+  --font-body: var(--font-source-serif-4);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
