@@ -11,9 +11,12 @@ import {
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { SITE } from "./src/config";
 
+import cloudflare from "@astrojs/cloudflare";
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
+  adapter: cloudflare({ prerenderEnvironment: "node" }),
   integrations: [
     sitemap({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
@@ -39,7 +42,22 @@ export default defineConfig({
     // @ts-ignore
     // This will be fixed in Astro 6 with Vite 7 support
     // See: https://github.com/withastro/astro/issues/14030
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      {
+        // Externalize @resvg/resvg-js native binary from the server bundle.
+        // OG images are prerendered at build time so resvg runs via Node,
+        // not inside the Workers runtime. The Cloudflare adapter forces
+        // ssr.noExternal=true, so we use resolveId to externalize instead.
+        name: "externalize-resvg",
+        enforce: "pre",
+        resolveId(id) {
+          if (id === "@resvg/resvg-js") {
+            return { id, external: true };
+          }
+        },
+      },
+    ],
     optimizeDeps: {
       exclude: ["@resvg/resvg-js"],
     },
@@ -57,8 +75,6 @@ export default defineConfig({
       }),
     },
   },
-  experimental: {
-    preserveScriptOrder: true,
     fonts: [
       {
         name: "Google Sans Code",
@@ -77,5 +93,7 @@ export default defineConfig({
         styles: ["normal", "italic"],
       },
     ],
-  },
-});
+//   experimental: {
+//     preserveScriptOrder: true,
+//   },
+ });
