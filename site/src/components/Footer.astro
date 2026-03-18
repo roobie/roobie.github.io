@@ -6,7 +6,7 @@ import Socials from "./Socials.astro";
 const currentYear = new Date().getFullYear();
 
 type Props = {
-  noMarginTop?: boolean;
+	noMarginTop?: boolean;
 } & HTMLAttributes<"footer">;
 
 const { noMarginTop = false, class: className, ...attrs } = Astro.props;

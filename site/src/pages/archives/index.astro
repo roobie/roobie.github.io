@@ -10,24 +10,24 @@ import { SITE } from "@/config";
 
 // Redirect to 404 page if `showArchives` config is false
 if (!SITE.showArchives) {
-  return Astro.redirect("/404");
+	return Astro.redirect("/404");
 }
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 
 const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
 ];
 ---
 

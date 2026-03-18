@@ -5,7 +5,7 @@ import { getPath } from "@/utils/getPath";
 import Datetime from "./Datetime.astro";
 
 type Props = {
-  variant?: "h2" | "h3";
+	variant?: "h2" | "h3";
 } & CollectionEntry<"blog">;
 
 const { variant: Heading = "h2", id, data, filePath } = Astro.props;

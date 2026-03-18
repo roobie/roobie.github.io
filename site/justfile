@@ -5,4 +5,4 @@ default:
   just --list
 
 dev:
-  mise x node@24 -- pnpm run dev
+  mise run dev

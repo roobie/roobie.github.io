@@ -1,6 +1,9 @@
 [tools]
 node = "24"
 
+[tasks.format]
+run = "bunx @biomejs/biome format . --write"
+
 [tasks.deploy]
 dir = "site"
 run = [

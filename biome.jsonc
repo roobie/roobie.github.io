@@ -1,0 +1,10 @@
+{
+	"files": {
+		"includes": ["**", "!**/.astro/*", "!.agents/*"]
+	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
+		}
+	}
+}

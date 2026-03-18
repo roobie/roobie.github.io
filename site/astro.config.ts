@@ -4,9 +4,9 @@ import sitemap from "@astrojs/sitemap";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
 import {
-  transformerNotationDiff,
-  transformerNotationHighlight,
-  transformerNotationWordHighlight,
+	transformerNotationDiff,
+	transformerNotationHighlight,
+	transformerNotationWordHighlight,
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { SITE } from "./src/config";
@@ -15,85 +15,88 @@ import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-  site: SITE.website,
-  adapter: cloudflare({ prerenderEnvironment: "node" }),
-  integrations: [
-    sitemap({
-      filter: page => SITE.showArchives || !page.endsWith("/archives"),
-    }),
-  ],
-  markdown: {
-    remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
-    shikiConfig: {
-      // For more themes, visit https://shiki.style/themes
-      themes: { light: "min-light", dark: "night-owl" },
-      defaultColor: false,
-      wrap: false,
-      transformers: [
-        transformerFileName({ style: "v2", hideDot: false }),
-        transformerNotationHighlight(),
-        transformerNotationWordHighlight(),
-        transformerNotationDiff({ matchAlgorithm: "v3" }),
-      ],
-    },
-  },
-  vite: {
-    // eslint-disable-next-line
-    // @ts-ignore
-    // This will be fixed in Astro 6 with Vite 7 support
-    // See: https://github.com/withastro/astro/issues/14030
-    plugins: [
-      tailwindcss(),
-      {
-        // Externalize @resvg/resvg-js native binary from the server bundle.
-        // OG images are prerendered at build time so resvg runs via Node,
-        // not inside the Workers runtime. The Cloudflare adapter forces
-        // ssr.noExternal=true, so we use resolveId to externalize instead.
-        name: "externalize-resvg",
-        enforce: "pre",
-        resolveId(id) {
-          if (id === "@resvg/resvg-js") {
-            return { id, external: true };
-          }
-        },
-      },
-    ],
-    optimizeDeps: {
-      exclude: ["@resvg/resvg-js"],
-    },
-  },
-  image: {
-    responsiveStyles: true,
-    layout: "constrained",
-  },
-  env: {
-    schema: {
-      PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
-        access: "public",
-        context: "client",
-        optional: true,
-      }),
-    },
-  },
-    fonts: [
-      {
-        name: "Google Sans Code",
-        cssVariable: "--font-google-sans-code",
-        provider: fontProviders.google(),
-        fallbacks: ["monospace"],
-        weights: [300, 400, 500, 600, 700],
-        styles: ["normal", "italic"],
-      },
-      {
-        name: "Source Serif 4",
-        cssVariable: "--font-source-serif-4",
-        provider: fontProviders.google(),
-        fallbacks: ["Georgia", "serif"],
-        weights: [300, 400, 500, 600],
-        styles: ["normal", "italic"],
-      },
-    ],
-//   experimental: {
-//     preserveScriptOrder: true,
-//   },
- });
+	site: SITE.website,
+	adapter: cloudflare({ prerenderEnvironment: "node" }),
+	integrations: [
+		sitemap({
+			filter: (page) => SITE.showArchives || !page.endsWith("/archives"),
+		}),
+	],
+	markdown: {
+		remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
+		shikiConfig: {
+			// For more themes, visit https://shiki.style/themes
+			themes: { light: "min-light", dark: "night-owl" },
+			defaultColor: false,
+			wrap: false,
+			transformers: [
+				transformerFileName({ style: "v2", hideDot: false }),
+				transformerNotationHighlight(),
+				transformerNotationWordHighlight(),
+				transformerNotationDiff({ matchAlgorithm: "v3" }),
+			],
+		},
+	},
+	vite: {
+		// eslint-disable-next-line
+		// @ts-ignore
+		// This will be fixed in Astro 6 with Vite 7 support
+		// See: https://github.com/withastro/astro/issues/14030
+		plugins: [
+			tailwindcss(),
+			{
+				// Externalize @resvg/resvg-js native binary from the server bundle.
+				// OG images are prerendered at build time so resvg runs via Node,
+				// not inside the Workers runtime. The Cloudflare adapter forces
+				// ssr.noExternal=true, so we use resolveId to externalize instead.
+				name: "externalize-resvg",
+				enforce: "pre",
+				resolveId(id) {
+					if (id === "@resvg/resvg-js") {
+						return { id, external: true };
+					}
+				},
+			},
+		],
+		optimizeDeps: {
+			exclude: ["@resvg/resvg-js"],
+		},
+		server: {
+			allowedHosts: ["blog.localdev"],
+		},
+	},
+	image: {
+		responsiveStyles: true,
+		layout: "constrained",
+	},
+	env: {
+		schema: {
+			PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
+				access: "public",
+				context: "client",
+				optional: true,
+			}),
+		},
+	},
+	fonts: [
+		{
+			name: "Google Sans Code",
+			cssVariable: "--font-google-sans-code",
+			provider: fontProviders.google(),
+			fallbacks: ["monospace"],
+			weights: [300, 400, 500, 600, 700],
+			styles: ["normal", "italic"],
+		},
+		{
+			name: "Source Serif 4",
+			cssVariable: "--font-source-serif-4",
+			provider: fontProviders.google(),
+			fallbacks: ["Georgia", "serif"],
+			weights: [300, 400, 500, 600],
+			styles: ["normal", "italic"],
+		},
+	],
+	//   experimental: {
+	//     preserveScriptOrder: true,
+	//   },
+});

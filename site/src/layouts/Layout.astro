@@ -4,55 +4,55 @@ import { ClientRouter } from "astro:transitions";
 import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import { SITE } from "@/config";
 import "@/styles/global.css";
-import { SimpleAnalytics } from 'astro-simpleanalytics-plugin';
+import { SimpleAnalytics } from "astro-simpleanalytics-plugin";
 
 type Props = {
-  title?: string;
-  author?: string;
-  profile?: string;
-  description?: string;
-  ogImage?: string;
-  canonicalURL?: string;
-  pubDatetime?: Date;
-  modDatetime?: Date | null;
-  scrollSmooth?: boolean;
-  tags?: string[];
+	title?: string;
+	author?: string;
+	profile?: string;
+	description?: string;
+	ogImage?: string;
+	canonicalURL?: string;
+	pubDatetime?: Date;
+	modDatetime?: Date | null;
+	scrollSmooth?: boolean;
+	tags?: string[];
 };
 
 const {
-  title = SITE.title,
-  author = SITE.author,
-  profile = SITE.profile,
-  description = SITE.desc,
-  ogImage = SITE.ogImage ? `/${SITE.ogImage}` : "/og.png",
-  canonicalURL = new URL(Astro.url.pathname, Astro.url),
-  pubDatetime,
-  modDatetime,
-  scrollSmooth = false,
-  tags,
+	title = SITE.title,
+	author = SITE.author,
+	profile = SITE.profile,
+	description = SITE.desc,
+	ogImage = SITE.ogImage ? `/${SITE.ogImage}` : "/og.png",
+	canonicalURL = new URL(Astro.url.pathname, Astro.url),
+	pubDatetime,
+	modDatetime,
+	scrollSmooth = false,
+	tags,
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.url);
 
 const structuredData = pubDatetime
-  ? {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      headline: title,
-      image: `${socialImageURL}`,
-      datePublished: pubDatetime.toISOString(),
-      ...(modDatetime && { dateModified: modDatetime.toISOString() }),
-      description: description,
-      ...(tags && tags.length > 0 && { keywords: tags.join(", ") }),
-      author: [
-        {
-          "@type": "Person",
-          name: author,
-          ...(profile && { url: profile }),
-        },
-      ],
-    }
-  : null;
+	? {
+			"@context": "https://schema.org",
+			"@type": "BlogPosting",
+			headline: title,
+			image: `${socialImageURL}`,
+			datePublished: pubDatetime.toISOString(),
+			...(modDatetime && { dateModified: modDatetime.toISOString() }),
+			description: description,
+			...(tags && tags.length > 0 && { keywords: tags.join(", ") }),
+			author: [
+				{
+					"@type": "Person",
+					name: author,
+					...(profile && { url: profile }),
+				},
+			],
+		}
+	: null;
 ---
 
 <!doctype html>
