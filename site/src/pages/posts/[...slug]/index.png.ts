@@ -12,7 +12,9 @@ export async function getStaticPaths() {
 	}
 
 	const posts = await getCollection("blog").then((p) =>
-		p.filter(({ data }) => !data.draft && !data.ogImage),
+		p.filter(
+			({ data }) => (import.meta.env.DEV || !data.draft) && !data.ogImage,
+		),
 	);
 
 	return posts.map((post) => ({
