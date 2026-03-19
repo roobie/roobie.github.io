@@ -7,6 +7,6 @@ window.wander = {
   pages: [
       'https://bjro.dev/',
       'https://susam.net/',
-      'https://dahlstrand.net/wander/',
+      'https://dahlstrand.net/',
   ],
 }
