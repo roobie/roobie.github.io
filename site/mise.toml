@@ -1,0 +1,9 @@
+[tools]
+node = "24"
+
+# Not needed - Astro sets this when using `astro dev`
+#[env]
+#DEV = "1"
+
+[tasks.dev]
+run = "pnpm dev"

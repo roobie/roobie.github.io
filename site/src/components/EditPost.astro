@@ -4,16 +4,16 @@ import IconEdit from "@/assets/icons/IconEdit.svg";
 import { SITE } from "@/config";
 
 type Props = {
-  hideEditPost?: CollectionEntry<"blog">["data"]["hideEditPost"];
-  class?: string;
-  post: CollectionEntry<"blog">;
+	hideEditPost?: CollectionEntry<"blog">["data"]["hideEditPost"];
+	class?: string;
+	post: CollectionEntry<"blog">;
 };
 
 const { hideEditPost, post, class: className = "" } = Astro.props;
 
 const href = `${SITE.editPost.url}${post.filePath}`;
 const showEditPost =
-  SITE.editPost.enabled && !hideEditPost && href.trim() !== "";
+	SITE.editPost.enabled && !hideEditPost && href.trim() !== "";
 ---
 
 {

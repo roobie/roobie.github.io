@@ -12,13 +12,13 @@ const { pathname } = Astro.url;
 
 // Remove trailing slash from current pathname if exists
 const currentPath =
-  pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
+	pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
 
 const isActive = (path: string) => {
-  const currentPathArray = currentPath.split("/").filter(p => p.trim());
-  const pathArray = path.split("/").filter(p => p.trim());
+	const currentPathArray = currentPath.split("/").filter((p) => p.trim());
+	const pathArray = path.split("/").filter((p) => p.trim());
 
-  return currentPath === path || currentPathArray[0] === pathArray[0];
+	return currentPath === path || currentPathArray[0] === pathArray[0];
 };
 ---
 

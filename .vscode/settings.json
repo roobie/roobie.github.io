@@ -1,5 +1,5 @@
 {
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "prettier.prettier-vscode",
-  "prettier.htmlWhitespaceSensitivity": "ignore"
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "prettier.prettier-vscode",
+	"prettier.htmlWhitespaceSensitivity": "ignore"
 }

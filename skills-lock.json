@@ -1,10 +1,10 @@
 {
-  "version": 1,
-  "skills": {
-    "ai-seo": {
-      "source": "coreyhaines31/marketingskills",
-      "sourceType": "github",
-      "computedHash": "5f7ce5ccdb2b0dce5e1ea7f3ed8bf17070b790865e91725ca8908e6ec829e164"
-    }
-  }
+	"version": 1,
+	"skills": {
+		"ai-seo": {
+			"source": "coreyhaines31/marketingskills",
+			"sourceType": "github",
+			"computedHash": "5f7ce5ccdb2b0dce5e1ea7f3ed8bf17070b790865e91725ca8908e6ec829e164"
+		}
+	}
 }
