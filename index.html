@@ -162,58 +162,9 @@
     <main class="wrap">
       <section class="hero" role="region" aria-label="Hero">
 
-        <h1>Ship something delightful.</h1>
-
         <h1>The site has moved to: <a href="https://bjro.dev">bjro.dev</a></h1>
 
-        <span class="badge"><span class="dot" aria-hidden="true"></span> launching vibes: immaculate</span>
-
-        <div class="card" aria-label="Joke">
-          <div class="emoji" aria-hidden="true">🧠</div>
-          <p class="joke">
-            <b>Joke of the day:</b> Why do programmers prefer dark mode?<br />
-            Because light attracts bugs.
-          </p>
-        </div>
-
-        <div class="actions">
-          <a class="btn primary" href="#" onclick="copyJoke(); return false;">
-            Copy joke <span class="kbd">Ctrl</span><span class="kbd">C</span>
-          </a>
-          <a class="btn" href="#" onclick="toggleMood(); return false;">
-            Toggle mood <span class="kbd">M</span>
-          </a>
-        </div>
-
-        <footer>
-          <span>Tip: Press <span class="kbd">M</span> anytime.</span>
-          <span>Made with plain HTML + CSS.</span>
-        </footer>
       </section>
     </main>
-
-    <script>
-      const jokes = [
-        "Why do programmers prefer dark mode? Because light attracts bugs.",
-        "I told my computer I needed a break… it said: 'No problem — I’ll go to sleep.'",
-        "Why did the developer go broke? Because they used up all their cache."
-      ];
-      let i = 0;
-
-      function copyJoke() {
-        const text = jokes[i % jokes.length];
-        navigator.clipboard?.writeText(text).catch(() => {});
-      }
-
-      function toggleMood() {
-        i++;
-        const p = document.querySelector(".joke");
-        p.innerHTML = "<b>Joke of the day:</b> " + jokes[i % jokes.length].replace(": ", ":<br />");
-      }
-
-      window.addEventListener("keydown", (e) => {
-        if (e.key.toLowerCase() === "m") toggleMood();
-      });
-    </script>
   </body>
 </html>
