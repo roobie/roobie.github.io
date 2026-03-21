@@ -89,9 +89,10 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | new blogpost | 2026-03-12 | 335f181 | [1-new-blogpost](./quick/1-new-blogpost/) |
+| 2 | add /uses page with tool recommendations | 2026-03-21 | afee103 | [260321-mw6-add-uses-page-with-tool-recommendations-](./quick/260321-mw6-add-uses-page-with-tool-recommendations-/) |
 
 ## Session Continuity
 
-Last session: 2026-03-16T17:00:11.925Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-03-21T00:00:00Z
+Stopped at: Completed quick task 260321-mw6 (add /uses page)
 Resume file: None
