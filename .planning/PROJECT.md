@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A personal tech blog by Bjorn Roberg, hosted on GitHub Pages at roobie.github.io. Built with Astro (AstroPaper theme) and Tailwind CSS. The blog covers software engineering, AI agents, dev tools, security, and programming concepts. Posts are co-authored with AI models.
+A personal tech blog by Bjorn Roberg, hosted at bjro.dev (deployed via Cloudflare Workers). Built with Astro (AstroPaper theme) and Tailwind CSS. The blog covers software engineering, AI agents, dev tools, security, and programming concepts. Posts are co-authored with AI models.
 
 ## Core Value
 
@@ -21,6 +21,7 @@ Produce high-quality software & tech content with AI as a writing partner — bl
 - ✓ Light/dark theme support — existing
 - ✓ SEO and structured data (JSON-LD, Open Graph) — existing
 - ✓ GitHub Actions CI/CD deployment — existing
+- ✓ Domain identity: bjro.dev as canonical domain, AI/dev tooling description — Validated in Phase 6: Domain & Site Identity
 
 ### Active
 
@@ -58,4 +59,4 @@ Content lives in `site/src/data/blog/*.md` with frontmatter including: author, p
 | AI as co-author, not ghostwriter | Transparent about AI involvement, credited in author field | ✓ Good |
 
 ---
-*Last updated: 2026-03-10 after initialization*
+*Last updated: 2026-03-22 after Phase 6 completion*
