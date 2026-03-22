@@ -58,6 +58,11 @@ Phases execute in numeric order: 1 → 2 → 3
 | 1. Workflow Foundation | 0/? | Not started | - |
 | 2. Core Content Workflow | 0/? | Not started | - |
 | 3. Workflow Enhancement | 0/? | Not started | - |
+| 6. Domain & Site Identity | 0/1 | Not started | - |
+| 7. Tag Taxonomy & Post Metadata | 0/? | Not started | - |
+| 8. Structured Data & E-E-A-T | 0/? | Not started | - |
+| 9. Technical SEO Polish | 0/? | Not started | - |
+| 10. Content Strategy — Topic Authority | 0/? | Not started | - |
 
 ### Phase 4: Apply edits as per the frontend-designer's suggestions
 
@@ -80,3 +85,69 @@ Plans:
 
 Plans:
 - [ ] 05-01-PLAN.md — Conditional structured data, og:type, article:author/tag, tags prop threading
+
+### Phase 6: Domain & Site Identity
+
+**Goal:** All canonical URLs, meta tags, sitemap, and robots.txt reference `bjro.dev` as the primary domain; site description signals AI and developer tooling expertise
+**Requirements**: Ad-hoc (SEO audit — Critical)
+**Depends on:** None
+**Plans:** 1 plan
+
+Plans:
+- [ ] 06-01-PLAN.md — Update SITE.website/profile/desc in config.ts, fix robots.txt leading blank line, verify build output
+
+**Success Criteria** (what must be TRUE):
+  1. `SITE.website` in `config.ts` is `https://bjro.dev/` and all generated canonical tags, OG URLs, sitemap entries, and robots.txt reference that domain
+  2. `SITE.desc` contains keywords relevant to AI agents, developer tooling, and software architecture — not generic "philosophy, technology, and life"
+  3. `SITE.profile` points to `https://bjro.dev/` (or an about page on that domain)
+  4. `roobie.github.io` 301-redirects to `bjro.dev` (or redirect is documented as a manual step if infra is outside this repo)
+
+### Phase 7: Tag Taxonomy & Post Metadata
+
+**Goal:** Replace vague tags with search-relevant terms and bring all post descriptions and titles up to SEO standard
+**Requirements**: Ad-hoc (SEO audit — High impact)
+**Depends on:** None
+**Plans:** TBD
+
+**Success Criteria** (what must be TRUE):
+  1. No post uses the tags `computing`, `tool`, `discussion`, or `braindump` — each has been replaced with a more specific, search-relevant tag
+  2. Every published post has a description between 120-160 characters that includes the post's primary keyword
+  3. Every published post title communicates the topic and value — no single-word titles (e.g., `mise`, `Debian`) without a qualifying subtitle
+  4. The tag set across all posts forms coherent topical clusters (e.g., `ai-agents`, `developer-tools`, `cli`, `software-architecture`)
+
+### Phase 8: Structured Data & E-E-A-T
+
+**Goal:** Strengthen structured data for rich results and add author credibility signals
+**Requirements**: Ad-hoc (SEO audit — Medium impact)
+**Depends on:** Phase 6 (needs correct domain in publisher URL)
+**Plans:** TBD
+
+**Success Criteria** (what must be TRUE):
+  1. JSON-LD `BlogPosting` schema includes a `publisher` field with name and URL
+  2. An `/about` page exists with author bio, areas of expertise (AI agents, dev tooling), and links to open-source projects (casq, cairn, slog)
+  3. Agent-related posts (9+ posts) contain internal cross-links to related posts in the cluster
+
+### Phase 9: Technical SEO Polish
+
+**Goal:** Fix remaining low-severity technical SEO issues identified in audit
+**Requirements**: Ad-hoc (SEO audit — Low impact)
+**Depends on:** Phase 6
+**Plans:** TBD
+
+**Success Criteria** (what must be TRUE):
+  1. `theme-color` meta tag has a valid color value or is removed
+  2. Twitter Card meta tags use `name=` attribute instead of `property=`
+  3. Sitemap includes `lastmod` dates derived from post `modDatetime` or `pubDatetime`
+  4. `robots.txt` template has no leading blank line
+
+### Phase 10: Content Strategy — Topic Authority
+
+**Goal:** Publish content that fills gaps in topical coverage for AI agents and developer tooling
+**Requirements**: Ad-hoc (SEO audit — Long-term)
+**Depends on:** Phases 6, 7 (identity and taxonomy in place first)
+**Plans:** TBD
+
+**Success Criteria** (what must be TRUE):
+  1. At least one comparison or roundup post is published (e.g., tool comparisons, agent orchestration approaches)
+  2. An AI agents topic landing page or series index exists that aggregates all agent-related posts into a visible cluster
+  3. Internal linking across the agent cluster is systematic — every agent post links to at least 2 other agent posts
