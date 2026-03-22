@@ -58,7 +58,7 @@ Phases execute in numeric order: 1 → 2 → 3
 | 1. Workflow Foundation | 0/? | Not started | - |
 | 2. Core Content Workflow | 0/? | Not started | - |
 | 3. Workflow Enhancement | 0/? | Not started | - |
-| 6. Domain & Site Identity | 0/1 | Not started | - |
+| 6. Domain & Site Identity | 1/1 | Complete   | 2026-03-22 |
 | 7. Tag Taxonomy & Post Metadata | 0/? | Not started | - |
 | 8. Structured Data & E-E-A-T | 0/? | Not started | - |
 | 9. Technical SEO Polish | 0/? | Not started | - |
@@ -91,7 +91,7 @@ Plans:
 **Goal:** All canonical URLs, meta tags, sitemap, and robots.txt reference `bjro.dev` as the primary domain; site description signals AI and developer tooling expertise
 **Requirements**: Ad-hoc (SEO audit — Critical)
 **Depends on:** None
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [ ] 06-01-PLAN.md — Update SITE.website/profile/desc in config.ts, fix robots.txt leading blank line, verify build output

@@ -2,16 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-03-16T17:02:39.729Z"
-last_activity: "2026-03-12 - Completed quick task 1: new blogpost"
+status: unknown
+stopped_at: Completed 06-01 (domain and site identity — bjro.dev)
+last_updated: "2026-03-22T04:03:30.300Z"
 progress:
-  total_phases: 5
-  completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
-  percent: 33
+  total_phases: 10
+  completed_phases: 3
+  total_plans: 5
+  completed_plans: 5
 ---
 
 # Project State
@@ -21,20 +19,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-10)
 
 **Core value:** Produce high-quality software & tech content with AI as a writing partner
-**Current focus:** Phase 1 - Workflow Foundation
+**Current focus:** Phase 06 — domain-and-site-identity
 
 ## Current Position
 
-Phase: 1 of 3 (Workflow Foundation)
-Plan: 0 of ? in current phase
-Status: Ready to plan
-Last activity: 2026-03-12 - Completed quick task 1: new blogpost
-
-Progress: [███░░░░░░░] 33%
+Phase: 06 (domain-and-site-identity) — EXECUTING
+Plan: 1 of 1
 
 ## Performance Metrics
 
 **Velocity:**
+
 - Total plans completed: 0
 - Average duration: -
 - Total execution time: 0 hours
@@ -46,6 +41,7 @@ Progress: [███░░░░░░░] 33%
 | - | - | - | - |
 
 **Recent Trend:**
+
 - Last 5 plans: -
 - Trend: -
 
@@ -54,6 +50,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions P02 | 8 | 2 tasks | 4 files |
 | Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions P03 | 5 | 2 tasks | 0 files |
 | Phase 05-apply-edits-as-per-the-ai-seo-suggestions P01 | 2 | 2 tasks | 2 files |
+| Phase 06-domain-and-site-identity P01 | 6 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -70,6 +67,8 @@ Recent decisions affecting current work:
 - [Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions]: All visual changes from plans 01 and 02 approved by human reviewer without regressions
 - [Phase 05-apply-edits-as-per-the-ai-seo-suggestions]: Use pubDatetime as the single discriminator for post vs. non-post page logic in Layout.astro
 - [Phase 05-apply-edits-as-per-the-ai-seo-suggestions]: og:type set to article when pubDatetime is truthy, website otherwise — covers all page types without a new prop
+- [Phase 06-domain-and-site-identity]: editPost.url kept as roobie.github.io GitHub link, not a canonical URL
+- [Phase 06-domain-and-site-identity]: 301 redirect from roobie.github.io to bjro.dev is a manual infra step outside the repo
 
 ### Pending Todos
 
@@ -79,6 +78,7 @@ None yet.
 
 - Phase 4 added: Apply edits as per the frontend-designer's suggestions
 - Phase 5 added: Apply edits as per the AI SEO suggestions
+- Phases 6-10 added: SEO audit findings (domain config, tag taxonomy, structured data, technical polish, content strategy)
 
 ### Blockers/Concerns
 
@@ -93,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T00:00:00Z
-Stopped at: Completed quick task 260321-mw6 (add /uses page)
+Last session: 2026-03-22T04:03:30.298Z
+Stopped at: Completed 06-01 (domain and site identity — bjro.dev)
 Resume file: None
