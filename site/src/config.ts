@@ -1,8 +1,8 @@
 export const SITE = {
-	website: "https://roobie.github.io/", // replace this with your deployed domain
+	website: "https://bjro.dev/",
 	author: "Björn Roberg",
-	profile: "https://roobie.github.io/",
-	desc: "A place to gather thoughts on philosophy, technology, and life — powered by Astro.",
+	profile: "https://bjro.dev/",
+	desc: "Writing on AI agents, developer tooling, and software architecture — by Björn Roberg.",
 	title: "Cogitate",
 	ogImage: "astropaper-og.jpg",
 	lightAndDarkMode: true,
