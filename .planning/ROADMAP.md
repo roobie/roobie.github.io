@@ -61,7 +61,7 @@ Phases execute in numeric order: 1 → 2 → 3
 | 6. Domain & Site Identity | 1/1 | Complete   | 2026-03-22 |
 | 7. Tag Taxonomy & Post Metadata | 3/3 | Complete   | 2026-03-23 |
 | 8. Structured Data & E-E-A-T | 3/3 | Complete   | 2026-03-23 |
-| 9. Technical SEO Polish | 0/? | Not started | - |
+| 9. Technical SEO Polish | 0/1 | Not started | - |
 | 10. Content Strategy — Topic Authority | 0/? | Not started | - |
 
 ### Phase 4: Apply edits as per the frontend-designer's suggestions
@@ -142,7 +142,10 @@ Plans:
 **Goal:** Fix remaining low-severity technical SEO issues identified in audit
 **Requirements**: Ad-hoc (SEO audit — Low impact)
 **Depends on:** Phase 6
-**Plans:** TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 09-01-PLAN.md — Remove theme-color, fix Twitter Card meta attributes, add sitemap lastmod dates
 
 **Success Criteria** (what must be TRUE):
   1. `theme-color` meta tag has a valid color value or is removed
