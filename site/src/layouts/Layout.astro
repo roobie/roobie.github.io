@@ -51,6 +51,15 @@ const structuredData = pubDatetime
 					...(profile && { url: profile }),
 				},
 			],
+			publisher: {
+				"@type": "Person",
+				name: SITE.author,
+				url: SITE.website,
+			},
+			mainEntityOfPage: {
+				"@type": "WebPage",
+				"@id": `${canonicalURL}`,
+			},
 		}
 	: null;
 ---
