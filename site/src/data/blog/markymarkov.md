@@ -80,7 +80,7 @@ description: "MarkyMarkov uses Markov chains to learn patterns from your codebas
 
 **What is Markymarkov?**
 
-Markymarkov is a Markov Chain-based code guidance system designed to help LLM agents generate better code. Unlike traditional linters or type checkers that enforce fixed rules, Markymarkov learns patterns directly from your codebase and uses those patterns to validate and guide code generation in real-time.
+Markymarkov is a Markov Chain-based code guidance system designed to help LLM agents generate better code. Unlike traditional linters or type checkers that enforce fixed rules, Markymarkov learns patterns directly from your codebase and uses those patterns to validate and guide code generation in real-time. The theoretical underpinning—combining Markov chains with LLMs as complementary tools—is explored in depth in [Markov chains and LLMs: hybrid architectures for smarter agents](/posts/markov-chains-and-llms-hybrid-architectures).
 
 At its core, Markymarkov operates on a simple but powerful principle: **code is sequential, and code patterns are learnable**. By analyzing existing code, it builds probabilistic models of what patterns typically follow other patterns—both at the syntactic level (how code is structured) and at the semantic level (what code idioms are preferred).
 
@@ -2815,5 +2815,7 @@ Key advantages:
 - Fast to train and load, compact to store
 - Interpretable confidence scores for actionable feedback
 - Flexible integration points: CI, IDE, LLM workflows
+
+Markymarkov works especially well alongside explicit context management strategies. Pairing it with a structured project memory like the one described in [Context Management for AI Agents: Why MINDMAP Changes Everything](/posts/context-context-context) gives agents both the pattern-level guidance Markymarkov provides and the architectural context they need to make the right changes safely.
 
 If you care about consistency, developer productivity, and explainability, try training Markymarkov on a representative subset of your code and see what it highlights.

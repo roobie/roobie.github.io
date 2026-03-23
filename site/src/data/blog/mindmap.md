@@ -19,7 +19,7 @@ But as your project grows, decisions accumulate, regressions appear, and it beco
 
 That’s why the core challenge isn’t **“can the model write code?”** but **“can the model understand and manage the project’s context well enough to make the right change?”**
 
-The concept of the MINDMAP is to **externalize that context** into a lightweight, line-oriented graph that any agent can quickly reconstruct: a living index of components, workflows, decisions, bugs, and TODOs that turns a sprawling codebase into something a model can reliably navigate and update.
+The concept of the MINDMAP is to **externalize that context** into a lightweight, line-oriented graph that any agent can quickly reconstruct: a living index of components, workflows, decisions, bugs, and TODOs that turns a sprawling codebase into something a model can reliably navigate and update. This connects to a broader argument about [building smarter agents from first principles](/posts/building-smarter-ai-agents-with-ideas-from-philosophy): agents that maintain explicit world models and belief states are fundamentally more reliable than those improvising from raw context alone.
 
 ---
 
@@ -145,7 +145,7 @@ Ultimately, the limiting factor isn’t the format, it’s the **habit**: agents
 
 ---
 
-Looking ahead, the real payoff of this pattern shows up when you move from a single helper agent to a **small ecosystem of humans and agents** collaborating through the same mind map.
+Looking ahead, the real payoff of this pattern shows up when you move from a single helper agent to a **small ecosystem of humans and agents** collaborating through the same mind map. Techniques like [currying agents](/posts/currying-agents)—where context is progressively accumulated across calls—complement this architecture well, since a mind map gives those accumulated contexts a stable, shared home.
 
 A human might sketch a new architecture decision as a `DR` node, a planning agent explodes that into `TODO` nodes across services, and specialized implementer agents pick those up to modify code and update `AE`/`WF` entries. A reliability agent can periodically sweep `BUG` nodes to look for recurring patterns, while a documentation agent turns stable clusters of nodes into higher-level guides.
 

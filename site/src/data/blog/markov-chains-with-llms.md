@@ -72,7 +72,7 @@ State: ErrorHandling
 3. If probability is high, the LLM gets stronger system prompt guidance to execute
 4. If probability is low, the LLM gets guidance to stay in Planning or investigate further
 
-**Benefit:** More predictable agent behavior while maintaining flexibility within states.
+**Benefit:** More predictable agent behavior while maintaining flexibility within states. For a practical tool that applies this exact principle to code guidance, see [MarkyMarkov](/posts/markymarkov).
 
 ### Hierarchical Planning with MDPs
 
@@ -693,7 +693,7 @@ console.log(`Action flagged: ANOMALY_SCORE=0.98`);
 
 ### ✅ **Ideal Use Cases**
 
-- **Structured tasks** with known decompositions (code gen, SQL, planning)
+- **Structured tasks** with known decompositions (code gen, SQL, planning; [agentic business processes](/posts/notes-on-agentic-applications-in-business-processes) are a natural fit)
 - **Multi-turn interactions** where you want consistent behavior (dialogue, customer support)
 - **Resource-constrained** environments (mobile, edge, low-latency systems)
 - **Safety-critical** workflows where interpretability matters (medical, legal, finance)

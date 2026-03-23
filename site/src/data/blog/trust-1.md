@@ -109,7 +109,7 @@ That doesn’t mean it will happen. It means it can, and you’ve effectively op
 
 ---
 
-On top of that, using cloud LLMs for infra creates a blind spot in your own security model.
+On top of that, using cloud LLMs for infra creates a blind spot in your own security model. The same instinct that drives teams toward [locking down agents with sandboxing and capability restrictions](/posts/locking-down-agents) applies here: the model is an external actor, and the boundary around what it can see matters.
 
 We spend time carefully designing network segments, IAM policies, audit logging, and access reviews. We lock down who can see Postgres credentials, who can read production logs, which bastion hosts can reach which subnets.
 
@@ -127,4 +127,4 @@ That’s the real predicament: we’ve made an external system a participant in 
 
 None of this is an argument against using AI to manage infra. It’s an argument against pretending that sending live Postgres configs and production logs to a cloud LLM is some trivial, low‑risk operation.
 
-If you care about your trust boundary—where your data lives, who can see it, which laws apply to it—then that browser tab is part of your security architecture whether you admit it or not.
+If you care about your trust boundary—where your data lives, who can see it, which laws apply to it—then that browser tab is part of your security architecture whether you admit it or not. Some of the same trust problems can be addressed architecturally: [linear types for agent safety](/posts/linear-agentics) explores how unforgeable capability tokens make it provably impossible for an agent to act outside its granted permissions—a complementary approach to the data-leakage problem described here.
