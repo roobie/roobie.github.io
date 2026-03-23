@@ -59,7 +59,7 @@ Phases execute in numeric order: 1 → 2 → 3
 | 2. Core Content Workflow | 0/? | Not started | - |
 | 3. Workflow Enhancement | 0/? | Not started | - |
 | 6. Domain & Site Identity | 1/1 | Complete   | 2026-03-22 |
-| 7. Tag Taxonomy & Post Metadata | 0/? | Not started | - |
+| 7. Tag Taxonomy & Post Metadata | 0/3 | Not started | - |
 | 8. Structured Data & E-E-A-T | 0/? | Not started | - |
 | 9. Technical SEO Polish | 0/? | Not started | - |
 | 10. Content Strategy — Topic Authority | 0/? | Not started | - |
@@ -107,7 +107,12 @@ Plans:
 **Goal:** Replace vague tags with search-relevant terms and bring all post descriptions and titles up to SEO standard
 **Requirements**: Ad-hoc (SEO audit — High impact)
 **Depends on:** None
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Update frontmatter for 7 AI agent cluster posts (tags, descriptions, titles)
+- [ ] 07-02-PLAN.md — Update frontmatter for 7 developer tools cluster posts (tags, descriptions, titles)
+- [ ] 07-03-PLAN.md — Update frontmatter for 7 remaining posts (Linux, opinion, meta) + final validation
 
 **Success Criteria** (what must be TRUE):
   1. No post uses the tags `computing`, `tool`, `discussion`, or `braindump` — each has been replaced with a more specific, search-relevant tag
