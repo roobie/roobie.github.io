@@ -24,6 +24,7 @@ Produce high-quality software & tech content with AI as a writing partner — bl
 - ✓ Domain identity: bjro.dev as canonical domain, AI/dev tooling description — Validated in Phase 6: Domain & Site Identity
 - ✓ SEO-optimized tag taxonomy and post metadata across all 21 published posts — Validated in Phase 7: Tag Taxonomy & Post Metadata
 - ✓ BlogPosting JSON-LD with publisher/mainEntityOfPage, expanded about page, agent cluster cross-links — Validated in Phase 8: Structured Data & E-E-A-T
+- ✓ Technical SEO polish: Twitter Card meta fix, theme-color removed, sitemap lastmod dates — Validated in Phase 9: Technical SEO Polish
 
 ### Active
 
@@ -61,4 +62,4 @@ Content lives in `site/src/data/blog/*.md` with frontmatter including: author, p
 | AI as co-author, not ghostwriter | Transparent about AI involvement, credited in author field | ✓ Good |
 
 ---
-*Last updated: 2026-03-23 after Phase 8 completion*
+*Last updated: 2026-03-23 after Phase 9 completion*
