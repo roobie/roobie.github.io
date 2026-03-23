@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-01 (domain and site identity — bjro.dev)
-last_updated: "2026-03-22T04:06:43.948Z"
+stopped_at: Completed 07-03 (tag taxonomy cleanup — Linux, opinion, meta posts)
+last_updated: "2026-03-23T08:25:07.572Z"
 progress:
   total_phases: 10
   completed_phases: 3
-  total_plans: 5
-  completed_plans: 5
+  total_plans: 8
+  completed_plans: 7
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-10)
 
 **Core value:** Produce high-quality software & tech content with AI as a writing partner
-**Current focus:** Phase 06 — domain-and-site-identity
+**Current focus:** Phase 07 — tag-taxonomy-and-post-metadata
 
 ## Current Position
 
-Phase: 06 (domain-and-site-identity) — EXECUTING
-Plan: 1 of 1
+Phase: 07 (tag-taxonomy-and-post-metadata) — EXECUTING
+Plan: 1 of 3
 
 ## Performance Metrics
 
@@ -51,6 +51,7 @@ Plan: 1 of 1
 | Phase 04-apply-edits-as-per-the-frontend-designer-s-suggestions P03 | 5 | 2 tasks | 0 files |
 | Phase 05-apply-edits-as-per-the-ai-seo-suggestions P01 | 2 | 2 tasks | 2 files |
 | Phase 06-domain-and-site-identity P01 | 6 | 2 tasks | 2 files |
+| Phase 07-tag-taxonomy-and-post-metadata P01 | 4 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,11 @@ Recent decisions affecting current work:
 - [Phase 05-apply-edits-as-per-the-ai-seo-suggestions]: og:type set to article when pubDatetime is truthy, website otherwise — covers all page types without a new prop
 - [Phase 06-domain-and-site-identity]: editPost.url kept as roobie.github.io GitHub link, not a canonical URL
 - [Phase 06-domain-and-site-identity]: 301 redirect from roobie.github.io to bjro.dev is a manual infra step outside the repo
+- [Phase 07-tag-taxonomy-and-post-metadata]: Use ai-agents as primary cluster tag for all 7 AI agent posts; secondary tags encode topic dimension
+- [Phase 07-tag-taxonomy-and-post-metadata]: YAML titles with colons wrapped in double quotes to avoid parse errors
+- [Phase 07-tag-taxonomy-and-post-metadata]: Linux posts tagged with [linux] cluster; keyboard remapping uses [linux, keyboard, developer-tools]
+- [Phase 07-tag-taxonomy-and-post-metadata]: trust-1 and notes-1 tagged [security/ai-agents + llm + opinion] — security/AI primary clusters with opinion modifier
+- [Phase 07-tag-taxonomy-and-post-metadata]: npm post tagged [ecosystem-analysis, opinion, developer-tools] — structural analysis category established
 
 ### Pending Todos
 
@@ -93,6 +99,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-22T04:03:30.298Z
-Stopped at: Completed 06-01 (domain and site identity — bjro.dev)
+Last session: 2026-03-23T08:25:07.570Z
+Stopped at: Completed 07-03 (tag taxonomy cleanup — Linux, opinion, meta posts)
 Resume file: None
