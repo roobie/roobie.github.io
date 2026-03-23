@@ -10,7 +10,7 @@ tags:
   - ai-agents
   - agent-architecture
   - open-source
-description: "MarkyMarkov uses Markov chains to learn patterns from your codebase and provide fast, explainable code guidance that complements LLM agents without replacing them."
+description: "MarkyMarkov uses Markov chains to learn patterns from your codebase and provide fast, explainable code guidance that complements LLM agents."
 ---
 
 ## Table of Contents
