@@ -6,9 +6,10 @@ slug: the-npm-problem-nobody-wants-to-work-on
 featured: false
 draft: false
 tags:
-  - discussion
-  - development
-description: Every production Node.js system depends on a single corporate-controlled registry with no meaningful public alternative -- and the ecosystem treats this structural risk as a solved problem because it hasn't broken yet.
+  - ecosystem-analysis
+  - opinion
+  - developer-tools
+description: "Every Node.js production system depends on a single corporate-controlled npm registry with no real alternative — a structural risk the ecosystem ignores."
 ---
 
 This has been sitting in my drafts for a while and I keep not publishing it because every time I re-read it I think "nobody's going to do anything about this anyway." But I've been chewing on it long enough that I need to put it somewhere other than my own head.

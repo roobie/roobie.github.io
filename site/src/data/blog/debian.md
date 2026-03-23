@@ -2,13 +2,14 @@
 author: Björn Roberg, Claude.
 pubDatetime: 2026-02-28T13:00:00Z
 modDatetime: 2026-02-28T13:00:00Z
-title: Debian
+title: "Debian: Why the Universal Operating System Still Matters in 2026"
 slug: debian
 featured: false
 draft: false
 tags:
-  - computing
-description: Debian is a marvel.
+  - linux
+  - open-source
+description: "Debian turns 33 and keeps earning its title as the universal OS — community governance, 59,000 packages, and the foundation of over 1,000 Linux distributions."
 ---
 
 **Debian truly is one of the foundational pillars of the open-source world**, and it deserves every bit of celebration. Launched in **1993 by Ian Murdock**, it's been going strong for over **three decades** now, which is remarkable in the fast-moving world of technology.

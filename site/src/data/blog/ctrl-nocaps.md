@@ -2,15 +2,15 @@
 author: Björn Roberg
 pubDatetime: 2026-01-20T13:00:00Z
 modDatetime: 2026-01-20T13:00:00Z
-title: Making use of the Caps Lock key
+title: "Remap Caps Lock to Left Control on Linux and Windows"
 slug: making-use-of-the-caps-lock-key
 featured: true
 draft: false
 tags:
-  - computing
-  - ux
-  - tweak
-description: Remap Caps Lock to Left Control.
+  - linux
+  - keyboard
+  - developer-tools
+description: "Remap Caps Lock to Left Control for a more ergonomic keyboard layout — instructions for Debian/Linux via XKBOPTIONS and Windows via SharpKeys."
 ---
 
 How to remap Caps Lock to Left Control.

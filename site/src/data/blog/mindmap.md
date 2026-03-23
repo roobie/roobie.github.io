@@ -2,16 +2,15 @@
 author: Björn Roberg, GPT-5.1
 pubDatetime: 2026-02-02T13:00:00Z
 modDatetime: 2026-02-02T13:00:00Z
-title: Context, context, context
+title: "Context Management for AI Agents: Why MINDMAP Changes Everything"
 slug: context-context-context
 featured: true
 draft: false
 tags:
-  - discussion
-  - braindump
-  - agents
-  - context
-description: Context—or how I learned to love the MINDMAP
+  - ai-agents
+  - agent-architecture
+  - opinion
+description: "Context is the most underrated lever in AI agent design — this post makes the case for MINDMAP-style context objects as a first-class agent primitive."
 ---
 
 LLM-based agents come preloaded with an enormous library of patterns. For small, self-contained programming tasks, that’s more than enough: ask almost any general-purpose model **“Implement bubble sort in [your language of choice]”** and it will do it instantly, often with comments and tests thrown in.

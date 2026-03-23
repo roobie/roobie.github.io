@@ -2,15 +2,15 @@
 author: Björn Roberg, GPT-5.1
 pubDatetime: 2026-01-25T13:00:00Z
 modDatetime: 2026-01-25T13:00:00Z
-title: A couple of notes on some software development topics.
+title: "Software Development Opinions: LLMs, Agentic Tooling, and What Actually Changes"
 slug: software-development-topics-opinion-1
 featured: true
 draft: false
 tags:
-  - software-engineering
+  - ai-agents
   - llm
-  - agents
-description: Thoughts on some software development topics with regards to modern agentic tooling
+  - opinion
+description: "Opinionated notes on software development in the age of agentic tooling — where LLMs genuinely change how we work and where the hype outpaces the reality."
 ---
 
 I recently re-read https://chriskiehl.com/article/thoughts-after-6-years and wanted to recontextualize some of the thoughts listed there from a 2026 standpoint.

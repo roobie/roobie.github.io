@@ -2,15 +2,15 @@
 author: Björn Roberg, GPT-5.1
 pubDatetime: 2026-01-29T13:00:00Z
 modDatetime: 2026-01-29T13:00:00Z
-title: Cloud LLMs in prod...
+title: "Cloud LLMs in Production: The Hidden Trust Boundary You’re Already Crossing"
 slug: cloud-llms-in-prod
 featured: true
 draft: false
 tags:
-  - discussion
-  - braindump
-  - agents
-description: Modern infra teams are quietly feeding their most sensitive data—logs, configs, schemas—into cloud LLMs just to get unstuck. It feels like harmless troubleshooting, but in reality it extends your trust boundary into a black box you don’t control or fully understand.
+  - security
+  - llm
+  - opinion
+description: "Infra teams quietly feed logs, configs, and schemas to cloud LLMs when troubleshooting — extending the trust boundary into a black box they don’t control."
 ---
 
 There’s a quiet, slightly uncomfortable truth sitting behind all the hype about using AI to run infrastructure: a lot of us are pasting the keys to the kingdom into a web form and hoping for the best.

@@ -7,7 +7,7 @@ featured: true
 draft: false
 tags:
   - meta
-description: The blog has a proper home now — bjro.dev.
+description: "The blog has moved to bjro.dev — a short domain that's easier to share and signals a long-term commitment to writing about software and technology."
 ---
 
 Big news: **Cogitate** now lives at [bjro.dev](https://bjro.dev).
