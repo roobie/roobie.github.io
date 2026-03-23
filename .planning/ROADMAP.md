@@ -60,7 +60,7 @@ Phases execute in numeric order: 1 → 2 → 3
 | 3. Workflow Enhancement | 0/? | Not started | - |
 | 6. Domain & Site Identity | 1/1 | Complete   | 2026-03-22 |
 | 7. Tag Taxonomy & Post Metadata | 3/3 | Complete   | 2026-03-23 |
-| 8. Structured Data & E-E-A-T | 0/3 | Not started | - |
+| 8. Structured Data & E-E-A-T | 2/3 | In Progress|  |
 | 9. Technical SEO Polish | 0/? | Not started | - |
 | 10. Content Strategy — Topic Authority | 0/? | Not started | - |
 
@@ -125,7 +125,7 @@ Plans:
 **Goal:** Strengthen structured data for rich results and add author credibility signals
 **Requirements**: Ad-hoc (SEO audit — Medium impact)
 **Depends on:** Phase 6 (needs correct domain in publisher URL)
-**Plans:** 3 plans
+**Plans:** 2/3 plans executed
 
 Plans:
 - [ ] 08-01-PLAN.md — JSON-LD publisher + mainEntityOfPage, about page expansion
