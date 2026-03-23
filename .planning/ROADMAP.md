@@ -60,7 +60,7 @@ Phases execute in numeric order: 1 → 2 → 3
 | 3. Workflow Enhancement | 0/? | Not started | - |
 | 6. Domain & Site Identity | 1/1 | Complete   | 2026-03-22 |
 | 7. Tag Taxonomy & Post Metadata | 3/3 | Complete   | 2026-03-23 |
-| 8. Structured Data & E-E-A-T | 0/? | Not started | - |
+| 8. Structured Data & E-E-A-T | 0/3 | Not started | - |
 | 9. Technical SEO Polish | 0/? | Not started | - |
 | 10. Content Strategy — Topic Authority | 0/? | Not started | - |
 
@@ -125,7 +125,12 @@ Plans:
 **Goal:** Strengthen structured data for rich results and add author credibility signals
 **Requirements**: Ad-hoc (SEO audit — Medium impact)
 **Depends on:** Phase 6 (needs correct domain in publisher URL)
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — JSON-LD publisher + mainEntityOfPage, about page expansion
+- [ ] 08-02-PLAN.md — Cross-links for first 5 agent posts
+- [ ] 08-03-PLAN.md — Cross-links for remaining 4 agent posts
 
 **Success Criteria** (what must be TRUE):
   1. JSON-LD `BlogPosting` schema includes a `publisher` field with name and URL
