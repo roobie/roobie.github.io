@@ -56,7 +56,7 @@ Pattern: anywhere you have **multi-step, cross-system processes with human nuanc
 
 ## FSMs: Putting Guardrails Around Agents
 
-A core challenge with agents is that they're "too free-form." FSMs are a simple, powerful way to **constrain behavior without killing flexibility**.
+A core challenge with agents is that they're "too free-form." FSMs are a simple, powerful way to **constrain behavior without killing flexibility**. For a deeper guarantee — where the type system itself enforces state transitions — see [Linear Types for Agent Safety](/posts/linear-agentics).
 
 ### Basic Idea
 
@@ -420,7 +420,7 @@ For most LLM-powered workflows at scale, **Temporal is the sweet spot**: battle-
 
 ## Combining It All with Durable Workflows
 
-Durable workflows give you **reliability over time**; FSMs give you **command and control**; agents/MCP give you **semantics and capabilities**.
+Durable workflows give you **reliability over time**; FSMs give you **command and control**; agents/MCP give you **semantics and capabilities**. The epistemic and moral frameworks behind those semantics are explored in [Building Smarter AI Agents With Ideas From Philosophy](/posts/building-smarter-ai-agents-with-ideas-from-philosophy).
 
 ### Execution Loop Sketch
 

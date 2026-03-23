@@ -16,3 +16,7 @@ description: "Practical techniques for sandboxing AI agents and limiting blast r
 Sandboxing agents isn’t a “nice to have”; it’s the safety railing that keeps obvious risks from becoming painful incidents. A coding agent that can freely read your filesystem, touch real credentials, call production APIs, or execute arbitrary shell commands is, by definition, an untrusted program with broad powers. It can accidentally delete data, leak secrets, open insecure network paths, or quietly embed vulnerabilities in otherwise healthy code. Running agents inside containers or VMs with limited filesystem access, scoped credentials, and constrained networking shrinks the blast radius when (not if) something goes wrong. You still get the speed boost of automated coding, but any damage is confined to a disposable environment instead of your laptop, your cloud account, or your production systems.
 
 Today I browsed [this](https://news.ycombinator.com/item?id=46690907) HN article, which lead me to [agent-sandbox](https://github.com/mattolson/agent-sandbox) - an uncomplicated docker setup to sandbox `claude` inside a container, with a firewall. I'm going to apply this to my workflows and keep notes here.
+
+For a type-system approach to provable safety constraints, see [Linear Types for Agent Safety](/posts/linear-agentics).
+
+The trust boundaries this addresses are the flip side of what's explored in [Cloud LLMs in Production](/posts/cloud-llms-in-prod).

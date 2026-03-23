@@ -27,7 +27,7 @@ Here's the key insight: if an API token is a linear type, an agent literally can
 
 ## Why This Matters for Agent Security
 
-Traditional security relies on sandboxes: runtime checks that ask "does this agent have permission?" But sandboxes have escape hatches. They can be misconfigured. They add overhead. And they're checked at runtime, after you've already deployed potentially dangerous code.
+Traditional security relies on sandboxes: runtime checks that ask "does this agent have permission?" But sandboxes have escape hatches. They can be misconfigured. They add overhead. And they're checked at runtime, after you've already deployed potentially dangerous code. For practical container-based sandboxing that limits blast radius at runtime, see [Locking Down AI Agents](/posts/locking-down-agents).
 
 Linear types flip this around. **Permissions become objects the agent must physically possess.** No token, no file access. No budget, no API calls. The type system enforces this before the agent runs.
 
@@ -119,7 +119,7 @@ You don't need to rewrite everything in a exotic functional language. A practica
 
 ## The Path Forward
 
-We're at an inflection point with AI agents. They're becoming powerful enough to be genuinely useful—and genuinely dangerous. The traditional approach of "deploy and monitor" doesn't scale when agents can operate autonomously at machine speed.
+We're at an inflection point with AI agents. They're becoming powerful enough to be genuinely useful—and genuinely dangerous. The traditional approach of "deploy and monitor" doesn't scale when agents can operate autonomously at machine speed. Combining linear type guarantees with [durable FSM-based orchestration](/posts/notes-on-agentic-applications-in-business-processes) gives you both provable safety properties and production-grade reliability.
 
 Linear types offer a path to **provable safety**: security properties you can verify before deployment, not discover through incidents. An agent with the right type signature is safe by construction. No amount of prompt injection or adversarial input can make it violate its resource constraints.
 

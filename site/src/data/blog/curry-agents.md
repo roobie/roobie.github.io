@@ -64,7 +64,7 @@ The **intermediate agents are reusable** — you've "curried in" the configurati
 
 ### Multi-Stage Reasoning Chains
 
-Break complex reasoning into stages where each stage is a partially applied function:
+Break complex reasoning into stages where each stage is a partially applied function (this pattern fits naturally inside [durable agentic workflows with FSM control](/posts/notes-on-agentic-applications-in-business-processes)):
 
 1. **Query understanding agent** → Takes raw input, returns structured intent
 2. **Planning agent(intent)** → Takes intent, returns execution plan  
@@ -139,7 +139,7 @@ Each `with_*` method returns a new agent with an **augmented prompt template**, 
 
 **Testability**: Test each currying stage independently with mock inputs
 
-**Lazy evaluation**: Don't call the LLM until all context is gathered (saves tokens and latency)
+**Lazy evaluation**: Don't call the LLM until all context is gathered (saves tokens and latency) — for strategies on managing what goes into that context, see [Context, Context, Context](/posts/context-context-context)
 
 **Type safety**: Each intermediate function can validate its specific input before proceeding
 

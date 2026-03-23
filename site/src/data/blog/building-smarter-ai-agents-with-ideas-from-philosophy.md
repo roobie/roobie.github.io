@@ -139,7 +139,7 @@ Add a **rule-based (deontic) layer**:
 - Explicit "do not" rules: legal, ethical, platform or product constraints.
 - Implement them as **hard filters** in the planner: any candidate plan that violates a rule is simply thrown away, not just given a lower score.
 
-These three layers work together: rules eliminate obviously bad plans, consequences score remaining options, virtues tie-break.
+These three layers work together: rules eliminate obviously bad plans, consequences score remaining options, virtues tie-break. For practical techniques on enforcing these hard rules at a systems level, see [Locking Down AI Agents](/posts/locking-down-agents).
 
 ### 3.3 Traits: build in good "habits"
 
