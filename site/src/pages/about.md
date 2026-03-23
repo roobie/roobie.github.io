@@ -12,8 +12,7 @@ you, great; if it starts a conversation, even better.
 ## What I work on
 
 My focus areas are AI agents, developer tooling, and software architecture. I
-build mostly in Rust, TypeScript, and Go — picking whichever fits the problem
-rather than the hype cycle. Most of what I write about here comes from building
+build mostly in Python, TypeScript (and web stuff in general), Rust, dotnet/C♯, Go (and others) — picking whichever fits the problem. Most of what I write about here comes from building
 real systems and noticing patterns worth examining.
 
 ## Open-source projects
@@ -24,6 +23,11 @@ real systems and noticing patterns worth examining.
   that need an immutable audit trail
 - **[slog](/posts/introducing-slog)** — structured logger designed for
   machine-readable output without sacrificing human readability
+  
+&hellip; and more at
+
+- [Codeberg](https://codeberg.org/bjr)
+- [GitHub](https://github.com/roobie)
 
 Content in this blog is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 unless otherwise indicated.
