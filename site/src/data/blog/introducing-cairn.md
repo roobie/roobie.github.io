@@ -12,17 +12,13 @@ tags:
 description: "cairn is an append-only SQLite event store where immutability is enforced by triggers, not convention. Go, TypeScript, and Rust SDKs share one test spec."
 ---
 
-## The Constraint Is the Product
+## The Constraint Is the Feature
 
 Most event stores give you append-only semantics as a **convention**. Cairn enforces it at the **storage layer**. SQLite `BEFORE UPDATE` and `BEFORE DELETE` triggers make it structurally impossible to modify or remove an event — even with a direct SQL connection to the database file.
 
-The name comes from a cairn: a stack of stones used as a trail marker. You add stones, never remove them.
+Why is this a feature?
 
----
-
-## Why Append-Only at the Storage Layer?
-
-Convention-based immutability breaks the moment someone runs an ad-hoc `UPDATE` or `DELETE` against the database. For audit logs, telemetry, and event trails, that's not acceptable.
+Convention-based immutability breaks the moment someone runs an ad-hoc `UPDATE` or `DELETE` against the database. For some types of workloads, that's something you simply don't want. E.g. audit logs, telemetry, and event trails.
 
 Cairn's approach:
 
@@ -104,8 +100,6 @@ Bundled SQLite via `rusqlite` — no system SQLite dependency. `Drop` runs a WAL
 
 ## The API
 
-Five operations. That's it.
-
 | Operation      | What it does                                              |
 |----------------|-----------------------------------------------------------|
 | `Open`         | Open or create a database; apply schema and PRAGMAs       |
@@ -114,18 +108,18 @@ Five operations. That's it.
 | `AppendBatch`  | Insert multiple events atomically (all-or-nothing)        |
 | `Query`        | Return events for a topic in a `[start, end]` time range  |
 
-No `Update`. No `Delete`. No `QueryAll`. No pagination. The API surface is deliberately minimal — cairn is storage, not an analytics engine.
+The API surface is deliberately minimal — cairn is storage, not an analytics engine.
 
 ---
 
 ## When to Use Cairn
 
-| Use case | Why cairn fits |
-|----------|---------------|
-| **Audit logs** | Immutability is a legal requirement, not a preference |
-| **IoT / edge telemetry** | Single-file SQLite works on embedded devices; no daemon needed |
-| **Application event trails** | Structured event sourcing without the infrastructure overhead |
-| **Local-first event buffers** | Collect events offline, ship the file later |
+| Use case                      | Why cairn fits                                                 |
+|-------------------------------|----------------------------------------------------------------|
+| **Audit logs**                | Immutability is a legal requirement, not a preference          |
+| **IoT / edge telemetry**      | Single-file SQLite works on embedded devices; no daemon needed |
+| **Application event trails**  | Structured event sourcing without the infrastructure overhead  |
+| **Local-first event buffers** | Collect events offline, ship the file later                    |
 
 ## What Cairn Is Not
 
@@ -140,9 +134,9 @@ No `Update`. No `Delete`. No `QueryAll`. No pagination. The API surface is delib
 
 All three SDKs implement against a single [API spec](https://github.com/roobie/cairn/blob/main/spec/api.md) and share 21 test vectors covering append, batch, query, and immutability rejection. The spec defines error names (`PayloadTooLarge`, `EmptyTopic`, etc.) that each language maps to its idiomatic form:
 
-| Spec | Go | TypeScript | Rust |
-|------|----|------------|------|
-| `PayloadTooLarge` | `ErrPayloadTooLarge` | `.kind === 'payload_too_large'` | `Error::PayloadTooLarge` |
+| Spec                    | Go                         | TypeScript                           | Rust                           |
+|-------------------------|----------------------------|--------------------------------------|--------------------------------|
+| `PayloadTooLarge`       | `ErrPayloadTooLarge`       | `.kind === 'payload_too_large'`      | `Error::PayloadTooLarge`       |
 | `ImmutabilityViolation` | `ErrImmutabilityViolation` | `.kind === 'immutability_violation'` | `Error::ImmutabilityViolation` |
 
 ---
