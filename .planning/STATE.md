@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-03-PLAN.md
-last_updated: "2026-03-23T11:23:37.126Z"
+stopped_at: Completed 08-02-PLAN.md
+last_updated: "2026-03-23T11:25:51.135Z"
 progress:
   total_phases: 10
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 11
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # Project State
@@ -55,6 +55,7 @@ Plan: 3 of 3
 | Phase 07-tag-taxonomy-and-post-metadata P02 | 8 | 2 tasks | 7 files |
 | Phase 08-structured-data-e-e-a-t P01 | 3 | 2 tasks | 2 files |
 | Phase 08-structured-data-e-e-a-t P03 | 3 | 1 tasks | 4 files |
+| Phase 08-structured-data-e-e-a-t P02 | 4 | 1 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,8 @@ Recent decisions affecting current work:
 - [Phase 08-structured-data-e-e-a-t]: publisher URL uses SITE.website (site URL) not SITE.profile — publisher identity is site URL
 - [Phase 08-structured-data-e-e-a-t]: About page project links use on-site /posts/introducing-* paths to keep traffic on-site
 - [Phase 08-structured-data-e-e-a-t]: Cross-links woven into existing prose, not added as sections; all 9 agent posts now meet 2-link minimum
+- [Phase 08-structured-data-e-e-a-t]: building-smarter already had footer links; added one body-level inline link to ensure cross-linking in prose
+- [Phase 08-structured-data-e-e-a-t]: Agent cluster internal links use /posts/{slug} format, woven into prose or follow-up sentences — never a Related Posts section
 
 ### Pending Todos
 
@@ -106,6 +109,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-23T11:23:37.122Z
-Stopped at: Completed 08-03-PLAN.md
+Last session: 2026-03-23T11:25:51.133Z
+Stopped at: Completed 08-02-PLAN.md
 Resume file: None
