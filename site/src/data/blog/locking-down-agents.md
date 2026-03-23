@@ -2,16 +2,15 @@
 author: Björn Roberg, GPT-5.1
 pubDatetime: 2026-01-20T17:00:00Z
 modDatetime: 2026-01-20T17:00:00Z
-title: Locking down agents
+title: "Locking Down AI Agents: Limiting Blast Radius in Production Systems"
 slug: locking-down-agents
 featured: true
 draft: false
 tags:
-  - computing
+  - ai-agents
+  - agent-safety
   - security
-  - development
-  - agents
-description: Discussions about how one can limit the blast radius of agents.
+description: "Practical techniques for sandboxing AI agents and limiting blast radius — filesystem restrictions, network controls, and permission scoping in production."
 ---
 
 Sandboxing agents isn’t a “nice to have”; it’s the safety railing that keeps obvious risks from becoming painful incidents. A coding agent that can freely read your filesystem, touch real credentials, call production APIs, or execute arbitrary shell commands is, by definition, an untrusted program with broad powers. It can accidentally delete data, leak secrets, open insecure network paths, or quietly embed vulnerabilities in otherwise healthy code. Running agents inside containers or VMs with limited filesystem access, scoped credentials, and constrained networking shrinks the blast radius when (not if) something goes wrong. You still get the speed boost of automated coding, but any damage is confined to a disposable environment instead of your laptop, your cloud account, or your production systems.

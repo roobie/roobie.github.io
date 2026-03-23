@@ -7,12 +7,10 @@ slug: markymarkov
 featured: true
 draft: false
 tags:
-  - agents
-  - markov-chains
-  - architecture
-  - patterns
-  - proof-of-concept
-description: MarkyMarkov - a PoC leveraging Markov chains for coding - shows that small, interpretable probabilistic models add high value to code workflows. By learning patterns from your own codebase, Markymarkov provides fast, explainable guidance that complements existing tools rather than replacing them.
+  - ai-agents
+  - agent-architecture
+  - open-source
+description: "MarkyMarkov uses Markov chains to learn patterns from your codebase and provide fast, explainable code guidance that complements LLM agents without replacing them."
 ---
 
 ## Table of Contents

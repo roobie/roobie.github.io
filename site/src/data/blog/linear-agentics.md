@@ -7,10 +7,10 @@ slug: linear-agentics
 featured: true
 draft: false
 tags:
-  - agents
-  - type-system
-  - hypothesis
-description: Discussing a type system that rejects unsafe code before it ever runs.
+  - ai-agents
+  - agent-safety
+  - software-architecture
+description: "Linear types applied to AI agent safety — a type system that enforces single-use for destructive operations and statically rejects unsafe agent code."
 ---
 
 **The fundamental problem with AI agents today is that we can't prove they're safe—we can only test them and hope.** An agent might work perfectly in development, pass all your tests, and then leak credentials in production because it reused an API key in an unexpected way. Or it might exhaust your cloud budget because nothing prevented it from spawning unlimited API calls.

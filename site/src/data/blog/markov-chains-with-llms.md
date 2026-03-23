@@ -7,11 +7,10 @@ slug: markov-chains-and-llms-hybrid-architectures
 featured: false
 draft: false
 tags:
-  - agents
-  - markov-chains
-  - architecture
-  - patterns
-description: How to combine Markov chains with large language models to build more structured, interpretable, and efficient agents. Markov chains provide structure and efficiency; LLMs provide semantic understanding and flexibility.
+  - ai-agents
+  - agent-architecture
+  - software-architecture
+description: "Combine Markov chains with LLMs to build structured, interpretable agents — Markov chains enforce predictable state; LLMs provide semantic flexibility."
 ---
 
 ## The Hybrid Insight

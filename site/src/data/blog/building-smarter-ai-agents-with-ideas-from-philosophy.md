@@ -7,11 +7,10 @@ slug: building-smarter-ai-agents-with-ideas-from-philosophy
 featured: true
 draft: false
 tags:
-  - discussion
-  - braindump
-  - agents
+  - ai-agents
+  - agent-architecture
   - philosophy
-description: Philosophically informed agent design means explicitly modeling what an AI believes, how it knows things, and which moral and epistemic norms guide its decisions, so that its behavior becomes more reliable, inspectable, and aligned with human expectations.
+description: "Philosophically informed AI agent design — modeling belief, knowledge, and epistemic norms — makes agent behavior more reliable and inspectable."
 ---
 
 When we talk about "AI agents," we usually jump straight to tools, APIs, and model prompts. But under the hood, any useful agent is constantly doing something deeply philosophical: forming beliefs, weighing evidence, making decisions, and following (or breaking) rules.

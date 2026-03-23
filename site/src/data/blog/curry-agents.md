@@ -2,15 +2,15 @@
 author: Björn Roberg, Claude
 pubDatetime: 2026-02-11T04:00:00Z
 modDatetime: 2026-02-11T04:00:00Z
-title: Currying agents
+title: "Currying AI Agents: Partial Application for Reusable Agent Configurations"
 slug: currying-agents
 featured: false
 draft: false
 tags:
-  - tool
-  - computing
-  - agents
-description: How one can leverage partial application of agents - borrowing from the functional programming paradigm.
+  - ai-agents
+  - agent-architecture
+  - software-architecture
+description: "Apply partial application from functional programming to AI agents — pre-configure agent parameters to create reusable, composable agent building blocks."
 ---
 
 **Currying in LLM agents means breaking down a complex agent task into a chain of smaller, specialized functions where each step takes some inputs and returns a new function waiting for the next piece of information.**

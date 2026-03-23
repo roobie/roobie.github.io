@@ -2,15 +2,15 @@
 author: Björn Roberg, GPT-5.1
 pubDatetime: 2026-01-21T19:00:00Z
 modDatetime: 2026-02-07T22:45:00Z
-title: Notes on agentic applications in business processes
+title: "AI Agents in Business Processes: Temporal, FSMs, and MCP"
 slug: notes-on-agentic-applications-in-business-processes
 featured: false
 draft: false
 tags:
-  - discussion
-  - braindump
-  - agents
-description: This post explores how to pair agentic workflows with durable workflow engines (specifically Temporal), add structure using finite state machines, plug in MCP servers for tools, and grow from a small pilot into stable, production-ready workflows.
+  - ai-agents
+  - distributed-systems
+  - software-architecture
+description: "How to pair agentic workflows with Temporal for durability, finite state machines for structure, and MCP servers to scale from pilot to production."
 ---
 
 Position: **durable workflows** pair naturally with **agentic workflows**.
