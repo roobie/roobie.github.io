@@ -6,10 +6,10 @@ slug: introducing-slog
 featured: false
 draft: false
 tags:
-  - project
-  - tool
-  - computing
-description: slog is a structured logger for Cloudflare Workers, Node.js, Deno, and Bun. Zero dependencies, pluggable transports, and a Hono middleware that uses waitUntil on Workers.
+  - open-source
+  - typescript
+  - developer-tools
+description: "slog is a zero-dependency structured logger for Node.js, Deno, Bun, and Cloudflare Workers with pluggable transports and a Hono waitUntil middleware."
 ---
 
 ## The Problem with console.log

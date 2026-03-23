@@ -2,14 +2,15 @@
 author: Björn Roberg
 pubDatetime: 2026-01-21T11:00:00Z
 modDatetime: 2026-01-21T11:00:00Z
-title: Terminal multiplexers
+title: "Terminal Multiplexers: Why I Switched from tmux to zellij"
 slug: terminal-multiplexers
 featured: true
 draft: false
 tags:
-  - computing
-  - ux
-description: Notes on terminal multiplexers.
+  - terminal
+  - developer-tools
+  - cli
+description: "A quick comparison of tmux and zellij as terminal multiplexers — zellij wins on discoverability with visible, mnemonic keybinds right out of the box."
 ---
 
 Long have I used `tmux`, and been pretty happy with it.

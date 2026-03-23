@@ -2,15 +2,15 @@
 author: Björn Roberg, GPT-5.1
 pubDatetime: 2026-01-22T13:00:00Z
 modDatetime: 2026-01-22T13:00:00Z
-title: Introducing casq (a simple content-addressable file storage CLI and library)
+title: "Introducing casq: Content-Addressable File Storage CLI in Rust"
 slug: introducing-casq
 featured: true
 draft: false
 tags:
-  - project
-  - tool
-  - computing
-description: casq is a small, no-frills content-addressed file store and Rust library that gives you git-style hashing and deduplication locally, without trying to be a full backup system or version control tool, and is available under the permissive Apache-2.0 license.
+  - open-source
+  - rust
+  - developer-tools
+description: "casq is a Rust CLI and library for content-addressed file storage — git-style deduplication without the overhead of a full version control system."
 ---
 
 ## Content-Addressed Storage Without the Baggage: Introducing `casq` and `casq_core`

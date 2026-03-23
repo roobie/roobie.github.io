@@ -2,14 +2,15 @@
 author: Björn Roberg
 pubDatetime: 2026-01-23T13:00:00Z
 modDatetime: 2026-01-23T13:00:00Z
-title: Whosthere / LAN tool
+title: "whosthere: LAN Discovery Tool with a Modern TUI in Go"
 slug: whosthere-lan-tool
 featured: false
 draft: false
 tags:
-  - computing
-  - tool
-description: LAN discovery tool of note.
+  - developer-tools
+  - cli
+  - terminal
+description: "whosthere is a Go-based LAN discovery tool with a modern terminal UI — fast, intuitive network exploration that shows who and what is on your local network."
 ---
 
 https://github.com/ramonvermeulen/whosthere

@@ -2,15 +2,15 @@
 author: Björn Roberg, GPT-5.1
 pubDatetime: 2026-01-24T14:00:00Z
 modDatetime: 2026-01-24T14:00:00Z
-title: Using casq in CI
+title: "Using casq for Content-Addressable Storage in CI Pipelines"
 slug: using-casq-in-ci
 featured: true
 draft: false
 tags:
-  - tool
-  - computing
-  - ci_cd
-description: Content addressable storage for improved CI
+  - developer-tools
+  - ci-cd
+  - open-source
+description: "casq brings content-addressable storage to CI pipelines, eliminating redundant builds and test runs by identifying identical inputs with a git-style hash."
 ---
 
 ## Example CI Pipeline Using `casq`

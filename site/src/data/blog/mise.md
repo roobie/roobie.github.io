@@ -2,14 +2,15 @@
 author: Björn Roberg, GPT-51.
 pubDatetime: 2026-01-23T13:00:00Z
 modDatetime: 2026-01-23T13:00:00Z
-title: mise
+title: "mise: Per-Project Tool Version Manager and Task Runner"
 slug: mise
 featured: false
 draft: false
 tags:
-  - computing
-  - tool
-description: Environment manager and task runner.
+  - developer-tools
+  - cli
+  - devops
+description: "mise pins tool versions per project — Node, Python, Go, and more — in a single .mise.toml, replacing nvm, pyenv, and Makefiles with one unified tool."
 ---
 
 ## When [`mise`](https://mise.jdx.dev/about.html) Makes Sense

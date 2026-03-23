@@ -6,10 +6,10 @@ slug: introducing-cairn
 featured: false
 draft: false
 tags:
-  - project
-  - tool
-  - computing
-description: cairn is an append-only event store backed by SQLite where immutability is enforced by triggers, not convention. SDKs for Go, TypeScript, and Rust share one spec and 21 test vectors.
+  - open-source
+  - developer-tools
+  - software-architecture
+description: "cairn is an append-only SQLite event store where immutability is enforced by triggers, not convention. Go, TypeScript, and Rust SDKs share one test spec."
 ---
 
 ## The Constraint Is the Product
