@@ -9,6 +9,22 @@ I write here to slow down my thinking — to examine ideas about technology,
 epistemology, and how we reason about complex things. If any of it is useful to
 you, great; if it starts a conversation, even better.
 
+## What I work on
+
+My focus areas are AI agents, developer tooling, and software architecture. I
+build mostly in Rust, TypeScript, and Go — picking whichever fits the problem
+rather than the hype cycle. Most of what I write about here comes from building
+real systems and noticing patterns worth examining.
+
+## Open-source projects
+
+- **[casq](/posts/introducing-casq)** — content-addressable storage queue for
+  deduplicating and ordering data by its hash
+- **[cairn](/posts/introducing-cairn)** — append-only event store for systems
+  that need an immutable audit trail
+- **[slog](/posts/introducing-slog)** — structured logger designed for
+  machine-readable output without sacrificing human readability
+
 Content in this blog is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 unless otherwise indicated.
 
