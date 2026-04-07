@@ -30,3 +30,8 @@ public/pagefind
 .ck/
 
 .wrangler/
+
+
+.pi/
+.claude/
+.agents/
