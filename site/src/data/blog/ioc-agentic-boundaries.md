@@ -3,7 +3,7 @@ author: Björn Roberg
 title: "Inversion of Control at the Agentic Boundary"
 pubDatetime: 2026-04-07
 description: "Applying IoC and dependency injection patterns to agentic service boundaries — and why technical plumbing alone won't prevent control inversion."
-draft: true
+featured: true
 tags:
   - ai-agents
   - agent-architecture
