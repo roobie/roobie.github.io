@@ -1,7 +1,7 @@
 ---
 author: Björn Roberg, Claude Opus 4.6
 pubDatetime: 2026-03-18T12:00:00Z
-title: "Introducing cairn: append-only event storage with SQLite"
+title: "Show HN: Cairn — append-only SQLite event store, immutability enforced by triggers"
 slug: introducing-cairn
 featured: false
 draft: false
@@ -14,17 +14,30 @@ description: "cairn is an append-only SQLite event store where immutability is e
 
 ## The Constraint Is the Feature
 
-Most event stores give you append-only semantics as a **convention**. Cairn enforces it at the **storage layer**. SQLite `BEFORE UPDATE` and `BEFORE DELETE` triggers make it structurally impossible to modify or remove an event — even with a direct SQL connection to the database file.
+Most event stores give you append-only semantics as a **convention**. Cairn enforces it at the **storage layer**. SQLite `BEFORE UPDATE` and `BEFORE DELETE` triggers make it structurally impossible to modify or remove an event — SQLite itself rejects mutations, even from a direct `sqlite3` shell connection.
 
-Why is this a feature?
-
-Convention-based immutability breaks the moment someone runs an ad-hoc `UPDATE` or `DELETE` against the database. For some types of workloads, that's something you simply don't want. E.g. audit logs, telemetry, and event trails.
+Convention-based immutability breaks the moment someone runs an ad-hoc `UPDATE` or `DELETE` against the database. For audit logs, telemetry, and event trails, that's unacceptable.
 
 Cairn's approach:
 
-- **Triggers, not API guards** — the database itself rejects mutations. `PRAGMA defensive` prevents disabling them via `writable_schema`.
-- **Zero configuration** — `Open("events.db")` is the only entry point. WAL mode, busy timeout, defensive mode, and the schema DDL are applied automatically.
+- **Triggers, not API guards** — the database rejects mutations. See the next section for how bypass attempts are handled.
+- **Zero configuration** — `Open("events.db")` is the only entry point. WAL mode, busy timeout, and the schema DDL are applied automatically.
 - **One file** — a single SQLite database. No external services, no network, no daemon. Copy the file and you have a backup.
+
+## Why Triggers Can't Be Bypassed (and Where the Boundary Is)
+
+Triggers live in `sqlite_schema`. A sophisticated attacker might try:
+
+```sql
+PRAGMA writable_schema = ON;
+DELETE FROM sqlite_schema WHERE name = 'no_update';
+```
+
+To block this on cairn's own connections, the TypeScript and Rust SDKs set `SQLITE_DBCONFIG_DEFENSIVE` during `Open` — SQLite then refuses `PRAGMA writable_schema = ON` for the life of that connection. (The Go SDK uses the pure-Go `modernc.org/sqlite` driver, which doesn't expose the `sqlite3_db_config` call; it falls back to `PRAGMA trusted_schema = OFF`. Switching to a CGo driver would fix that but break the pure-Go, cross-compile property, so we haven't.)
+
+Here's the honest part. **Defensive mode only applies to connections cairn opens.** Anyone who can read the database file can open their own `sqlite3` connection without defensive set, and the `writable_schema` trick will work. The real security boundary is therefore filesystem access — not a pragma. Cairn is a database, not a vault. Use OS permissions, disk encryption, or an append-only filesystem mount if your threat model requires it.
+
+What triggers **do** guarantee, unconditionally: any connection that respects SQLite's schema will be rejected when issuing `UPDATE` or `DELETE` against `events`. Accidental modification, application bugs, ad-hoc SQL from ops, ORM misconfiguration — all of that is covered. The deliberate-attacker-with-filesystem-access case is not, and no user-space database can cover it.
 
 ---
 
@@ -111,6 +124,32 @@ Bundled SQLite via `rusqlite` — no system SQLite dependency. `Drop` runs a WAL
 The API surface is deliberately minimal — cairn is storage, not an analytics engine.
 
 ---
+
+## Why Not X?
+
+**vs. Litestream** — Litestream replicates any SQLite database to object storage. It's orthogonal: Litestream answers "how do I back this up live?", cairn answers "how do I prevent mutation?" Compose them: cairn + Litestream = append-only + continuously replicated.
+
+**vs. journald / syslog** — Great for host-local text lines. No SDK for structured binary payloads, no portable single-file format, no cross-language contract, no point-in-time range queries. Cairn is what you reach for when log lines aren't enough.
+
+**vs. INSERT-only by convention** — That's exactly the thing cairn replaces. "Everyone on the team agreed we'd only `INSERT` into this table" survives exactly until the first `sqlite3 events.db 'UPDATE ...'` — which might be a well-intentioned one-off fix at 2 a.m. Triggers make the convention load-bearing.
+
+## Performance
+
+Benchmarks run on a **Raspberry Pi 3 Model B** (armv7, 4 cores, 1 GB RAM, Class 10 SD card), Go SDK, 128-byte event payload, WAL mode with SQLite's default `synchronous = NORMAL` (fsync per commit on the WAL, lazy fsync on the main DB at checkpoint):
+
+| Operation                    | Throughput       | Notes                            |
+|------------------------------|------------------|----------------------------------|
+| `Append` (single event)      | ~98 events/sec   | SD-card fsync bound (~10 ms/op)  |
+| `AppendBatch` (100 events)   | ~2,800 events/sec | One fsync amortized over batch   |
+| `Query` (scan 100k events)   | ~27,000 events/sec | ~370 µs per row scanned        |
+
+The headline: **batch your appends if you care about throughput.** Single `Append` is fine for low-rate audit events where durability per-event matters more than rate. `AppendBatch` trades "lose up to N events on crash" for 28× throughput. Pick per workload.
+
+A Pi 3 over SD is a deliberately pessimistic floor. On a modern laptop NVMe, single `Append` scales roughly with fsync latency (~400× faster in my testing); `AppendBatch` gains less (~30×, fsync already amortized); `Query` gains the least (~1.3×, it's CPU-bound row scanning, not I/O). Benchmarks are reproducible:
+
+```bash
+cd cairn/go && go test -bench=. -benchtime=3s -run=^$
+```
 
 ## When to Use Cairn
 
