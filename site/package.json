@@ -14,7 +14,7 @@
 		"deploy": "bunx wrangler deploy"
 	},
 	"dependencies": {
-		"@astrojs/cloudflare": "^13.1.2",
+		"@astrojs/cloudflare": "^13.1.10",
 		"@astrojs/rss": "^4.0.17",
 		"@astrojs/sitemap": "^3.7.1",
 		"@resvg/resvg-js": "^2.6.2",
