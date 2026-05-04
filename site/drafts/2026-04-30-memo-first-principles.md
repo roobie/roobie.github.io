@@ -197,3 +197,88 @@ decorative, so it never strips down to find the irreducible mechanism.
   is analytical substrate, not draft prose. BR writes the post.
 - The constraint classification table is the centerpiece — it's the kind
   of thing that gets screenshotted and shared.
+
+
+## Q4 validation — preliminary results (2026-05-03)
+
+### What we ran
+
+20 StrategyQA yes/no questions, three conditions, Claude Haiku
+(`claude -p --model haiku`). Script:
+`site/drafts/memo-experiment/run_memo_eval.py`.
+
+| Condition | Prefix | Accuracy |
+|---|---|---|
+| A — Baseline | (none) | 90% (18/20) |
+| B — Minimal reconstruction | "Before answering, name the type of reasoning this problem requires and why. Then solve step by step." + 1 format exemplar (~29 words) | **95% (19/20)** |
+| C — Full MeMo prefix | Definition paragraph + 3 worked exemplars (~217 words) | 80% (16/20) |
+
+### Reading
+
+B > A > C. The minimal reconstruction outperformed both baseline and the
+full MeMo prefix. The full prefix *hurt* on Haiku — two questions produced
+unparseable answers (framework-naming consumed the response budget), one
+flipped to wrong.
+
+This supports the reconstruction hypothesis: the mechanism is the forced
+categorization pause, not the Munger framing. The extra ~190 words are
+noise that a smaller model can't absorb gracefully.
+
+Question 17 (cotton candy body weight) fails across all three conditions.
+The question: "Could an average person eat a mass of cotton candy matching
+their body weight?" (gold: yes). All three models said no. The gold answer
+is correct — given enough time, a person can eat more than their mass in
+any food-like substance; the question doesn't specify "in one sitting."
+But the models (and this author's first reading) anchored on the intuitive
+absurdity of "eat your body weight" without noticing the temporal
+non-constraint. This is a confound-rich question, not a knowledge gap —
+interesting precisely because the failure is consistent across prompting
+strategies. The self-routing pause doesn't help when the model's error is
+premature framing of the problem, not lack of a reasoning strategy.
+
+### Caveats
+
+- N=20 is small. The B-over-A difference is 1 question — not statistically
+  significant on its own.
+- Haiku is weaker than the models the paper tested (GPT-4, GPT-3.5). The
+  full prefix might help more on stronger models.
+- Our MeMo prefix is a reconstruction (~217 words), not verbatim from the
+  paper (~300 words). The gap may partly reflect our reconstruction.
+- The answer extraction heuristic (regex for yes/no) failed twice on
+  condition C — verbose responses buried the answer. This is itself a
+  finding: the full prefix encourages output structures that are harder
+  to parse reliably.
+
+### Next steps to strengthen this
+
+1. **Run on Sonnet.** If B > A holds on a stronger model, the finding is
+   much more robust. If C recovers on Sonnet, that's equally interesting —
+   it would mean the full prefix is model-capability-gated.
+2. **More questions.** 20 is directional. 50-100 from the StrategyQA dev
+   set would give confidence intervals. Cheap on Haiku.
+3. **Add MMLU-CS condition.** The paper's biggest MeMo win was +13% on
+   MMLU CS (GPT-3.5). Multiple-choice is a different answer format — tests
+   whether the mechanism generalizes beyond yes/no.
+4. **Nonsense-label ablation.** Run condition B but with the instruction
+   "Name a fruit before answering, then solve." If accuracy still rises,
+   the frame label is cosmetic (any forced pause works). If it drops,
+   the *content* of the self-routing matters, not just the pause.
+5. **Multiple runs for variance.** The script supports `--runs N`. Three
+   runs per condition on Haiku would show whether the 1-question
+   differences are noise.
+
+### Refine-recipe observations
+
+The `decompose → parallel(invert, rotate) → synthesize` pass on this
+post (run 2026-05-03) identified:
+
+- **Dominant failure mode (invert):** "just another prompting tips post" —
+  the reconstruction claim needs empirical backing to be credible, not
+  just theoretical. Q4 validation directly addresses this.
+- **Strongest rotation (rotate):** practitioner axis — lead with the
+  copy-pasteable artifact (the minimal prompt), anchor with the constraint
+  table. The "attention steering" reframe (from implicit-subject rotation)
+  is the post's intellectual contribution beyond the paper.
+- **Synthesis proposal:** Hook with the prompt → why it works (attention
+  steering, not metacognition) → proof (constraint table) → what breaks
+  it (failure modes) → source credit.
