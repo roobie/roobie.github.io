@@ -1,6 +1,6 @@
 ---
 author: Björn Roberg, Claude Opus 4.7
-pubDatetime: 2026-05-13
+pubDatetime: 2026-05-12
 title: "I tagged every blog post by cognitive mode. Most of mine are knowledge-telling — and that's fine."
 slug: tagging-posts-by-cognitive-mode
 featured: false
