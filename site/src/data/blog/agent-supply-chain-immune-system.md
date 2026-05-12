@@ -13,6 +13,7 @@ tags:
   - mcp
   - supply-chain
 description: "The AI-supply-chain cohort is already crowded: Invariant, Snyk Agent Scan, JFrog, Klaimee, a dozen more. They all ship the same artifact, a point-in-time report. That is not what underwriters can price against. The primitive insurance needs is a falsifiable attestation with a TTL that re-verifies on drift. Nobody ships that yet."
+kt_mode: knowledge-transforming
 ---
 
 I started writing this as a wide-open-gap essay. Then I actually looked at the field, and the field is not wide open. Twelve months ago it was. Today the cohort is crowded and most of the obvious wedges are taken:

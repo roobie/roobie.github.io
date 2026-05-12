@@ -11,6 +11,7 @@ tags:
   - rust
   - developer-tools
 description: "casq is a Rust CLI and library for content-addressed file storage — git-style deduplication without the overhead of a full version control system."
+kt_mode: knowledge-telling
 ---
 
 ## Content-Addressed Storage Without the Baggage: Introducing `casq` and `casq_core`

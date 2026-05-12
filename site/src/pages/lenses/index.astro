@@ -1,0 +1,96 @@
+---
+import { getCollection } from "astro:content";
+import Main from "@/layouts/Main.astro";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Card from "@/components/Card.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
+import { SITE } from "@/config";
+
+// Mirrors the filter used by /posts/[...page].astro (line 16) and
+// /archives/index.astro (line 18): drafts visible in dev, excluded in prod.
+const posts = await getCollection(
+  "blog",
+  ({ data }) => import.meta.env.DEV || !data.draft
+);
+const sortedPosts = getSortedPosts(posts);
+
+// Lens 1: Bereiter & Scardamalia — knowledge-telling vs knowledge-transforming.
+// Frontmatter field: kt_mode (optional). Posts without the field land in
+// "unclassified" so the un-tagged backlog stays visible rather than hidden.
+const bsGroups = getPostsByGroupCondition(
+  sortedPosts,
+  post => post.data.kt_mode ?? "unclassified"
+);
+const bsOrder = [
+  "knowledge-transforming",
+  "mixed",
+  "knowledge-telling",
+  "unclassified",
+] as const;
+const bsLabels: Record<(typeof bsOrder)[number], string> = {
+  "knowledge-transforming": "Knowledge-transforming",
+  mixed: "Mixed",
+  "knowledge-telling": "Knowledge-telling",
+  unclassified: "Unclassified",
+};
+---
+
+<Layout title={`Lenses | ${SITE.title}`}>
+  <Header />
+  <Main
+    pageTitle="Lenses"
+    pageDesc="Posts grouped through theoretical frames. One lens shipped; more to follow."
+  >
+    <p class="mb-6">
+      A lens is a theoretical frame I find useful for thinking about the writing
+      itself — what kind of cognitive work produced a given post, what genre
+      move it makes, what posture toward co-authorship it admits. Each lens
+      classifies the same corpus differently. The classifications are mine,
+      sometimes contested, always editable: each is one line of frontmatter on
+      the post it tags. More lenses will arrive as the frames earn their keep.
+    </p>
+
+    <section class="my-10">
+      <h2 class="text-2xl font-bold">
+        Bereiter &amp; Scardamalia: knowledge-telling vs knowledge-transforming
+      </h2>
+      <p class="my-3">
+        Bereiter and Scardamalia (1987) distinguish two cognitive processes
+        behind any written artifact.
+        <em>Knowledge-telling</em> is the retrieve-and-write loop — locate what you
+        know about a topic, write it down, repeat. The text comes out coherent; the
+        writer's beliefs are unchanged.
+        <em>Knowledge-transforming</em> runs two problem spaces in tension — a content
+        space (what do I actually believe?) and a rhetorical space (how should this
+        be said?) — each constraining the other. Beliefs shift during the writing.
+        <em>Mixed</em> means the post does both in different sections.
+      </p>
+
+      {
+        bsOrder.map(key => {
+          const group = bsGroups[key] ?? [];
+          if (group.length === 0) return null;
+          return (
+            <div class="my-8">
+              <span class="text-2xl font-bold">{bsLabels[key]}</span>
+              <sup class="text-sm">{group.length}</sup>
+              <ul>
+                {group.map(data => (
+                  <Card {...data} />
+                ))}
+              </ul>
+            </div>
+          );
+        })
+      }
+    </section>
+
+    {
+      /* future lenses: each one = optional frontmatter field + <section> here */
+    }
+  </Main>
+  <Footer />
+</Layout>

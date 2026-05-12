@@ -9,6 +9,7 @@ tags:
   - agent-architecture
   - security
   - governance
+kt_mode: mixed
 ---
 
 > tl;dr Treat agent capabilities as injected dependencies — explicit, auditable, swappable. But recognize that IoC patterns solve the engineering problem, not the governance one.

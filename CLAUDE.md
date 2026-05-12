@@ -33,9 +33,11 @@ Posts are `.md` files in `site/src/data/blog/`. Required frontmatter fields:
 - `pubDatetime: Date` (YAML date)
 - `description: string`
 
-Optional: `author`, `modDatetime`, `featured`, `draft`, `tags` (string array, defaults to `["others"]`), `ogImage`, `canonicalURL`, `hideEditPost`, `timezone`.
+Optional: `author`, `modDatetime`, `featured`, `draft`, `tags` (string array, defaults to `["others"]`), `ogImage`, `canonicalURL`, `hideEditPost`, `timezone`, `kt_mode` (`knowledge-telling` | `knowledge-transforming` | `mixed`).
 
 Posts with `draft: true` are excluded from production builds.
+
+`kt_mode` classifies a post by Bereiter & Scardamalia's knowledge-telling vs knowledge-transforming distinction; it is consumed by `/lenses/` to group posts by cognitive mode. Omission means unclassified (rendered in a separate group).
 
 ## Key Configuration Files
 

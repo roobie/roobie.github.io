@@ -10,6 +10,7 @@ tags:
   - opinion
   - developer-tools
 description: "Every Node.js production system depends on a single corporate-controlled npm registry with no real alternative — a structural risk the ecosystem ignores."
+kt_mode: knowledge-transforming
 ---
 
 This has been sitting in my drafts for a while and I keep not publishing it because every time I re-read it I think "nobody's going to do anything about this anyway." But I've been chewing on it long enough that I need to put it somewhere other than my own head.
