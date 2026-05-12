@@ -1,519 +1,519 @@
 {
-  "experiment": "memo-strategyqa",
-  "model": "haiku",
-  "timestamp": "2026-05-03T16:22:06.726759+00:00",
-  "questions_count": 20,
-  "runs": 1,
-  "results": [
-    {
-      "condition": "baseline",
-      "label": "A \u2014 Baseline (no prefix)",
-      "run": 0,
-      "correct": 18,
-      "total": 20,
-      "accuracy": 0.9,
-      "details": [
-        {
-          "question": "Could a llama birth twice during War in Vietnam (1955-1975)?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 9.26,
-          "response_words": 49
-        },
-        {
-          "question": "Would a pear sink in water?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 6.69,
-          "response_words": 35
-        },
-        {
-          "question": "Is it common to see frost during some college commencements?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 7.35,
-          "response_words": 42
-        },
-        {
-          "question": "Could the members of The Police perform as a quartet?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 7.54,
-          "response_words": 40
-        },
-        {
-          "question": "Can a mass of crickets be heard from space?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 10.24,
-          "response_words": 44
-        },
-        {
-          "question": "Were there WWII battles in the Mediterranean?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 7.53,
-          "response_words": 46
-        },
-        {
-          "question": "Is the Atlantic Ocean big enough to fit all of Russia?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 7.47,
-          "response_words": 26
-        },
-        {
-          "question": "Does the human dsygote have more chromosomes than a cat?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 6.26,
-          "response_words": 44
-        },
-        {
-          "question": "Would a vegetarian enjoy a traditional Reuben sandwich?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 7.33,
-          "response_words": 38
-        },
-        {
-          "question": "Did the 40th president of the United States serve two terms?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 5.3,
-          "response_words": 21
-        },
-        {
-          "question": "Are more people today related to Genghis Khan than Julius Caesar?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 8.39,
-          "response_words": 61
-        },
-        {
-          "question": "Could Plato have known about the Americas?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 7.87,
-          "response_words": 61
-        },
-        {
-          "question": "Is a Boeing 747 wider than a basketball court is long?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 6.91,
-          "response_words": 35
-        },
-        {
-          "question": "Can a mass of humanity theoretically fit inside the Grand Canyon?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 10.08,
-          "response_words": 34
-        },
-        {
-          "question": "Would a dog respond to a silent dog whistle?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 6.85,
-          "response_words": 50
-        },
-        {
-          "question": "Was Mother Teresa alive when the Berlin Wall fell?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 6.22,
-          "response_words": 26
-        },
-        {
-          "question": "Could an average person eat a mass of cotton candy matching their body weight?",
-          "gold": "yes",
-          "predicted": "no",
-          "correct": false,
-          "elapsed": 9.15,
-          "response_words": 70
-        },
-        {
-          "question": "Would a moose fit inside a Mini Cooper?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 9.4,
-          "response_words": 41
-        },
-        {
-          "question": "Did the Roman Empire exist at the same time as the Han Dynasty?",
-          "gold": "yes",
-          "predicted": "no",
-          "correct": false,
-          "elapsed": 7.02,
-          "response_words": 58
-        },
-        {
-          "question": "Is the Great Wall of China longer than the distance from New York to Los Angeles?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 8.31,
-          "response_words": 32
-        }
-      ]
-    },
-    {
-      "condition": "minimal",
-      "label": "B \u2014 Minimal reconstruction (~50w)",
-      "run": 0,
-      "correct": 19,
-      "total": 20,
-      "accuracy": 0.95,
-      "details": [
-        {
-          "question": "Could a llama birth twice during War in Vietnam (1955-1975)?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 9.08,
-          "response_words": 93
-        },
-        {
-          "question": "Would a pear sink in water?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 8.68,
-          "response_words": 46
-        },
-        {
-          "question": "Is it common to see frost during some college commencements?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 11.54,
-          "response_words": 174
-        },
-        {
-          "question": "Could the members of The Police perform as a quartet?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 10.07,
-          "response_words": 77
-        },
-        {
-          "question": "Can a mass of crickets be heard from space?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 11.42,
-          "response_words": 198
-        },
-        {
-          "question": "Were there WWII battles in the Mediterranean?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 8.44,
-          "response_words": 110
-        },
-        {
-          "question": "Is the Atlantic Ocean big enough to fit all of Russia?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 6.94,
-          "response_words": 54
-        },
-        {
-          "question": "Does the human dsygote have more chromosomes than a cat?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 6.7,
-          "response_words": 60
-        },
-        {
-          "question": "Would a vegetarian enjoy a traditional Reuben sandwich?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 8.02,
-          "response_words": 92
-        },
-        {
-          "question": "Did the 40th president of the United States serve two terms?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 8.22,
-          "response_words": 88
-        },
-        {
-          "question": "Are more people today related to Genghis Khan than Julius Caesar?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 13.8,
-          "response_words": 198
-        },
-        {
-          "question": "Could Plato have known about the Americas?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 12.41,
-          "response_words": 168
-        },
-        {
-          "question": "Is a Boeing 747 wider than a basketball court is long?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 8.33,
-          "response_words": 71
-        },
-        {
-          "question": "Can a mass of humanity theoretically fit inside the Grand Canyon?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 13.32,
-          "response_words": 159
-        },
-        {
-          "question": "Would a dog respond to a silent dog whistle?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 11.24,
-          "response_words": 112
-        },
-        {
-          "question": "Was Mother Teresa alive when the Berlin Wall fell?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 6.54,
-          "response_words": 67
-        },
-        {
-          "question": "Could an average person eat a mass of cotton candy matching their body weight?",
-          "gold": "yes",
-          "predicted": "no",
-          "correct": false,
-          "elapsed": 12.2,
-          "response_words": 172
-        },
-        {
-          "question": "Would a moose fit inside a Mini Cooper?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 10.09,
-          "response_words": 189
-        },
-        {
-          "question": "Did the Roman Empire exist at the same time as the Han Dynasty?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 11.01,
-          "response_words": 91
-        },
-        {
-          "question": "Is the Great Wall of China longer than the distance from New York to Los Angeles?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 9.59,
-          "response_words": 69
-        }
-      ]
-    },
-    {
-      "condition": "full_memo",
-      "label": "C \u2014 Full MeMo prefix (~300w)",
-      "run": 0,
-      "correct": 16,
-      "total": 20,
-      "accuracy": 0.8,
-      "details": [
-        {
-          "question": "Could a llama birth twice during War in Vietnam (1955-1975)?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 12.29,
-          "response_words": 131
-        },
-        {
-          "question": "Would a pear sink in water?",
-          "gold": "no",
-          "predicted": null,
-          "correct": false,
-          "elapsed": 9.45,
-          "response_words": 78
-        },
-        {
-          "question": "Is it common to see frost during some college commencements?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 11.28,
-          "response_words": 81
-        },
-        {
-          "question": "Could the members of The Police perform as a quartet?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 8.87,
-          "response_words": 61
-        },
-        {
-          "question": "Can a mass of crickets be heard from space?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 12.38,
-          "response_words": 156
-        },
-        {
-          "question": "Were there WWII battles in the Mediterranean?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 9.49,
-          "response_words": 88
-        },
-        {
-          "question": "Is the Atlantic Ocean big enough to fit all of Russia?",
-          "gold": "yes",
-          "predicted": "no",
-          "correct": false,
-          "elapsed": 17.17,
-          "response_words": 95
-        },
-        {
-          "question": "Does the human dsygote have more chromosomes than a cat?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 8.65,
-          "response_words": 37
-        },
-        {
-          "question": "Would a vegetarian enjoy a traditional Reuben sandwich?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 14.82,
-          "response_words": 101
-        },
-        {
-          "question": "Did the 40th president of the United States serve two terms?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 6.36,
-          "response_words": 25
-        },
-        {
-          "question": "Are more people today related to Genghis Khan than Julius Caesar?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 16.17,
-          "response_words": 200
-        },
-        {
-          "question": "Could Plato have known about the Americas?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 12.49,
-          "response_words": 139
-        },
-        {
-          "question": "Is a Boeing 747 wider than a basketball court is long?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 9.61,
-          "response_words": 75
-        },
-        {
-          "question": "Can a mass of humanity theoretically fit inside the Grand Canyon?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 13.84,
-          "response_words": 138
-        },
-        {
-          "question": "Would a dog respond to a silent dog whistle?",
-          "gold": "yes",
-          "predicted": null,
-          "correct": false,
-          "elapsed": 13.53,
-          "response_words": 68
-        },
-        {
-          "question": "Was Mother Teresa alive when the Berlin Wall fell?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 6.36,
-          "response_words": 49
-        },
-        {
-          "question": "Could an average person eat a mass of cotton candy matching their body weight?",
-          "gold": "yes",
-          "predicted": "no",
-          "correct": false,
-          "elapsed": 19.86,
-          "response_words": 138
-        },
-        {
-          "question": "Would a moose fit inside a Mini Cooper?",
-          "gold": "no",
-          "predicted": "no",
-          "correct": true,
-          "elapsed": 13.61,
-          "response_words": 140
-        },
-        {
-          "question": "Did the Roman Empire exist at the same time as the Han Dynasty?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 10.72,
-          "response_words": 82
-        },
-        {
-          "question": "Is the Great Wall of China longer than the distance from New York to Los Angeles?",
-          "gold": "yes",
-          "predicted": "yes",
-          "correct": true,
-          "elapsed": 10.17,
-          "response_words": 88
-        }
-      ]
-    }
-  ]
+	"experiment": "memo-strategyqa",
+	"model": "haiku",
+	"timestamp": "2026-05-03T16:22:06.726759+00:00",
+	"questions_count": 20,
+	"runs": 1,
+	"results": [
+		{
+			"condition": "baseline",
+			"label": "A \u2014 Baseline (no prefix)",
+			"run": 0,
+			"correct": 18,
+			"total": 20,
+			"accuracy": 0.9,
+			"details": [
+				{
+					"question": "Could a llama birth twice during War in Vietnam (1955-1975)?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 9.26,
+					"response_words": 49
+				},
+				{
+					"question": "Would a pear sink in water?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 6.69,
+					"response_words": 35
+				},
+				{
+					"question": "Is it common to see frost during some college commencements?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 7.35,
+					"response_words": 42
+				},
+				{
+					"question": "Could the members of The Police perform as a quartet?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 7.54,
+					"response_words": 40
+				},
+				{
+					"question": "Can a mass of crickets be heard from space?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 10.24,
+					"response_words": 44
+				},
+				{
+					"question": "Were there WWII battles in the Mediterranean?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 7.53,
+					"response_words": 46
+				},
+				{
+					"question": "Is the Atlantic Ocean big enough to fit all of Russia?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 7.47,
+					"response_words": 26
+				},
+				{
+					"question": "Does the human dsygote have more chromosomes than a cat?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 6.26,
+					"response_words": 44
+				},
+				{
+					"question": "Would a vegetarian enjoy a traditional Reuben sandwich?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 7.33,
+					"response_words": 38
+				},
+				{
+					"question": "Did the 40th president of the United States serve two terms?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 5.3,
+					"response_words": 21
+				},
+				{
+					"question": "Are more people today related to Genghis Khan than Julius Caesar?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 8.39,
+					"response_words": 61
+				},
+				{
+					"question": "Could Plato have known about the Americas?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 7.87,
+					"response_words": 61
+				},
+				{
+					"question": "Is a Boeing 747 wider than a basketball court is long?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 6.91,
+					"response_words": 35
+				},
+				{
+					"question": "Can a mass of humanity theoretically fit inside the Grand Canyon?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 10.08,
+					"response_words": 34
+				},
+				{
+					"question": "Would a dog respond to a silent dog whistle?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 6.85,
+					"response_words": 50
+				},
+				{
+					"question": "Was Mother Teresa alive when the Berlin Wall fell?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 6.22,
+					"response_words": 26
+				},
+				{
+					"question": "Could an average person eat a mass of cotton candy matching their body weight?",
+					"gold": "yes",
+					"predicted": "no",
+					"correct": false,
+					"elapsed": 9.15,
+					"response_words": 70
+				},
+				{
+					"question": "Would a moose fit inside a Mini Cooper?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 9.4,
+					"response_words": 41
+				},
+				{
+					"question": "Did the Roman Empire exist at the same time as the Han Dynasty?",
+					"gold": "yes",
+					"predicted": "no",
+					"correct": false,
+					"elapsed": 7.02,
+					"response_words": 58
+				},
+				{
+					"question": "Is the Great Wall of China longer than the distance from New York to Los Angeles?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 8.31,
+					"response_words": 32
+				}
+			]
+		},
+		{
+			"condition": "minimal",
+			"label": "B \u2014 Minimal reconstruction (~50w)",
+			"run": 0,
+			"correct": 19,
+			"total": 20,
+			"accuracy": 0.95,
+			"details": [
+				{
+					"question": "Could a llama birth twice during War in Vietnam (1955-1975)?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 9.08,
+					"response_words": 93
+				},
+				{
+					"question": "Would a pear sink in water?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 8.68,
+					"response_words": 46
+				},
+				{
+					"question": "Is it common to see frost during some college commencements?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 11.54,
+					"response_words": 174
+				},
+				{
+					"question": "Could the members of The Police perform as a quartet?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 10.07,
+					"response_words": 77
+				},
+				{
+					"question": "Can a mass of crickets be heard from space?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 11.42,
+					"response_words": 198
+				},
+				{
+					"question": "Were there WWII battles in the Mediterranean?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 8.44,
+					"response_words": 110
+				},
+				{
+					"question": "Is the Atlantic Ocean big enough to fit all of Russia?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 6.94,
+					"response_words": 54
+				},
+				{
+					"question": "Does the human dsygote have more chromosomes than a cat?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 6.7,
+					"response_words": 60
+				},
+				{
+					"question": "Would a vegetarian enjoy a traditional Reuben sandwich?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 8.02,
+					"response_words": 92
+				},
+				{
+					"question": "Did the 40th president of the United States serve two terms?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 8.22,
+					"response_words": 88
+				},
+				{
+					"question": "Are more people today related to Genghis Khan than Julius Caesar?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 13.8,
+					"response_words": 198
+				},
+				{
+					"question": "Could Plato have known about the Americas?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 12.41,
+					"response_words": 168
+				},
+				{
+					"question": "Is a Boeing 747 wider than a basketball court is long?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 8.33,
+					"response_words": 71
+				},
+				{
+					"question": "Can a mass of humanity theoretically fit inside the Grand Canyon?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 13.32,
+					"response_words": 159
+				},
+				{
+					"question": "Would a dog respond to a silent dog whistle?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 11.24,
+					"response_words": 112
+				},
+				{
+					"question": "Was Mother Teresa alive when the Berlin Wall fell?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 6.54,
+					"response_words": 67
+				},
+				{
+					"question": "Could an average person eat a mass of cotton candy matching their body weight?",
+					"gold": "yes",
+					"predicted": "no",
+					"correct": false,
+					"elapsed": 12.2,
+					"response_words": 172
+				},
+				{
+					"question": "Would a moose fit inside a Mini Cooper?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 10.09,
+					"response_words": 189
+				},
+				{
+					"question": "Did the Roman Empire exist at the same time as the Han Dynasty?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 11.01,
+					"response_words": 91
+				},
+				{
+					"question": "Is the Great Wall of China longer than the distance from New York to Los Angeles?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 9.59,
+					"response_words": 69
+				}
+			]
+		},
+		{
+			"condition": "full_memo",
+			"label": "C \u2014 Full MeMo prefix (~300w)",
+			"run": 0,
+			"correct": 16,
+			"total": 20,
+			"accuracy": 0.8,
+			"details": [
+				{
+					"question": "Could a llama birth twice during War in Vietnam (1955-1975)?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 12.29,
+					"response_words": 131
+				},
+				{
+					"question": "Would a pear sink in water?",
+					"gold": "no",
+					"predicted": null,
+					"correct": false,
+					"elapsed": 9.45,
+					"response_words": 78
+				},
+				{
+					"question": "Is it common to see frost during some college commencements?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 11.28,
+					"response_words": 81
+				},
+				{
+					"question": "Could the members of The Police perform as a quartet?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 8.87,
+					"response_words": 61
+				},
+				{
+					"question": "Can a mass of crickets be heard from space?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 12.38,
+					"response_words": 156
+				},
+				{
+					"question": "Were there WWII battles in the Mediterranean?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 9.49,
+					"response_words": 88
+				},
+				{
+					"question": "Is the Atlantic Ocean big enough to fit all of Russia?",
+					"gold": "yes",
+					"predicted": "no",
+					"correct": false,
+					"elapsed": 17.17,
+					"response_words": 95
+				},
+				{
+					"question": "Does the human dsygote have more chromosomes than a cat?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 8.65,
+					"response_words": 37
+				},
+				{
+					"question": "Would a vegetarian enjoy a traditional Reuben sandwich?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 14.82,
+					"response_words": 101
+				},
+				{
+					"question": "Did the 40th president of the United States serve two terms?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 6.36,
+					"response_words": 25
+				},
+				{
+					"question": "Are more people today related to Genghis Khan than Julius Caesar?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 16.17,
+					"response_words": 200
+				},
+				{
+					"question": "Could Plato have known about the Americas?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 12.49,
+					"response_words": 139
+				},
+				{
+					"question": "Is a Boeing 747 wider than a basketball court is long?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 9.61,
+					"response_words": 75
+				},
+				{
+					"question": "Can a mass of humanity theoretically fit inside the Grand Canyon?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 13.84,
+					"response_words": 138
+				},
+				{
+					"question": "Would a dog respond to a silent dog whistle?",
+					"gold": "yes",
+					"predicted": null,
+					"correct": false,
+					"elapsed": 13.53,
+					"response_words": 68
+				},
+				{
+					"question": "Was Mother Teresa alive when the Berlin Wall fell?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 6.36,
+					"response_words": 49
+				},
+				{
+					"question": "Could an average person eat a mass of cotton candy matching their body weight?",
+					"gold": "yes",
+					"predicted": "no",
+					"correct": false,
+					"elapsed": 19.86,
+					"response_words": 138
+				},
+				{
+					"question": "Would a moose fit inside a Mini Cooper?",
+					"gold": "no",
+					"predicted": "no",
+					"correct": true,
+					"elapsed": 13.61,
+					"response_words": 140
+				},
+				{
+					"question": "Did the Roman Empire exist at the same time as the Han Dynasty?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 10.72,
+					"response_words": 82
+				},
+				{
+					"question": "Is the Great Wall of China longer than the distance from New York to Los Angeles?",
+					"gold": "yes",
+					"predicted": "yes",
+					"correct": true,
+					"elapsed": 10.17,
+					"response_words": 88
+				}
+			]
+		}
+	]
 }

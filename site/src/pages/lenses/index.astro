@@ -12,8 +12,8 @@ import { SITE } from "@/config";
 // Mirrors the filter used by /posts/[...page].astro (line 16) and
 // /archives/index.astro (line 18): drafts visible in dev, excluded in prod.
 const posts = await getCollection(
-  "blog",
-  ({ data }) => import.meta.env.DEV || !data.draft
+	"blog",
+	({ data }) => import.meta.env.DEV || !data.draft,
 );
 const sortedPosts = getSortedPosts(posts);
 
@@ -21,20 +21,20 @@ const sortedPosts = getSortedPosts(posts);
 // Frontmatter field: kt_mode (optional). Posts without the field land in
 // "unclassified" so the un-tagged backlog stays visible rather than hidden.
 const bsGroups = getPostsByGroupCondition(
-  sortedPosts,
-  post => post.data.kt_mode ?? "unclassified"
+	sortedPosts,
+	(post) => post.data.kt_mode ?? "unclassified",
 );
 const bsOrder = [
-  "knowledge-transforming",
-  "mixed",
-  "knowledge-telling",
-  "unclassified",
+	"knowledge-transforming",
+	"mixed",
+	"knowledge-telling",
+	"unclassified",
 ] as const;
 const bsLabels: Record<(typeof bsOrder)[number], string> = {
-  "knowledge-transforming": "Knowledge-transforming",
-  mixed: "Mixed",
-  "knowledge-telling": "Knowledge-telling",
-  unclassified: "Unclassified",
+	"knowledge-transforming": "Knowledge-transforming",
+	mixed: "Mixed",
+	"knowledge-telling": "Knowledge-telling",
+	unclassified: "Unclassified",
 };
 ---
 
