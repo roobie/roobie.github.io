@@ -79,11 +79,13 @@ export default defineConfig({
 		},
 	},
 	vite: {
-		// eslint-disable-next-line
-		// @ts-ignore
-		// This will be fixed in Astro 6 with Vite 7 support
-		// See: https://github.com/withastro/astro/issues/14030
 		plugins: [
+			// Vite version skew between @tailwindcss/vite (peer: ^5||^6||^7)
+			// and astro 6 (which pulls vite 8). May or may not trigger
+			// depending on resolved transitive shapes — keeping @ts-ignore
+			// for resilience. Tracked upstream:
+			// https://github.com/withastro/astro/issues/14030
+			// @ts-ignore
 			tailwindcss(),
 			{
 				// Externalize @resvg/resvg-js native binary from the server bundle.
